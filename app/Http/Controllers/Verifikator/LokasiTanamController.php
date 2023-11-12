@@ -104,47 +104,6 @@ class LokasiTanamController extends Controller
 		return response()->json($data);
 	}
 
-	public function daftarTanam($id)
-	{
-		$verifikasi = AjuVerifTanam::find($id);
-		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
-		$lokasis = Lokasi::where('no_ijin', $verifikasi->no_ijin)->get();
-
-		$anggotas = $lokasis->map(function ($lokasi) use ($commitment) {
-			$anggotaData = [
-				'kelompok' => $lokasi->masterkelompok->nama_kelompok,
-				'no_pks' => $lokasi->pks->no_perjanjian,
-				'mulai_pks' => $lokasi->pks->tgl_perjanjian_start,
-				'akhir_pks' => $lokasi->pks->tgl_perjanjian_end,
-				'anggota' => $lokasi->masteranggota->nama_petani,
-				'datarealisasi' => [] // Inisialisasi data realisasi
-			];
-
-			foreach ($lokasi->datarealisasi as $realisasi) {
-				$realisasiData = [
-					'lokasi' => $realisasi->nama_lokasi,
-					'mulai_tanam' => $realisasi->mulai_tanam,
-					'akhir_tanam' => $realisasi->akhir_tanam,
-					'mulai_panen' => $realisasi->mulai_panen,
-					'akhir_panen' => $realisasi->akhir_panen,
-					// Tambahkan atribut datarealisasi lainnya sesuai kebutuhan
-				];
-
-				$anggotaData['datarealisasi'][] = $realisasiData;
-			}
-
-			return $anggotaData;
-		});
-
-		$data = [
-			'anggotas' => $anggotas,
-		];
-
-		return response()->json($data);
-	}
-
-
-
 	public function listLokasibyPetani($noIjin, $lokasiId)
 	{
 		$module_name = 'Verifikasi Data';

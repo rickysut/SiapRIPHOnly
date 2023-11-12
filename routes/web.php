@@ -238,6 +238,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 			return redirect()->route('skl.arsip');
 		})->name('skl.arsip');
 	});
+
 	//template
 	Route::group(['prefix' => 'template', 'as' => 'template.'], function () {
 		Route::get('index', 'FileManagementController@index')->name('index');
@@ -248,11 +249,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('{id}/download', 'FileManagementController@download')->name('download');
 		Route::delete('{id}/delete', 'FileManagementController@destroy')->name('delete');
 	});
+
 	Route::get('lokasiTanamByCommitment/{id}', 'DataLokasiTanamController@lokasiTanamByCommitment')->name('lokasiTanamByCommitment');
 	Route::get('listLokasi/{id}', 'DataLokasiTanamController@listLokasi')->name('ajutanam.listlokasi');
 	Route::get('produksi/listLokasi/{id}', 'DataLokasiTanamController@listLokasiTanamProduksi')->name('ajuproduksi.listlokasi');
 });
 
+//route untuk Pelaku usaha
 Route::group(['prefix' => 'importir', 'as' => 'importir.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 });
 

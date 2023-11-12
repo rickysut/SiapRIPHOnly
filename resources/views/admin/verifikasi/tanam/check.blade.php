@@ -561,10 +561,9 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 
 			var url = '{{ route("verification.lokasitanam", $noIjin) }}';
 
-			$('#pksCheck').DataTable({
+			var pksCheck = $('#pksCheck').DataTable({
 				responsive: true,
 				lengthChange: true,
-				order: [1, 'asc'],
 				dom:
 				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
 				"<'row'<'col-sm-12'tr>>" +
@@ -573,27 +572,75 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 					{
 						extend: 'excelHtml5',
 						text: '<i class="fa fa-file-excel"></i>',
-						title: 'Daftar Perjanjian Kerjasama',
+						title: 'Monitoring Timeline Realisasi',
 						titleAttr: 'Generate Excel',
 						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
 					},
 					{
 						extend: 'print',
 						text: '<i class="fa fa-print"></i>',
-						title: 'Daftar Perjanjian Kerjasama',
+						title: 'Monitoring Timeline Realisasi',
 						titleAttr: 'Print Table',
 						className: 'btn-outline-primary btn-xs btn-icon mr-1'
 					}
 				],
-				columnDefs: [
+			});
 
-					{ className: 'text-center', targets: [2,3,4] },
+			var tableTanam = $('#tableTanam').DataTable({
+				responsive: true,
+				lengthChange: true,
+				dom:
+				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						text: '<i class="fa fa-file-excel"></i>',
+						title: 'Monitoring Timeline Realisasi',
+						titleAttr: 'Generate Excel',
+						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
+					},
+					{
+						extend: 'print',
+						text: '<i class="fa fa-print"></i>',
+						title: 'Monitoring Timeline Realisasi',
+						titleAttr: 'Print Table',
+						className: 'btn-outline-primary btn-xs btn-icon mr-1'
+					}
 				],
-				ajax: {
+			});
+
+			var tableLokasi = $('#tableLokasi').DataTable({
+				responsive: true,
+				lengthChange: true,
+				dom:
+				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						text: '<i class="fa fa-file-excel"></i>',
+						title: 'Monitoring Timeline Realisasi',
+						titleAttr: 'Generate Excel',
+						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
+					},
+					{
+						extend: 'print',
+						text: '<i class="fa fa-print"></i>',
+						title: 'Monitoring Timeline Realisasi',
+						titleAttr: 'Print Table',
+						className: 'btn-outline-primary btn-xs btn-icon mr-1'
+					}
+				],
+			});
+
+			function updateTablePks(url) {
+				$.ajax({
 					url: url,
 					type: 'GET',
 					dataType: 'json',
-					dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
 					success: function (response) {
 						var pksCheck = $('#pksCheck').DataTable();
 						pksCheck.clear().draw();
@@ -620,42 +667,16 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 						pksCheck.draw(); // Draw the table after adding the rows
 					},
 					error: function (xhr, status, error) {
-						// Handle error jika diperlukan
-						console.error(xhr);
-
+						console.log("AJAX request error: " + error);
 					}
-				},
-			});
+				});
+			}
 
-			$('#tableTanam').DataTable({
-				// serverSide: true,
-				responsive: true,
-				lengthChange: true,
-				dom:
-				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
-				"<'row'<'col-sm-12'tr>>" +
-				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-				buttons: [
-					{
-						extend: 'excelHtml5',
-						text: '<i class="fa fa-file-excel"></i>',
-						title: 'Monitoring Timeline Realisasi',
-						titleAttr: 'Generate Excel',
-						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
-					},
-					{
-						extend: 'print',
-						text: '<i class="fa fa-print"></i>',
-						title: 'Monitoring Timeline Realisasi',
-						titleAttr: 'Print Table',
-						className: 'btn-outline-primary btn-xs btn-icon mr-1'
-					}
-				],
-				ajax: {
+			function updateTableTanam(url) {
+				$.ajax({
 					url: url,
 					type: 'GET',
 					dataType: 'json',
-					dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
 					success: function (response) {
 						// Hapus data yang ada di tabel sebelum memasukkan yang baru
 						var tableTanam = $('#tableTanam').DataTable();
@@ -685,40 +706,16 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 						}
 					},
 					error: function (xhr, status, error) {
-						// Handle error jika diperlukan
-						console.error(xhr);
+						console.log("AJAX request error: " + error);
 					}
-				},
-			});
+				});
+			}
 
-			$('#tableLokasi').DataTable({
-				responsive: true,
-				lengthChange: true,
-				dom:
-				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
-				"<'row'<'col-sm-12'tr>>" +
-				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-				buttons: [
-					{
-						extend: 'excelHtml5',
-						text: '<i class="fa fa-file-excel"></i>',
-						title: 'Daftar Lokasi Tanam',
-						titleAttr: 'Generate Excel',
-						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
-					},
-					{
-						extend: 'print',
-						text: '<i class="fa fa-print"></i>',
-						title: 'Daftar Lokasi Tanam',
-						titleAttr: 'Print Table',
-						className: 'btn-outline-primary btn-xs btn-icon mr-1'
-					}
-				],
-				ajax: {
+			function updateTableLokasi(url) {
+				$.ajax({
 					url: url,
 					type: 'GET',
 					dataType: 'json',
-					dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
 					success: function (response) {
 						var tableLokasi = $('#tableLokasi').DataTable();
 						tableLokasi.clear().draw();
@@ -753,11 +750,212 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 						tableLokasi.draw(); // Draw the table after adding the rows
 					},
 					error: function (xhr, status, error) {
-						// Handle error jika diperlukan
-						console.error(xhr);
+						console.log("AJAX request error: " + error);
 					}
-				},
-			});
+				});
+			}
+
+			updateTablePks(url);
+			updateTableTanam(url);
+			updateTableLokasi(url);
+
+			// $('#pksCheck').DataTable({
+			// 	responsive: true,
+			// 	lengthChange: true,
+			// 	order: [1, 'asc'],
+			// 	dom:
+			// 	"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+			// 	"<'row'<'col-sm-12'tr>>" +
+			// 	"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+			// 	buttons: [
+			// 		{
+			// 			extend: 'excelHtml5',
+			// 			text: '<i class="fa fa-file-excel"></i>',
+			// 			title: 'Daftar Perjanjian Kerjasama',
+			// 			titleAttr: 'Generate Excel',
+			// 			className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
+			// 		},
+			// 		{
+			// 			extend: 'print',
+			// 			text: '<i class="fa fa-print"></i>',
+			// 			title: 'Daftar Perjanjian Kerjasama',
+			// 			titleAttr: 'Print Table',
+			// 			className: 'btn-outline-primary btn-xs btn-icon mr-1'
+			// 		}
+			// 	],
+			// 	columnDefs: [
+
+			// 		{ className: 'text-center', targets: [2,3,4] },
+			// 	],
+			// 	ajax: {
+			// 		url: url,
+			// 		type: 'GET',
+			// 		dataType: 'json',
+			// 		dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
+			// 		success: function (response) {
+			// 			var pksCheck = $('#pksCheck').DataTable();
+			// 			pksCheck.clear().draw();
+			// 			if (response.daftarPks.length > 0) {
+			// 				$.each(response.daftarPks, function(index, pks) { // Update response handling
+			// 					var noPks = pks.noPks;
+			// 					var kelompok = pks.kelompok;
+			// 					var mulaiPks = pks.mulaiPks;
+			// 					var akhirPks = pks.akhirPks;
+			// 					var tglPks = `
+			// 						<span>${mulaiPks !== null ? mulaiPks + ' s.d ' : ''}</span>
+			// 						<span>${akhirPks !== null ? akhirPks : ''}</span>
+			// 					`;
+			// 					var status = pks.status;
+			// 					var statusClass = status ? 'btn-success' : 'btn-warning';
+			// 					var pksBtn =`
+			// 						<a href="${pks.pksRoute}" class="btn btn-xs btn-icon btn-primary" title="Lihat detail">
+			// 							<i class="fal fa-search"></i>
+			// 						</a>
+			// 						`;
+			// 					pksCheck.row.add([noPks, kelompok, tglPks, status, pksBtn]).draw(false);
+			// 				});
+			// 			}
+			// 			pksCheck.draw(); // Draw the table after adding the rows
+			// 		},
+			// 		error: function (xhr, status, error) {
+			// 			// Handle error jika diperlukan
+			// 			console.error(xhr);
+
+			// 		}
+			// 	},
+			// });
+
+			// $('#tableTanam').DataTable({
+			// 	responsive: true,
+			// 	lengthChange: true,
+			// 	dom:
+			// 	"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+			// 	"<'row'<'col-sm-12'tr>>" +
+			// 	"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+			// 	buttons: [
+			// 		{
+			// 			extend: 'excelHtml5',
+			// 			text: '<i class="fa fa-file-excel"></i>',
+			// 			title: 'Monitoring Timeline Realisasi',
+			// 			titleAttr: 'Generate Excel',
+			// 			className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
+			// 		},
+			// 		{
+			// 			extend: 'print',
+			// 			text: '<i class="fa fa-print"></i>',
+			// 			title: 'Monitoring Timeline Realisasi',
+			// 			titleAttr: 'Print Table',
+			// 			className: 'btn-outline-primary btn-xs btn-icon mr-1'
+			// 		}
+			// 	],
+			// 	ajax: {
+			// 		url: '{{ route("verification.lokasitanam", $noIjin) }}',
+			// 		type: 'GET',
+			// 		dataType: 'json',
+			// 		dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
+			// 		success: function (response) {
+			// 			// Hapus data yang ada di tabel sebelum memasukkan yang baru
+			// 			var tableTanam = $('#tableTanam').DataTable();
+			// 			tableTanam.clear().draw();
+
+			// 			if (response.datarealisasi.length > 0) {
+			// 				$.each(response.datarealisasi, function (index, realisasi) {
+			// 					var ijinStart = realisasi.mulai_ijin;
+			// 					var ijinEnd = realisasi.akhir_ijin;
+			// 					var kelompok = realisasi.kelompok;
+			// 					var pksAwal = realisasi.mulai_perjanjian;
+			// 					var pksAkhir = realisasi.akhir_perjanjian;
+			// 					var petani = realisasi.anggota;
+			// 					var lokasi = realisasi.lokasi;
+			// 					var awalTanam = realisasi.mulai_tanam;
+			// 					var akhirTanam = realisasi.akhir_tanam;
+			// 					var awalPanen = realisasi.mulai_panen;
+			// 					var akhirPanen = realisasi.akhir_panen;
+
+			// 					var pksStart = (pksAwal < ijinStart || pksAwal > ijinEnd) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku">' + pksAwal + '</span>' : pksAwal;
+			// 					var pksEnd = (pksAkhir < ijinStart || pksAkhir > ijinEnd) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku">' + pksAkhir + '</span>' : pksAkhir;
+			// 					var tanamStart = (awalTanam < ijinStart || awalTanam > ijinEnd || awalTanam < pksAwal || awalTanam > pksAkhir) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku atau tanggal berlaku PKS">' + awalTanam + '</span>' : awalTanam;
+			// 					var tanamEnd = (akhirTanam < ijinStart || akhirTanam > ijinEnd || akhirTanam < pksAwal || akhirTanam > pksAkhir) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku atau tanggal berlaku PKS">' + akhirTanam + '</span>' : akhirTanam;
+
+			// 					tableTanam.row.add([lokasi, petani, kelompok, pksStart, pksEnd, tanamStart, tanamEnd, awalPanen, akhirPanen]).draw(false);
+			// 				});
+			// 			}
+			// 		},
+			// 		error: function (xhr, status, error) {
+			// 			// Handle error jika diperlukan
+			// 			console.error(xhr);
+			// 		}
+			// 	},
+			// });
+
+
+			// $('#tableLokasi').DataTable({
+			// 	responsive: true,
+			// 	lengthChange: true,
+			// 	dom:
+			// 	"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+			// 	"<'row'<'col-sm-12'tr>>" +
+			// 	"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+			// 	buttons: [
+			// 		{
+			// 			extend: 'excelHtml5',
+			// 			text: '<i class="fa fa-file-excel"></i>',
+			// 			title: 'Daftar Lokasi Tanam',
+			// 			titleAttr: 'Generate Excel',
+			// 			className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
+			// 		},
+			// 		{
+			// 			extend: 'print',
+			// 			text: '<i class="fa fa-print"></i>',
+			// 			title: 'Daftar Lokasi Tanam',
+			// 			titleAttr: 'Print Table',
+			// 			className: 'btn-outline-primary btn-xs btn-icon mr-1'
+			// 		}
+			// 	],
+			// 	ajax: {
+			// 		url: url,
+			// 		type: 'GET',
+			// 		dataType: 'json',
+			// 		dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
+			// 		success: function (response) {
+			// 			var tableLokasi = $('#tableLokasi').DataTable();
+			// 			tableLokasi.clear().draw();
+			// 			if (response.lokasis.length > 0) {
+			// 				$.each(response.lokasis, function(index, lokasi) { // Update response handling
+
+			// 					var luasTanam = lokasi.luas_tanam;
+			// 					var formatter = new Intl.NumberFormat('en-GB', {
+			// 						style: 'decimal',
+			// 						minimumFractionDigits: 2,
+			// 						maximumFractionDigits: 2,
+			// 					});
+			// 					var noDecimal = new Intl.NumberFormat('en-GB', {
+			// 						style: 'decimal',
+			// 						minimumFractionDigits: 0,
+			// 						maximumFractionDigits: 0,
+			// 					});
+			// 					var LuasTanam = formatter.format(luasTanam) + ' ha';
+
+			// 					var poktan = lokasi.poktan;
+			// 					var anggota = lokasi.anggota;
+			// 					var namaLokasi = lokasi.nama_lokasi;
+			// 					var jmlLokasi = noDecimal.format(namaLokasi) + ' titik';
+			// 					var actionBtn = `
+			// 						<a href="${lokasi.show}" class="btn btn-xs btn-icon btn-primary" title="Lihat detail">
+			// 							<i class="fal fa-search"></i>
+			// 						</a>
+			// 					`;
+			// 					tableLokasi.row.add([poktan, jmlLokasi, anggota,LuasTanam, actionBtn]).draw(false);
+			// 				});
+			// 			}
+			// 			tableLokasi.draw(); // Draw the table after adding the rows
+			// 		},
+			// 		error: function (xhr, status, error) {
+			// 			// Handle error jika diperlukan
+			// 			console.error(xhr);
+			// 		}
+			// 	},
+			// });
 		});
 	</script>
 
