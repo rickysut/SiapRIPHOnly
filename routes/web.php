@@ -204,7 +204,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::delete('pksmd', 'PksController@massDestroy')->name('pks.massDestroy');
 
 		//realisasi lokasi tanam & produksi
-		Route::get('realisasi/lokasi/{anggota_id}', 'LokasiController@show')->name('lokasi.tanam');
+		Route::get('realisasi/lokasi/{lokasiId}', 'LokasiController@show')->name('lokasi.tanam');
 		Route::post('realisasi/lokasi/{id}/update', 'LokasiController@update')->name('lokasi.tanam.update');
 		Route::put('realisasi/lokasi/{id}/storeTanam', 'LokasiController@storeTanam')->name('lokasi.tanam.store');
 		Route::put('realisasi/lokasi/{id}/storeProduksi', 'LokasiController@storeProduksi')->name('lokasi.produksi.store');
@@ -292,7 +292,7 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 		Route::get('{noIjin}/poktan/{poktan_id}/check', 'VerifProduksiController@verifPks')->name('check.pks');
 		Route::put('pks/{id}/store', 'VerifProduksiController@verifPksStore')->name('check.pks.store');
 		Route::post('{id}/checkPksSelesai', 'VerifProduksiController@checkPksSelesai')->name('checkPksSelesai');
-
+		Route::get('{id}/showlocation', 'LokasiTanamController@showLocation')->name('showLocation');
 		//unused
 		Route::put('{id}/store', 'VerifProduksiController@store')->name('store');
 	});
@@ -305,7 +305,7 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 		Route::get('{noIjin}/poktan/{poktan_id}/check', 'VerifSklController@verifPks')->name('check.pks');
 		Route::put('pks/{id}/store', 'VerifSklController@verifPksStore')->name('check.pks.store');
 		Route::post('{id}/checkPksSelesai', 'VerifSklController@checkPksSelesai')->name('checkPksSelesai');
-		Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
+		Route::get('{id}/showlocation', 'LokasiTanamController@showLocation')->name('showLocation');
 		Route::post('{id}/storeCheck', 'VerifSklController@storeCheck')->name('storeCheck');
 		Route::get('{id}/verifSklShow', 'VerifSklController@verifSklShow')->name('verifSklShow');
 
@@ -327,7 +327,7 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 		Route::get('recomendations', 'VerifSklController@recomendations')->name('recomendations');
 	});
 
-	Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
+	// Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
 
 
 	Route::get('skl/{id}/show', 'SklController@show')->name('skl.show');
@@ -365,6 +365,19 @@ Route::group(['prefix' => 'wilayah', 'as' => 'wilayah.', 'namespace' => 'Wilayah
 Route::group(['prefix' => 'digisign', 'as' => 'digisign.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 	Route::get('index', 'DigitalSign@index')->name('index');
 	Route::post('saveQrImage', 'DigitalSign@saveQrImage')->name('saveQrImage');
+});
+
+Route::group(['prefix' => 'support', 'as' => 'support.', 'middleware' => ['auth']], function () {
+	Route::group(['prefix' => 'how_to', 'as' => 'howto.', 'namespace' => 'HowTo'], function () {
+		Route::get('importir',		'HowToController@importir')->name('importir');
+		Route::get('administrator',	'HowToController@administrator')->name('administrator');
+		Route::get('verifikator',	'HowToController@verifikator')->name('verifikator');
+		Route::get('pejabat',		'HowToController@pejabat')->name('pejabat');
+	});
+	Route::group(['prefix' => 'faq', 'as' => 'faq.', 'namespace' => 'Faq'], function () {
+	});
+	Route::group(['prefix' => 'ticket', 'as' => 'ticket.', 'namespace' => 'Ticket'], function () {
+	});
 });
 
 Route::group(['prefix' => 'test', 'as' => 'test.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {

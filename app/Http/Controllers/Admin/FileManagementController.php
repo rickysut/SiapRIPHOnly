@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Berkas;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBerkasRequest;
-use App\Http\Requests\UpdateBerkasRequest;
-use App\Http\Requests\MassDestroyBerkasRequest;
 use App\Models\FileManagement;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -53,21 +49,6 @@ class FileManagementController extends Controller
 		// dd($filename);
 		$template->save();
 		return redirect()->route('admin.template.index')->with('success', 'Template berhasil diunggah.');
-	}
-
-	public function show($id)
-	{
-		//
-	}
-
-	public function edit($id)
-	{
-		//
-	}
-
-	public function update(Request $request, $id)
-	{
-		//
 	}
 
 	public function download($id)

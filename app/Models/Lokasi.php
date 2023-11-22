@@ -24,6 +24,8 @@ class Lokasi extends Model
 		'poktan_id',
 		'anggota_id',
 		'nama_lokasi',
+		'luas_lahan',
+		'periode_tanam',
 		'latitude',
 		'longitude',
 		'altitude',

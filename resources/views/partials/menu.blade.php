@@ -72,6 +72,7 @@
 			{{-- dashhboard --}}
 			@can('dashboard_access')
 				@if (Auth::user()->roles[0]->title == 'User')
+				@can('demo_access')
 					<li class="{{ request()->is('admin/dashboard*') ? 'active open' : '' }} ">
 						<a href="#" title="Dashboard" data-filter-tags="dashboard pemantauan kinerja">
 							<i class="fal fa-analytics"></i>
@@ -94,6 +95,7 @@
 							</li>
 						</ul>
 					</li>
+				@endcan
 				@elseif (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat')
 					<li class="{{ request()->is('admin/dashboard*') ? 'active open' : '' }} ">
 						<a href="#" title="Dashboard" data-filter-tags="dashboard pemantauan kinerja">
@@ -141,8 +143,8 @@
 				@endif
 			@endcan
 
-			{{-- user task --}}
-			@can('user_task_access')
+			{{-- user_task_access --}}
+			@can('demo_access')
 				<li class="nav-title">Pelaporan Realisasi</li>
 				@can('pull_access')
 					<li class="c-sidebar-nav-item {{ request()->is('admin/task/pull') ? 'active' : '' }}">
@@ -247,18 +249,28 @@
 						<a href="{{ route('verification.tanam') }}"
 							data-filter-tags="verifikasi tanam">
 							<i class="fal fa-seedling c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Verifikasi Tanam</span>
+							<span class="nav-link-text">
+								Verifikasi Tanam
+							</span>
 							@php
 								$pengajuan = new \App\Models\AjuVerifTanam();
 								$unverified = $pengajuan->NewRequest();
 								$proceed = $pengajuan->proceedVerif();
 							@endphp
-							@if ($unverified > 0)
-								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
-							@endif
-							@if ($proceed > 0)
-								<span class="dl-ref bg-warning-500 hidden-nav-function-minify hidden-nav-function-top">{{ $proceed }}</span>
-							@endif
+							<span class="">
+								{{-- untuk 2024 --}}
+								{{-- @if ($unverified > 0 || $proceed > 0)
+									<span class="dl-ref {{ $unverified > 0 ? 'bg-danger-500' : 'bg-warning-500' }} hidden-nav-function-minify hidden-nav-function-top">
+										{{ $unverified }}/{{ $proceed }}
+									</span>
+								@endif --}}
+								@if ($unverified > 0)
+									<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+								@endif
+								@if ($proceed > 0)
+									<span class="dl-ref bg-warning-500 hidden-nav-function-minify hidden-nav-function-top">{{ $proceed }}</span>
+								@endif
+							</span>
 						</a>
 					</li>
 				@endcan
@@ -274,6 +286,12 @@
 								$unverified = $pengajuan->NewRequest();
 								$proceed = $pengajuan->proceedVerif();
 							@endphp
+							{{-- untuk 2024 --}}
+							{{-- @if ($unverified > 0 || $proceed > 0)
+								<span class="dl-ref {{ $unverified > 0 ? 'bg-danger-500' : 'bg-warning-500' }} hidden-nav-function-minify hidden-nav-function-top">
+									{{ $unverified }}/{{ $proceed }}
+								</span>
+							@endif --}}
 							@if ($unverified > 0)
 								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
 							@endif
@@ -367,8 +385,8 @@
 				</li>
 			@endif
 
-			{{-- pengelolaan berkas --}}
-			@can('permohonan_access')
+			{{-- pengelolaan berkas permohonan_access --}}
+			@can('demo_access')
 				<li class="nav-title">Pengelolaan Berkas</li>
 				@can('template_access')
 					<li class="c-sidebar-nav-item {{ request()->is('admin/template')
@@ -382,8 +400,8 @@
 				@endcan
 			@endcan
 
-			{{-- Feed & Messages --}}
-			@can('feedmsg_access')
+			{{-- Feed & Messages feedmsg_access --}}
+			@can('demo_access')
 				<li class="nav-title">BERITA & PESAN</li>
 				@can('feeds_access')
 					{{-- <li class="{{ request()->is('admin/posts*')
@@ -585,6 +603,54 @@
 				@endcan
 			@endcan
 
+			{{-- support --}}
+			@can('demo_access')
+				<li class="nav-title" data-i18n="nav.administation">DUKUNGAN</li>
+				@can('administrator_access')
+				<li class="c-sidebar-nav-item {{ request()->is('support/how_to/administrator') ? 'active' : '' }}">
+					<a href="{{route('support.howto.administrator')}}" class="c-sidebar-nav-link"
+						data-filter-tags="dukungan support panduan">
+						<i class="c-sidebar-nav-icon fal fa-books">
+						</i>
+						<span class="nav-link-text">Panduan Adminisrator</span>
+					</a>
+				</li>
+				@endcan
+				@can('verificator_task_access')
+				<li class="c-sidebar-nav-item {{ request()->is('support/how_to/verifikator') ? 'active' : '' }} ">
+					<a href="{{route('support.howto.verifikator')}}" title="Panduan Penggunaan Aplikasi bagi Verifikator"
+						data-filter-tags="dukungan support panduan">
+						<i class="c-sidebar-nav-icon fal fa-books"></i>
+						<span class="nav-link-text">Panduan Verifikator</span>
+					</a>
+				</li>
+				@endcan
+				@can('user_task_access')
+				<li class="c-sidebar-nav-item {{ request()->is('support/how_to/importir') ? 'active' : '' }} ">
+					<a href="{{route('support.howto.importir')}}" title="Panduan Penggunaan Aplikasi bagi Pelaku Usaha"
+					data-filter-tags="dukungan support panduan">
+						<i class="c-sidebar-nav-icon fal fa-books"></i>
+						<span class="nav-link-text">Panduan Pelaku Usaha</span>
+					</a>
+				</li>
+				@endcan
+				@if (Auth::user()->roles[0]->title == 'Pejabat')
+				<li class="c-sidebar-nav-item {{ request()->is('support/how_to/pejabat') ? 'active open' : '' }} ">
+					<a href="{{route('support.howto.pejabat')}}" title="Panduan Penggunaan Aplikasi bagi Pejabat"
+					data-filter-tags="dukungan support panduan">
+						<i class="c-sidebar-nav-icon fal fa-books"></i>
+						<span class="nav-link-text">Panduan Pejabat</span>
+					</a>
+				</li>
+				@endif
+				<li class="">
+					<a href="" title="Tiket Bantuan"
+					data-filter-tags="dukungan support tiket" disabled>
+						<i class="fal fa-ticket"></i>
+						<span class="nav-link-text">Tiket Bantuan</span>
+					</a>
+				</li>
+			@endcan
 			{{-- personalisasi --}}
 			<li class="nav-title" data-i18n="nav.administation">PERSONALISASI</li>
 			{{-- Change Password --}}

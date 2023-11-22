@@ -90,20 +90,16 @@
 				"<'row'<'col-sm-12'tr>>" +
 				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 			buttons: [
+				@can('administrator_access')
 				{
 					text: '<i class="fa fa-plus mr-1"></i> Tambah Templat',
 					titleAttr: 'Create new template',
 					className: 'btn btn-info btn-xs ml-2',
-					@can('administrator_access')
-						action: function(e, dt, node, config) {
-							window.location.href = '{{ route('admin.template.create') }}';
-						}
-					@else
-						action: function(e, dt, node, config) {
-							// Add the desired behavior for users without the 'old_skl_create' permission
-						}
-					@endcan
+					action: function(e, dt, node, config) {
+						window.location.href = '{{ route('admin.template.create') }}';
+					},
 				}
+				@endcan
 			]
 		});
 

@@ -1,0 +1,100 @@
+studi case: "nama": "SURYA TANI MADANI INDONESIA",
+"no_ijin": "0067\/PP.240\/D\/01\/2023",
+
+
+1. data petani dari SIAP RIPH
+{
+    "id_poktan": "1070",
+    "id_petani": "32832",
+    "id_kabupaten": "3307",
+    "id_kecamatan": "3307020",
+    "id_kelurahan": "3307020023",
+    "nama_kelompok": "Tani Maju Mulyo",
+    "nama_pimpinan": "Hasim",
+    "hp_pimpinan": {},
+    "nama_petani": "Aminudin",
+    "ktp_petani": "3307020603760003",
+    "luas_lahan": "0.112",
+    "periode_tanam": "000000000000"
+},
+{
+    "id_poktan": "1070",
+    "id_petani": "32832",
+    "id_kabupaten": "3307",
+    "id_kecamatan": "3307020",
+    "id_kelurahan": "3307020023",
+    "nama_kelompok": "Tani Maju Mulyo",
+    "nama_pimpinan": "Hasim",
+    "hp_pimpinan": {},
+    "nama_petani": "Aminudin",
+    "ktp_petani": "3307020603760003",
+    "luas_lahan": "0.256",
+    "periode_tanam": "000000000000"
+},
+{
+    "id_poktan": "1070",
+    "id_petani": "32832",
+    "id_kabupaten": "3307",
+    "id_kecamatan": "3307020",
+    "id_kelurahan": "3307020023",
+    "nama_kelompok": "Tani Maju Mulyo",
+    "nama_pimpinan": "Hasim",
+    "hp_pimpinan": {},
+    "nama_petani": "Aminudin",
+    "ktp_petani": "3307020603760003",
+    "luas_lahan": "0.098",
+    "periode_tanam": "000000000000"
+},
+...
+Terdapat 3 data petani yang sama, yang membedakan hanya luas lahan. data ini dimaksudkan oleh perusahaan sebagai 3 lokasi lahan untuk 1 petani.
+
+key spesifik:
+1. kelompok tani = id_poktan
+2. petani = id_petani
+
+Permasalahan:
+1. dari ketiga data tersebut, tidak ada key spesifik/id yang dapat digunakan sebagai pembeda bagi tiap lokasi. menyebabkan, simethris akan menganggap ini sebagai data yang sama/redundant.
+2. jika menggunakan luas_lahan sebagai key spesifik, maka setiap kali terjadi pembaruan data/revisi di aplikasi SIAPRIPH terhadap kolom data luas_lahan, maka di simethris akan dianggap sebagai data baru. sehingga simethris tidak akan melakukan pembaruan terhadap data yang dimaksudkan.
+
+method pada simethris:
+Tabel Master Anggota
+MasterAnggota::updateOrCreate(
+	[
+		'npwp' => $stnpwp,
+		'anggota_id' => $idpetani,
+		'poktan_id' => $idpoktan
+	],
+	[
+		'id' => $idpetani,
+		'user_id' => $user->id,
+		'nama_petani'  => trim($poktan->nama_petani, ' '),
+		'ktp_petani' => $ktp,
+		'luas_lahan'   => trim($poktan->luas_lahan, ' '),
+		'periode_tanam' => trim($poktan->periode_tanam, ' ')
+	]
+);
+
+tabel Lokasi
+Lokasi::updateOrCreate(
+	[
+		'npwp' => $stnpwp,
+		'no_ijin' => $noijin,
+		'poktan_id' => $idpoktan,
+		'anggota_id' => $idpetani,
+	]
+);
+
+Pilihan Solusi:
+1. SIAPRIPH menambahkan entitas baru sebagai pembeda bagi tiap lokasi. Simethris melakukan adaptasi terhadap perubaha ini. Namun pilihan ini kurang tepat karena berpotensi mengubah >90% mekanisme di simethris. karena ini adalah core aplikasi.
+
+*2. Tergantung mekanisme pengisian data petani atau lokasi lahan di SIAPRIPH. Apabila terdapat banyak lokasi untuk 1 petani, maka agar dibuat saja menjadi total luas seluruh lokasi untuk petani tersebut. ini tidak mengubah apapun di kedua sistem. Pilihan ini paling dimungkinkan, karena tidak ada pengubahan di simethris (mungkin pula di SIAPRIPH). hanya pola input pelaku usaha saja yang disesuaikan. simethris telah mendukung 1 petani banyak lokasi.*
+
+*3. lokasi-lokasi tersebut agar diberi pembeda, sehingga nama_petani dan id_petani berbeda untuk tiap lokasi agar di simethris tetap muncul sejumlah petani yang sama dengan di SIAPRIPH. Pada dasarna pilihan ini adalah sama dengan pilihan poin 2. hanya metode input di SIAPRIPH saja yang berbeda.*
+
+4. Simethris tidak melakukan pemeriksaan redundancy terhadap data petani. maka seluruh data akan di salin tanpa memeriksa apakah data tersebut ada atau tidak. namun pilihan ini akan menyebabkan redundancy data yang buruk.
+
+
+
+To do
+1. id masteranggota yang ada jangan digunakan sebagai public key
+2. public key master anggota ganti ke kolom baru, msagg_id, increment PK

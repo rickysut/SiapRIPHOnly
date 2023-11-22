@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class AjuVerifTanam extends Model
 {
@@ -40,9 +41,14 @@ class AjuVerifTanam extends Model
 
 	public function proceedVerif(): int
 	{
+		$user = Auth::user(); // Ambil informasi pengguna saat ini
+
 		return self::whereIn('status', ['2', '3'])
-			->whereNull('batanam')->count();
+			->whereNull('batanam')
+			->where('check_by', $user->id)
+			->count();
 	}
+
 
 	public static function getNewPengajuan()
 	{

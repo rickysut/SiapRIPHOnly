@@ -149,35 +149,4 @@ class LokasiTanamController extends Controller
 
 		return view('admin.verifikasi.locationcheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'lokasi', 'noIjin', 'realNpwp', 'pks', 'fotoTanams', 'fotoProduksis'));
 	}
-
-	//dibuang
-
-
-	public function show($noIjin, $anggota_id)
-	{
-		$module_name = 'Verifikasi Data';
-		$page_title = 'Verifikasi Data Lokasi';
-		$page_heading = 'Pemeriksaan Data Tanam dan Produksi';
-		$heading_class = 'fal fa-ballot-check';
-
-		$no_ijin = substr_replace($noIjin, '/', 4, 0);
-		$no_ijin = substr_replace($no_ijin, '.', 7, 0);
-		$no_ijin = substr_replace($no_ijin, '/', 11, 0);
-		$no_ijin = substr_replace($no_ijin, '/', 13, 0);
-		$no_ijin = substr_replace($no_ijin, '/', 16, 0);
-
-		$lokasi = Lokasi::where('anggota_id', $anggota_id)
-			->where('no_ijin', $no_ijin)
-			->first();
-
-		$pks = Pks::where('poktan_id', $lokasi->poktan_id)
-			->where('no_ijin', $no_ijin)
-			->latest()
-			->first();
-		$commitment = PullRiph::where('no_ijin', $no_ijin)->first();
-
-		$anggotamitra = $lokasi;
-		// dd($anggotamitra);
-		return view('admin.verifikasi.locationcheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'lokasi', 'pks', 'commitment', 'anggotamitra'));
-	}
 }

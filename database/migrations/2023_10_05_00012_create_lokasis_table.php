@@ -21,6 +21,8 @@ return new class extends Migration
 			$table->unsignedBigInteger('poktan_id')->nullable();
 			$table->unsignedBigInteger('anggota_id')->nullable();
 			$table->string('nama_lokasi')->nullable();
+			$table->double('luas_lahan')->nullable();
+			$table->string('periode_tanam')->nullable();
 			$table->text('latitude')->nullable();
 			$table->text('longitude')->nullable();
 			$table->double('altitude')->nullable();

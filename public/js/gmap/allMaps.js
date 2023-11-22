@@ -4,39 +4,33 @@ var markers = [];
 var polygons = [];
 
 // Initialize the map
+
 function initMap() {
 	map = new google.maps.Map(document.getElementById("allMap"), {
 		center: { lat: -2.548926, lng: 118.014863 },
 		zoom: 5,
 		mapTypeId: google.maps.MapTypeId.HYBRID,
 	});
+}
 
-	// Handle the change event of #periodetahun element
-	$("#periodetahun").on("change", function () {
-		$("#panelData1").addClass("collapse");
-		$("#panelData2").addClass("collapse");
-		// initMap();
-		var periodetahun = $(this).val();
-		var url =
-			periodetahun === "all"
-				? "/admin/map/getAllMap/"
-				: "/admin/map/getAllMapByYears/" + periodetahun;
-		if (map) {
-			map = null;
-		}
+// Menambahkan event listener untuk memanggil fungsi handlePeriodetahunChange saat terjadi perubahan pada elemen #periodetahun
+$("#periodetahun").on("change", handlePeriodetahunChange);
 
-		// Call initMap again to reinitialize the map
-		initMap();
+function handlePeriodetahunChange() {
+	initMap();
+	$("#panelData1").addClass("collapse");
+	$("#panelData2").addClass("collapse");
+	var periodetahun = $(this).val();
+	var url = "/admin/map/getAllMapByYears/" + periodetahun;
 
-		// Make an AJAX request to retrieve marker data and polygons
-		$.ajax({
-			url: url,
-			type: "GET",
-			dataType: "json",
-			success: function (data) {
-				handleMarkerData(data);
-			},
-		});
+	// Make an AJAX request to retrieve marker data and polygons
+	$.ajax({
+		url: url,
+		type: "GET",
+		dataType: "json",
+		success: function (data) {
+			handleMarkerData(data);
+		},
 	});
 }
 

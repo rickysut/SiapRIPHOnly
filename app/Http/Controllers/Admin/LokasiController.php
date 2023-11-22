@@ -38,7 +38,7 @@ class LokasiController extends Controller
 	}
 
 
-	public function show($anggotaId)
+	public function show($lokasiId)
 	{
 		$module_name = 'Realisasi';
 		$page_title = 'Lokasi Tanam';
@@ -46,9 +46,7 @@ class LokasiController extends Controller
 		$heading_class = 'fal fa-farm';
 
 		$npwp_company = Auth::user()->data_user->npwp_company;
-		$anggota = Lokasi::where('npwp', $npwp_company)
-			->where('anggota_id', $anggotaId) // Use anggota_id instead of id
-			->firstOrFail();
+		$anggota = Lokasi::find($lokasiId);
 		// dd($anggota);
 		$commitment = PullRiph::where('no_ijin', $anggota->no_ijin)
 			->first();

@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Models\PullRiph;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\AjuVerifProduksi;
+use App\Models\AjuVerifSkl;
+use App\Models\AjuVerifTanam;
+use App\Models\Completed;
+use App\Models\DataRealisasi;
 use App\Models\Lokasi;
 use App\Models\MasterAnggota;
 use App\Models\Pks;
@@ -32,9 +37,20 @@ class PullRiphController extends Controller
 		$page_heading = 'Tarik Data RIPH';
 		$heading_class = 'fa fa-sync-alt';
 		$npwp_company = (Auth::user()::find(Auth::user()->id)->data_user->npwp_company ?? null);
-		return view('admin.pullriph.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company'));
-	}
+		$noIjins = PullRiph::where('npwp', $npwp_company)->select('no_ijin')->get();
+		// Cari ajutanam yang memiliki nomor ijin dari $noIjins
+		$ajutanam = AjuVerifTanam::whereIn('no_ijin', $noIjins)->get();
 
+		// Cari ajuproduksi dengan nomor ijin dari $noIjins
+		$ajuproduksi = AjuVerifProduksi::whereIn('no_ijin', $noIjins)->get();
+
+		// Cari skl dengan nomor ijin dari $noIjins
+		$ajuskl = AjuVerifSkl::whereIn('no_ijin', $noIjins)->get();
+
+		// Cari completed dengan nomor ijin dari $noIjins
+		$completed = Completed::whereIn('no_ijin', $noIjins)->get();
+		return view('admin.pullriph.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'noIjins', 'ajutanam', 'ajuproduksi', 'ajuskl', 'completed'));
+	}
 
 	public function pull(Request $request)
 	{
@@ -56,6 +72,7 @@ class PullRiphController extends Controller
 				'npwp' => $request->string('npwp'),
 				'nomor' =>  $request->string('nomor')
 			);
+
 			$response = $client->__soapCall('get_riph', $parameter);
 		} catch (\Exception $e) {
 			Log::error('Soap Exception: ' . $e->getMessage());
@@ -215,18 +232,45 @@ class PullRiphController extends Controller
 									'user_id' => $user->id,
 									'nama_petani'  => trim($poktan->nama_petani, ' '),
 									'ktp_petani' => $ktp,
-									'luas_lahan'   => trim($poktan->luas_lahan, ' '),
-									'periode_tanam' => trim($poktan->periode_tanam, ' ')
+									// 'luas_lahan' => trim($poktan->luas_lahan, ' '),
+									// 'periode_tanam' => trim($poktan->periode_tanam, ' ')
 								]
 							);
+
+							// DataRealisasi::where([
+							// 	'npwp_company' => $stnpwp,
+							// 	'no_ijin' => $noijin,
+							// ])->forceDelete();
+
+							// Lokasi::where([
+							// 	'npwp' => $stnpwp,
+							// 	'no_ijin' => $noijin,
+							// 	'poktan_id' => $idpoktan,
+							// 	'anggota_id' => $idpetani,
+							// ])->forceDelete();
+
 							Lokasi::updateOrCreate(
 								[
 									'npwp' => $stnpwp,
 									'no_ijin' => $noijin,
 									'poktan_id' => $idpoktan,
 									'anggota_id' => $idpetani,
-								]
+								],
+								// [
+								// 	'luas_lahan' => trim($poktan->luas_lahan, ' '),
+								// 	'periode_tanam' => trim($poktan->periode_tanam, ' ')
+								// ]
 							);
+							// Lokasi::create(
+							// 	[
+							// 		'npwp' => $stnpwp,
+							// 		'no_ijin' => $noijin,
+							// 		'poktan_id' => $idpoktan,
+							// 		'anggota_id' => $idpetani,
+							// 		'luas_lahan' => trim($poktan->luas_lahan, ' '),
+							// 		'periode_tanam' => trim($poktan->periode_tanam, ' ')
+							// 	],
+							// );
 						}
 					} elseif (is_object($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
 						$poktan = $dtjson->riph->wajib_tanam->kelompoktani->loop;
@@ -290,17 +334,34 @@ class PullRiphController extends Controller
 								'user_id' => $user->id,
 								'nama_petani'  => trim($poktan->nama_petani, ' '),
 								'ktp_petani' => $ktp,
-								'luas_lahan'   => trim($poktan->luas_lahan, ' '),
+								'luas_lahan' => trim($poktan->luas_lahan, ' '),
 								'periode_tanam' => trim($poktan->periode_tanam, ' ')
 							]
 						);
+
+						// DataRealisasi::where([
+						// 	'npwp_company' => $stnpwp,
+						// 	'no_ijin' => $noijin,
+						// ])->forceDelete();
+
+						// Lokasi::where([
+						// 	'npwp' => $stnpwp,
+						// 	'no_ijin' => $noijin,
+						// 	'poktan_id' => $idpoktan,
+						// 	'anggota_id' => $idpetani,
+						// ])->forceDelete();
+
 						Lokasi::updateOrCreate(
 							[
 								'npwp' => $stnpwp,
 								'no_ijin' => $noijin,
 								'poktan_id' => $idpoktan,
 								'anggota_id' => $idpetani,
-							]
+							],
+							// [
+							// 	'luas_lahan' => trim($poktan->luas_lahan, ' '),
+							// 	'periode_tanam' => trim($poktan->periode_tanam, ' ')
+							// ]
 						);
 					}
 				}

@@ -45,6 +45,29 @@
 				</h4>
 			</div>
 		</div>
+
+		<div class="row mb-5">
+			<div class="col-12">
+				<div class="alert alert-danger fade show" role="alert">
+					<div class="d-flex align-items-center">
+						<div class="alert-icon">
+							<span class="icon-stack icon-stack-md">
+								<i class="base-2 icon-stack-3x color-danger-400"></i>
+								<i class="base-10 text-white icon-stack-1x"></i>
+								<i class="fal fa-info-circle color-danger-800 icon-stack-2x"></i>
+							</span>
+						</div>
+						<div class="flex-1">
+							<span class="h4">Pemberitahuan</span>
+							<br>
+							Sehubungan dengan sedang dilaksanakannya pembaruan, perbaikan dan pemeliharaan pada sistem, disampaikan bahwa mulai saat ini hingga beberapa hari ke depan akses dan aktifitas pengguna sedang kami batasi. Demikian disampaikan, mohon maaf atas ketidaknyamanan yang terjadi.
+							<br><br>
+							<strong>Administrator.</strong> at <span class="nav-link-text js-get-date"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		@if (Auth::user()->roles[0]->title == 'Pejabat')
 			@if (!$profile || (!$profile->jabatan || !$profile->nip))
 				<div class="row mb-5">

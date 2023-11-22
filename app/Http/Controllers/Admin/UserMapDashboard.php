@@ -109,7 +109,11 @@ class UserMapDashboard extends Controller
 	public function ByYears($periodeTahun)
 	{
 		$usermap = Auth::user()->data_user->npwp_company;
-		$commitment = PullRiph::where('npwp', $usermap)->where('periodetahun', $periodeTahun)->get();
+		if ($periodeTahun === 'all') {
+			$commitment = PullRiph::where('npwp', $usermap)->get(); // Mengambil semua data jika $periodeTahun tidak disediakan
+		} else {
+			$commitment = PullRiph::where('npwp', $usermap)->where('periodetahun', $periodeTahun)->get();
+		}
 		$dataRealisasis = DataRealisasi::whereIn('no_ijin', $commitment->pluck('no_ijin'))
 			->with(['fototanam', 'fotoproduksi'])->get();
 
@@ -200,7 +204,6 @@ class UserMapDashboard extends Controller
 		// 		];
 		// 	}
 		// }
-
 		return response()->json($result);
 	}
 

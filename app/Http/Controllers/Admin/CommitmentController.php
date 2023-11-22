@@ -40,7 +40,9 @@ class CommitmentController extends Controller
 		$npwp_company = Auth::user()->data_user->npwp_company;
 		$commitments = PullRiph::where('npwp', $npwp_company)
 			->with('skl')
+			->select('id', 'no_ijin', 'periodetahun', 'tgl_ijin', 'volume_riph', 'luas_wajib_tanam', 'volume_produksi')
 			->get();
+		// dd($commitments);
 		$pksCount = 0; // Initialize with a default value
 		$pksFileCount = 0; // Initialize with a default value
 
@@ -55,33 +57,31 @@ class CommitmentController extends Controller
 				$commitment->sumVolume = $sumVolume;
 				$commitment->minThresholdTanam = $minThresholdTanam;
 				$commitment->minThresholdProd = $minThresholdProd;
-				$thesePks = Pks::where('no_ijin', $commitment->no_ijin)->get();
+				$thesePks = Pks::where('no_ijin', $commitment->no_ijin)->select('id', 'berkas_pks')->get();
 				$pksCount = $thesePks->count();
 				$pksFileCount = $thesePks
 					->whereNotNull('berkas_pks')
 					->count();
-				$userDocs = UserDocs::where('npwp', $npwp_company)
-					->where('commitment_id', $commitment->id) // Assuming 'id' is the correct field to match commitments and userDocs
-					->where('no_ijin', $commitment->no_ijin)
+				$userDocs = UserDocs::where('no_ijin', $commitment->no_ijin)
 					->first();
 
-				$ajuTanam = AjuVerifTanam::where('no_ijin', $commitment->no_ijin)
+				$ajuTanam = AjuVerifTanam::where('no_ijin', $commitment->no_ijin)->select('status')
 					->first();
 
-				$ajuProduksi = AjuVerifProduksi::where('no_ijin', $commitment->no_ijin)
+				$ajuProduksi = AjuVerifProduksi::where('no_ijin', $commitment->no_ijin)->select('status')
 					->first();
 
-				$ajuSkl = AjuVerifSkl::where('no_ijin', $commitment->no_ijin)
+				$ajuSkl = AjuVerifSkl::where('no_ijin', $commitment->no_ijin)->select('status')
 					->first();
 
-				$skl = Skl::where('no_ijin', $commitment->no_ijin)->first();
+				// $skl = Skl::where('no_ijin', $commitment->no_ijin)->first();
 
 				// Add userDocs to the commitment
 				$commitment->userDocs = $userDocs;
 				$commitment->ajuTanam = $ajuTanam;
 				$commitment->ajuProduksi = $ajuProduksi;
 				$commitment->ajuSkl = $ajuSkl;
-				$commitment->skl = $skl;
+				// $commitment->skl = $skl;
 			}
 		}
 		return view('admin.commitment.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitments', 'pksCount', 'pksFileCount'));
@@ -139,7 +139,6 @@ class CommitmentController extends Controller
 		} else {
 			$disabled = true; // input di-disable
 		}
-		// dd($pkss);
 		return view('admin.commitment.realisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'pkss', 'penangkars', 'docs', 'npwp', 'varietass', 'disabled'));
 	}
 

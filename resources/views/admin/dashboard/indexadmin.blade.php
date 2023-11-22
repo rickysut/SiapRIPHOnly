@@ -613,30 +613,35 @@
 					{
 						extend: 'pdfHtml5',
 						text: '<i class="fa fa-file-pdf"></i>',
+						title: 'Monitoring Verifikasi',
 						titleAttr: 'Generate PDF',
 						className: 'btn-outline-danger btn-sm btn-icon mr-1'
 					},
 					{
 						extend: 'excelHtml5',
 						text: '<i class="fa fa-file-excel"></i>',
+						title: 'Monitoring Verifikasi',
 						titleAttr: 'Generate Excel',
 						className: 'btn-outline-success btn-sm btn-icon mr-1'
 					},
 					{
 						extend: 'csvHtml5',
 						text: '<i class="fal fa-file-csv"></i>',
+						title: 'Monitoring Verifikasi',
 						titleAttr: 'Generate CSV',
 						className: 'btn-outline-primary btn-sm btn-icon mr-1'
 					},
 					{
 						extend: 'copyHtml5',
 						text: '<i class="fa fa-copy"></i>',
+						title: 'Monitoring Verifikasi',
 						titleAttr: 'Copy to clipboard',
 						className: 'btn-outline-primary btn-sm btn-icon mr-1'
 					},
 					{
 						extend: 'print',
 						text: '<i class="fa fa-print"></i>',
+						title: 'Monitoring Verifikasi',
 						titleAttr: 'Print Table',
 						className: 'btn-outline-primary btn-sm btn-icon mr-1'
 					}
@@ -654,18 +659,21 @@
 					{
 						extend: 'pdfHtml5',
 						text: '<i class="fa fa-file-pdf"></i>',
+						title: 'Monitoring Realisasi',
 						titleAttr: 'Generate PDF',
 						className: 'btn-outline-danger btn-xs btn-icon ml-5 mr-1'
 					},
 					{
 						extend: 'excelHtml5',
 						text: '<i class="fa fa-file-excel"></i>',
+						title: 'Monitoring Realisasi',
 						titleAttr: 'Generate Excel',
 						className: 'btn-outline-success btn-xs btn-icon mr-1'
 					},
 					{
 						extend: 'print',
 						text: '<i class="fa fa-print"></i>',
+						title: 'Monitoring Realisasi',
 						titleAttr: 'Print Table',
 						className: 'btn-outline-primary btn-xs btn-icon mr-1'
 					}
@@ -689,18 +697,21 @@
 					{
 						extend: 'pdfHtml5',
 						text: '<i class="fa fa-file-pdf"></i>',
+						title: 'Monitoring Verifikasi',
 						titleAttr: 'Generate PDF',
 						className: 'btn-outline-danger btn-xs btn-icon mr-1'
 					},
 					{
 						extend: 'excelHtml5',
 						text: '<i class="fa fa-file-excel"></i>',
+						title: 'Monitoring Verifikasi',
 						titleAttr: 'Generate Excel',
 						className: 'btn-outline-success btn-xs btn-icon mr-1'
 					},
 					{
 						extend: 'print',
 						text: '<i class="fa fa-print"></i>',
+						title: 'Monitoring Verifikasi',
 						titleAttr: 'Print Table',
 						className: 'btn-outline-primary btn-xs btn-icon mr-1'
 					}

@@ -57,7 +57,11 @@ class AdminMapController extends Controller
 
 	public function ByYears($periodeTahun)
 	{
-		$commitment = PullRiph::where('periodetahun', $periodeTahun)->get();
+		if ($periodeTahun === 'all') {
+			$commitment = PullRiph::all(); // Mengambil semua data jika $periodeTahun tidak disediakan
+		} else {
+			$commitment = PullRiph::where('periodetahun', $periodeTahun)->get();
+		}
 		$dataRealisasis = DataRealisasi::whereIn('no_ijin', $commitment->pluck('no_ijin'))
 			->with(['fototanam', 'fotoproduksi'])->get();
 

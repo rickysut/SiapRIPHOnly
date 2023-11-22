@@ -352,18 +352,6 @@ td {
 					className: 'btn-outline-success btn-sm btn-icon mr-1'
 				},
 				{
-					extend: 'csvHtml5',
-					text: '<i class="fal fa-file-csv"></i>',
-					titleAttr: 'Generate CSV',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'copyHtml5',
-					text: '<i class="fa fa-copy"></i>',
-					titleAttr: 'Copy to clipboard',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
 					extend: 'print',
 					text: '<i class="fa fa-print"></i>',
 					titleAttr: 'Print Table',

@@ -35,8 +35,16 @@ class VerifTanamController extends Controller
 		$heading_class = 'fal fa-file-search';
 
 		//table pengajuan. jika sudah mengajukan SKL, maka pengajuan terkait tidak muncul
-		$verifikasis = AjuVerifTanam::orderBy('created_at', 'desc')
+		// $verifikasis = AjuVerifTanam::orderBy('created_at', 'desc')
+		// 	->get();
+
+		$verifikasis = AjuVerifTanam::where(function ($query) {
+			$query->where('check_by', Auth::user()->id)
+				->orWhereNull('check_by');
+		})
+			->orderBy('created_at', 'desc')
 			->get();
+
 		return view('admin.verifikasi.tanam.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasis'));
 	}
 
@@ -115,6 +123,7 @@ class VerifTanamController extends Controller
 			if ($verifTanam->status == '1') {
 				$verifTanam->status = '2'; //pemeriksaan berkas selesai
 			}
+			$verifTanam->check_by = $user->id;
 			$verifTanam->save();
 			DB::commit();
 			// Flash message sukses
