@@ -46,6 +46,33 @@
 			</div>
 		</div>
 
+		@if (Auth::user()->roles[0]->title == 'User')
+			<div class="row mb-5">
+				<div class="col-12">
+					<div class="alert alert-danger fade show" role="alert">
+						<div class="d-flex align-items-center">
+							<div class="alert-icon">
+								<span class="icon-stack icon-stack-md">
+									<i class="base-2 icon-stack-3x color-danger-400"></i>
+									<i class="base-10 text-white icon-stack-1x"></i>
+									<i class="fal fa-info-circle color-danger-800 icon-stack-2x"></i>
+								</span>
+							</div>
+							<div class="flex-1">
+								<span class="h4">Pemberitahuan</span>
+								<br>
+								Sehubungan dengan telah dilaksanakanya pembaruan, perbaikan dan pemeliharaan pada sistem, disampaikan bahwa Pelaporan Realisasi Wajib Tanam-Produksi telah dapat dilanjutkan. Namun Demikian disampaikan pula, untuk melanjutkan pengisian data Realisasi Tanam-Produksi, seluruh pengguna diminta untuk melakukan sinkronisasi ulang terhadap data yang telah ter-rekam pada database kami.
+								<br><br>
+								Demikian disampaikan. Mohon maaf atas kendala yang dialami. Terima Kasih.
+								<br><br>
+								<strong>Administrator.</strong> at <span class="nav-link-text js-get-date"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		@endif
+
 		@if (Auth::user()->roles[0]->title == 'Pejabat')
 			@if (!$profile || (!$profile->jabatan || !$profile->nip))
 				<div class="row mb-5">
