@@ -368,14 +368,14 @@ Route::group(['prefix' => 'digisign', 'as' => 'digisign.', 'namespace' => 'Admin
 });
 
 Route::group(['prefix' => 'support', 'as' => 'support.', 'middleware' => ['auth']], function () {
+	// Route::group(['prefix' => 'how_to', 'as' => 'howto.', 'namespace' => 'HowTo'], function () {
+	// 	Route::get('/',		'HowToController@show')->name('show');
+	// });
 	Route::group(['prefix' => 'how_to', 'as' => 'howto.', 'namespace' => 'HowTo'], function () {
-		Route::get('/',		'HowToController@show')->name('show');
-	});
-	Route::group(['prefix' => 'how_to', 'as' => 'howto.', 'namespace' => 'HowTo'], function () {
-		Route::get('importir',		'HowToController@importir')->name('importir');
-		Route::get('administrator',	'HowToController@administrator')->name('administrator');
-		Route::get('verifikator',	'HowToController@verifikator')->name('verifikator');
-		Route::get('pejabat',		'HowToController@pejabat')->name('pejabat');
+		Route::get('importir',		'HowtoController@importir')->name('importir');
+		Route::get('administrator',	'HowtoController@administrator')->name('administrator');
+		Route::get('verifikator',	'HowtoController@verifikator')->name('verifikator');
+		Route::get('pejabat',		'HowtoController@pejabat')->name('pejabat');
 	});
 	Route::group(['prefix' => 'faq', 'as' => 'faq.', 'namespace' => 'Faq'], function () {
 	});
