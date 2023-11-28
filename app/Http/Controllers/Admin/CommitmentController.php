@@ -48,8 +48,8 @@ class CommitmentController extends Controller
 
 		if ($commitments) {
 			foreach ($commitments as $commitment) {
-				$sumLuas = $commitment->lokasi->sum('luas_tanam');
-				$sumVolume = $commitment->lokasi->sum('volume');
+				$sumLuas = $commitment->datarealisasi->sum('luas_lahan');
+				$sumVolume = $commitment->datarealisasi->sum('volume');
 				$minThresholdTanam = $commitment->luas_wajib_tanam;
 				$minThresholdProd = $commitment->volume_produksi;
 
@@ -83,6 +83,9 @@ class CommitmentController extends Controller
 				$commitment->ajuSkl = $ajuSkl;
 				// $commitment->skl = $skl;
 			}
+
+			// $countLokasi = $commitment->lokasi->count('id');
+			// dd($countLokasi);
 		}
 		return view('admin.commitment.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitments', 'pksCount', 'pksFileCount'));
 	}
@@ -221,8 +224,8 @@ class CommitmentController extends Controller
 		$commitment = PullRiph::where('npwp', $npwp_company)
 			->findOrFail($id);
 
-		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
+		$total_luastanam = $commitment->datarealisasi->sum('luas_lahan');
+		$total_volume = $commitment->datarealisasi->sum('volume');
 		// dd($total_volume);
 		return view('admin.commitment.realisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class'));
 	}

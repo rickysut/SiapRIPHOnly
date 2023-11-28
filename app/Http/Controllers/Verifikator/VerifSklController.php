@@ -113,9 +113,9 @@ class VerifSklController extends Controller
 			'wajibTanam' => number_format($commitment->luas_wajib_tanam, 2, '.', ','),
 			'wajibProduksi' => number_format($commitment->volume_produksi, 2, '.', ','),
 
-			'realisasiTanam' => number_format($lokasis->sum('luas_tanam'), 2, '.', ','),
-			'realisasiProduksi' => number_format($lokasis->sum('volume'), 2, '.', ','),
-			'hasGeoloc' => number_format($lokasis->sum('nama_lokasi'), 0, '.', ','),
+			'realisasiTanam' => number_format($commitment->datarealisasi->sum('luas_lahan'), 2, '.', ','),
+			'realisasiProduksi' => number_format($commitment->datarealisasi->sum('volume'), 2, '.', ','),
+			'hasGeoloc' => number_format($commitment->datarealisasi->count(), 0, '.', ','),
 
 			//ringkasan kemitraan
 			'countPoktan' => $pks->count(),
@@ -514,8 +514,8 @@ class VerifSklController extends Controller
 		// dd($pejabat);
 		$wajib_tanam = $commitment->luas_wajib_tanam;
 		$wajib_produksi = $commitment->volume_produksi;
-		$total_luas = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
+		$total_luas = $commitment->datarealisasi->sum('luas_lahan');
+		$total_volume = $commitment->datarealisasi->sum('volume');
 
 		$data = [
 			'Perusahaan' => $commitment->datauser->company_name,
@@ -620,8 +620,8 @@ class VerifSklController extends Controller
 		// dd($pejabat);
 		$wajib_tanam = $commitment->luas_wajib_tanam;
 		$wajib_produksi = $commitment->volume_produksi;
-		$total_luas = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
+		$total_luas = $commitment->datarealisasi->sum('luas_lahan');
+		$total_volume = $commitment->datarealisasi->sum('volume');
 		$Url = Completed::where('no_skl', $skl->no_skl)->first()->url;
 		// dd($Url);
 
@@ -664,8 +664,8 @@ class VerifSklController extends Controller
 		$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
 		$noIjin = str_replace(['.', '/', '-'], '', $skl->no_ijin);
 		$thn = $commitment->periodetahun;
-		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
+		$total_luastanam = $commitment->datarealisasi->sum('luas_lahan');
+		$total_volume = $commitment->datarealisasi->sum('volume');
 
 		$completedData = [
 			'no_skl' => $skl->no_skl,

@@ -234,8 +234,8 @@ td {
 														@if ($userDocs->spvp)
 															<select class="form-control form-control-sm {{ $userDocs->spvpcheck ? '' : 'border-danger' }}" name="spvpcheck" id="spvpcheck">
 																<option value="">- Pilih status -</option>
-																<option value="sesuai" {{ $userDocs->spvpcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-																<option value="perbaiki" {{ $userDocs->spvpcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+																<option value="sesuai" {{ $userDocs->spvpcheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+																<option value="perbaiki" {{ $userDocs->spvpcheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada</option>
 															</select>
 														@else
 															<span class="text-danger">
@@ -264,8 +264,8 @@ td {
 														@if ($userDocs->sptjmtanam)
 															<select class="form-control form-control-sm {{ $userDocs->sptjmtanamcheck ? '' : 'border-danger' }}" name="sptjmtanamcheck" id="sptjmtanamcheck">
 																<option value="">- Pilih status -</option>
-																<option value="sesuai" {{ $userDocs->sptjmtanamcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-																<option value="perbaiki" {{ $userDocs->sptjmtanamcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+																<option value="sesuai" {{ $userDocs->sptjmtanamcheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+																<option value="perbaiki" {{ $userDocs->sptjmtanamcheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada</option>
 															</select>
 														@else
 															<span class="text-danger">
@@ -294,8 +294,8 @@ td {
 														@if ($userDocs->sptjmproduksi)
 															<select class="form-control form-control-sm {{ $userDocs->sptjmproduksicheck ? '' : 'border-danger' }}" name="sptjmproduksicheck" id="sptjmproduksicheck">
 																<option value="">- Pilih status -</option>
-																<option value="sesuai" {{ $userDocs->sptjmproduksicheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-																<option value="perbaiki" {{ $userDocs->sptjmproduksicheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+																<option value="sesuai" {{ $userDocs->sptjmproduksicheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+																<option value="perbaiki" {{ $userDocs->sptjmproduksicheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada</option>
 															</select>
 														@else
 															<span class="text-danger">
@@ -324,8 +324,8 @@ td {
 														@if ($userDocs->rta)
 															<select class="form-control form-control-sm {{ $userDocs->rtacheck ? '' : 'border-danger' }}" name="rtacheck" id="rtacheck">
 																<option value="">- Pilih status -</option>
-																<option value="sesuai" {{ $userDocs->rtacheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-																<option value="perbaiki" {{ $userDocs->rtacheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+																<option value="sesuai" {{ $userDocs->rtacheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+																<option value="perbaiki" {{ $userDocs->rtacheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada/Perbaiki</option>
 															</select>
 														@else
 															<span class="text-danger">
@@ -354,8 +354,8 @@ td {
 														@if ($userDocs->rpo)
 															<select class="form-control form-control-sm {{ $userDocs->rpocheck ? '' : 'border-danger' }}" name="rpocheck" id="rpocheck">
 																<option value="">- Pilih status -</option>
-																<option value="sesuai" {{ $userDocs->rpocheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-																<option value="perbaiki" {{ $userDocs->rpocheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+																<option value="sesuai" {{ $userDocs->rpocheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+																<option value="perbaiki" {{ $userDocs->rpocheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada/Perbaiki</option>
 															</select>
 														@else
 															<span class="text-danger">
@@ -384,8 +384,8 @@ td {
 														@if ($userDocs->sphtanam)
 														<select class="form-control form-control-sm {{ $userDocs->sphtanamcheck ? '' : 'border-danger' }}" name="sphtanamcheck" id="sphtanamcheck">
 															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->sphtanamcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->sphtanamcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															<option value="sesuai" {{ $userDocs->sphtanamcheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+															<option value="perbaiki" {{ $userDocs->sphtanamcheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada</option>
 														</select>
 														@else
 															<span class="text-danger">
@@ -414,8 +414,8 @@ td {
 														@if ($userDocs->sphproduksi)
 														<select class="form-control form-control-sm {{ $userDocs->sphproduksicheck ? '' : 'border-danger' }}" name="sphproduksicheck" id="sphproduksicheck">
 															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->sphproduksicheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->sphproduksicheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															<option value="sesuai" {{ $userDocs->sphproduksicheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+															<option value="perbaiki" {{ $userDocs->sphproduksicheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada</option>
 														</select>
 														@else
 															<span class="text-danger">
@@ -444,8 +444,8 @@ td {
 														@if ($userDocs->logbookproduksi)
 														<select class="form-control form-control-sm {{ $userDocs->logbookproduksicheck ? '' : 'border-danger' }}" name="logbookproduksicheck" id="logbookproduksicheck">
 															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->logbookproduksicheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->logbookproduksicheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															<option value="sesuai" {{ $userDocs->logbookproduksicheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+															<option value="perbaiki" {{ $userDocs->logbookproduksicheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada</option>
 														</select>
 														@else
 															<span class="text-danger">
@@ -474,8 +474,8 @@ td {
 														@if ($userDocs->formLa)
 														<select class="form-control form-control-sm {{ $userDocs->formLacheck ? '' : 'border-danger' }}" name="formLacheck" id="formLacheck">
 															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->formLacheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->formLacheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															<option value="sesuai" {{ $userDocs->formLacheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+															<option value="perbaiki" {{ $userDocs->formLacheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada</option>
 														</select>
 														@else
 															<span class="text-danger">
@@ -621,6 +621,17 @@ td {
 										<input type="text" name="no_pengajuan" value="{{$verifikasi->no_pengajuan}}" hidden>
 										<input type="text" name="npwp" value="{{$verifikasi->npwp}}" hidden>
 										<div class="form-group row">
+											<label class="col-md-3 col-lg-2 col-form-label">Hasil Pemeriksaan<sup class="text-danger"> *</sup></label>
+											<div class="col-md-9 col-lg-10">
+												<select name="status" id="status" class="form-control custom-select" onchange="handleStatusChange()"  required>
+													<option value="" hidden>-- pilih status --</option>
+													<option value="4" {{ old('status', $verifikasi ? $verifikasi->status : '') == '4' ? 'selected' : '' }}>Sesuai</option>
+													<option value="5" {{ old('status', $verifikasi ? $verifikasi->status : '') == '5' ? 'selected' : '' }}>Perbaikan Data</option>
+												</select>
+												<small id="helpId" class="text-muted">Pilih hasil pemeriksaan</small>
+											</div>
+										</div>
+										<div class="form-group row" id="ndhprpContainer" hidden>
 											<label class="col-md-3 col-lg-2 col-form-label">Nota Dinas<sup class="text-danger"> *</sup></label>
 											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
@@ -637,7 +648,7 @@ td {
 												@endif
 											</div>
 										</div>
-										<div class="form-group row">
+										<div class="form-group row" id="baproduksiContainer" hidden>
 											<label class="col-md-3 col-lg-2 col-form-label">Berita Acara<sup class="text-danger"> *</sup></label>
 											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
@@ -664,17 +675,6 @@ td {
 													<option value="Wawancara" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Wawancara' ? 'selected' : '' }}>Wawancara</option>
 												</select>
 												<small id="helpId" class="text-muted">Pilih metode pemeriksaan</small>
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="col-md-3 col-lg-2 col-form-label">Hasil Pemeriksaan<sup class="text-danger"> *</sup></label>
-											<div class="col-md-9 col-lg-10">
-												<select name="status" id="status" class="form-control custom-select" required>
-													<option value="" hidden>-- pilih status --</option>
-													<option value="4" {{ old('status', $verifikasi ? $verifikasi->status : '') == '4' ? 'selected' : '' }}>Sesuai</option>
-													<option value="5" {{ old('status', $verifikasi ? $verifikasi->status : '') == '5' ? 'selected' : '' }}>Perbaikan Data</option>
-												</select>
-												<small id="helpId" class="text-muted">Pilih hasil pemeriksaan</small>
 											</div>
 										</div>
 										<div class="form-group row">
@@ -888,7 +888,7 @@ td {
 								var tanamStart = (awalTanam < ijinStart || awalTanam > ijinEnd || awalTanam < pksAwal || awalTanam > pksAkhir) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku atau tanggal berlaku PKS">' + awalTanam + '</span>' : awalTanam;
 								var tanamEnd = (akhirTanam < ijinStart || akhirTanam > ijinEnd || akhirTanam < pksAwal || akhirTanam > pksAkhir) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku atau tanggal berlaku PKS">' + akhirTanam + '</span>' : akhirTanam;
 
-								tableTanam.row.add([lokasi, petani, kelompok, pksStart, pksEnd, tanamStart, tanamEnd, awalPanen, akhirPanen]).draw(false);
+								tableTanam.row.add([kelompok, petani, lokasi, pksStart, pksEnd, tanamStart, tanamEnd, awalPanen, akhirPanen]).draw(false);
 							});
 						}
 					},
@@ -924,8 +924,8 @@ td {
 
 								var poktan = lokasi.poktan;
 								var anggota = lokasi.anggota;
-								var namaLokasi = lokasi.nama_lokasi;
-								var jmlLokasi = noDecimal.format(namaLokasi) + ' titik';
+								var jmlTitik = lokasi.jumlahTitik;
+								var jmlLokasi = noDecimal.format(jmlTitik) + ' titik';
 								var actionBtn = `
 									<a href="${lokasi.show}" class="btn btn-xs btn-icon btn-primary" title="Lihat detail">
 										<i class="fal fa-search"></i>
@@ -949,19 +949,40 @@ td {
 	</script>
 
 	<script>
+		function handleStatusChange() {
+			var status = document.getElementById("status").value;
+			var ndhprpInput = document.getElementById("ndhprp");
+			var baproduksiInput = document.getElementById("baproduksi");
+			var ndhprpContainer = document.getElementById("ndhprpContainer");
+			var baproduksiContainer = document.getElementById("baproduksiContainer");
+
+			if (status === "5") { // Jika status adalah 'Perbaikan Data' (5)
+				ndhprpInput.disabled = true;
+				baproduksiInput.disabled = true;
+
+				ndhprpContainer.hidden = true;
+				baproduksiContainer.hidden = true;
+			} else if (status === "4") { // Jika status adalah 'Sesuai' (4)
+				ndhprpContainer.hidden = false;
+				baproduksiContainer.hidden = false;
+
+				ndhprpInput.disabled = false;
+				baproduksiInput.disabled = false;
+			}
+		}
 		function validateInput() {
 			// get the input value and the current username from the page
 			var inputVal = document.getElementById('validasi').value;
 			var currentUsername = '{{ Auth::user()->username }}';
 			var status = document.getElementById("status").value;
-			var ndhprtInput = document.getElementById("ndhprp");
-			var batanamInput = document.getElementById("baproduksi");
+			var ndhprpInput = document.getElementById("ndhprp");
+			var baproduksiInput = document.getElementById("baproduksi");
 
 			// check if the input is not empty and matches the current username
 			if (inputVal !== '' && inputVal === currentUsername) {
 				// Jika status = 4, lakukan validasi tambahan
 				if (status === "4") {
-					if (ndhprtInput.files.length === 0 || batanamInput.files.length === 0) {
+					if (ndhprpInput === '' || baproduksiInput === '') {
 						alert("Nota Dinas dan Berita Acara harus diunggah jika Anda menetapkan status 'Sesuai'.");
 						return false; // Menghentikan pengiriman formulir
 					}

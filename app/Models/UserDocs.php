@@ -30,7 +30,7 @@ class UserDocs extends Model
 		'rtacheck', //form realisasi tanam
 		'sphtanamcheck', //
 		// 'spdstcheck', //surat pengantar dinas telah selesai tanam
-		'logbooktanamchek',
+		'logbooktanamcheck',
 		'tanamcheck_by',
 		'tanamverif_at',
 

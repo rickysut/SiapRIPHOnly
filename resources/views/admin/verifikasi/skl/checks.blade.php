@@ -1050,6 +1050,11 @@
 									minimumFractionDigits: 2,
 									maximumFractionDigits: 2,
 								});
+								var noDecimal = new Intl.NumberFormat('en-GB', {
+									style: 'decimal',
+									minimumFractionDigits: 0,
+									maximumFractionDigits: 0,
+								});
 								var totalLuas = formatter.format(luasTanam);
 								var totalProduksi = formatter.format(volProduksi);
 
@@ -1058,13 +1063,14 @@
 								var noIjin = lokasi.no_ijin;
 								var poktan = lokasi.poktan;
 								var anggota = lokasi.anggota;
-								var namaLokasi = lokasi.nama_lokasi;
+								var jmlTitik = lokasi.jumlahTitik;
+								var jmlLokasi = noDecimal.format(jmlTitik) + ' titik';
 								var actionBtn = `
 									<a href="${lokasi.show}" class="btn btn-xs btn-icon btn-primary" title="Lihat detail">
 										<i class="fal fa-search"></i>
 									</a>
 								`;
-								tableData.row.add([poktan, namaLokasi, anggota, totalLuas, totalProduksi, actionBtn]).draw(false);
+								tableData.row.add([poktan, jmlLokasi, anggota, totalLuas, totalProduksi, actionBtn]).draw(false);
 							});
 						}
 						tableData.draw(); // Draw the table after adding the rows

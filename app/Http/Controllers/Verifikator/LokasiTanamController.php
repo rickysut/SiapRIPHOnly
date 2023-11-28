@@ -69,9 +69,9 @@ class LokasiTanamController extends Controller
 			return [
 				'poktan'		=> $lokasi->masterkelompok->nama_kelompok,
 				'anggota'		=> $lokasi->masteranggota->nama_petani,
-				'nama_lokasi'	=> $lokasi->nama_lokasi,
-				'luas_tanam'	=> $lokasi->luas_tanam,
-				'volume'		=> $lokasi->volume,
+				'jumlahTitik'	=> $lokasi->datarealisasi->count(),
+				'luas_tanam'	=> $lokasi->datarealisasi->sum('luas_lahan'),
+				'volume'		=> $lokasi->datarealisasi->sum('volume'),
 				'show'			=> $showRoute,
 			];
 		});

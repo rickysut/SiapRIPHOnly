@@ -96,5 +96,11 @@ Pilihan Solusi:
 
 
 To do
-1. id masteranggota yang ada jangan digunakan sebagai public key
-2. public key master anggota ganti ke kolom baru, msagg_id, increment PK
+1. id masteranggota yang ada jangan digunakan sebagai public key local done. lanjut ke server
+2. public key master anggota ganti ke kolom baru, mst_id, increment PK. local done. lanjut ke server
+3. tambah kolom luas_lahan dan periode_tanam di lokasis. local done. lanjut ke server
+4. adaptasi solusi case baru ke sistem. cek semua relasi, controller, model, view.
+5. set KTP null diijinkan masuk
+6. tambah jml_titik di lokasi
+7. buat folder uploads/master. unggah semua howto ke sini. cek nama berkas
+8. masterpoktan pktn_id

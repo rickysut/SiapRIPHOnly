@@ -47,10 +47,10 @@ class DashboardController extends Controller
 				$commitments = PullRiph::where('periodetahun', $currentYear)->get();
 				$company = $commitments->count('no_ijin');
 				$total_luastanam = $commitments->flatMap(function ($commitment) {
-					return $commitment->lokasi->pluck('luas_tanam');
+					return $commitment->datarealisasi->pluck('luas_lahan');
 				})->sum();
 				$total_volume = $commitments->flatMap(function ($commitment) {
-					return $commitment->lokasi->pluck('volume');
+					return $commitment->datarealisasi->pluck('volume');
 				})->sum();
 
 				$allPengajuan = PullRiph::whereYear('created_at', $currentYear)
@@ -151,22 +151,22 @@ class DashboardController extends Controller
 				return $commitment->lokasi->pluck('id');
 			})->count();
 			$realisasi_tanam = $commitments->flatMap(function ($commitment) {
-				return $commitment->lokasi->pluck('luas_tanam');
+				return $commitment->datarealisasi->pluck('luas_lahan');
 			})->sum();
 			$realisasi_produksi = $commitments->flatMap(function ($commitment) {
-				return $commitment->lokasi->pluck('volume');
+				return $commitment->datarealisasi->pluck('volume');
 			})->sum();
 
 
 			if ($wajib_tanam == 0) {
 				$prosentanam = 0;
 			} else {
-				$prosentanam = $realisasi_tanam / $wajib_tanam;
+				$prosentanam = $realisasi_tanam / $wajib_tanam * 100;
 			}
 			if ($wajib_produksi == 0) {
 				$prosenproduksi = 0;
 			} else {
-				$prosenproduksi = $realisasi_produksi / $wajib_produksi;
+				$prosenproduksi = $realisasi_produksi / $wajib_produksi * 100;
 			}
 
 			// $allPengajuan = Pengajuan::whereNotNull('status')
@@ -204,7 +204,14 @@ class DashboardController extends Controller
 			'masteranggota'
 		])->get();
 
-		$periodeTahuns = PullRiph::pluck('periodetahun')->unique();
+		$roleaccess = Auth::user()->roleaccess;
+		if ($roleaccess == 1) {
+			$periodeTahuns = PullRiph::pluck('periodetahun')->unique();
+		}
+		if ($roleaccess == 2) {
+			$periodeTahuns = PullRiph::where('npwp', Auth::user()->data_user->npwp_company)->pluck('periodetahun')->unique();
+		}
+		// $periodeTahuns = PullRiph::pluck('periodetahun')->unique();
 		$users = User::where('roleaccess', 2)
 			->has('data_user')
 			->get();

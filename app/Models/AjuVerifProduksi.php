@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class AjuVerifProduksi extends Model
 {
@@ -39,22 +40,48 @@ class AjuVerifProduksi extends Model
 
 	public static function newPengajuanCount(): int
 	{
-		return self::where('status', '1')->count();
+		$user = Auth::user(); // Ambil informasi pengguna saat ini
+
+		//lokal model (AjuVerifProduksi)
+		return self::where('status', '1')
+			->where(function ($query) use ($user) {
+				$query->where('check_by', $user->id)
+					->orWhereNull('check_by');
+			})
+			->count();
 	}
 
 	public function NewRequest(): int
 	{
-		return self::where('status', '1')->count();
+		$user = Auth::user(); // Ambil informasi pengguna saat ini
+
+		//lokal model (AjuVerifProduksi)
+		return self::where('status', '1')
+			->where(function ($query) use ($user) {
+				$query->where('check_by', $user->id)
+					->orWhereNull('check_by');
+			})
+			->count();
 	}
 
 	public function proceedVerif(): int
 	{
+		$user = Auth::user(); // Ambil informasi pengguna saat ini
+
 		return self::whereIn('status', ['2', '3'])
-			->whereNull('baproduksi')->count();
+			->whereNull('baproduksi')
+			->where('check_by', $user->id)
+			->count();
 	}
 
 	public static function getNewPengajuan()
 	{
-		return self::where('status', '1')->get();
+		$user = Auth::user(); // Ambil informasi pengguna saat ini
+		return self::where('status', '1')
+			->where(function ($query) use ($user) {
+				$query->where('check_by', $user->id)
+					->orWhereNull('check_by');
+			})
+			->get();
 	}
 }

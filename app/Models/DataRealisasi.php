@@ -32,14 +32,13 @@ class DataRealisasi extends Model
 		//tanam
 		'mulai_tanam',
 		'akhir_tanam',
-		'luas_tanam',
-		'foto_tanam',
+		'luas_lahan',
+
 
 		//produksi
 		'mulai_panen',
 		'akhir_panen',
 		'volume',
-		'foto_panen',
 	];
 
 	public function commitment()

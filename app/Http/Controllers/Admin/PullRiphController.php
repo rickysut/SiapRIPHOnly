@@ -23,11 +23,7 @@ use Illuminate\Support\Facades\DB;
 
 class PullRiphController extends Controller
 {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
+
 	public function index()
 	{
 		abort_if(Gate::denies('pull_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -82,22 +78,7 @@ class PullRiphController extends Controller
 
 		return $res;
 	}
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create()
-	{
-		//
-	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
 	public function store(Request $request)
 	{
 		$filepath = '';
@@ -169,6 +150,19 @@ class PullRiphController extends Controller
 				if ($dtjson->riph->wajib_tanam->kelompoktani->loop === null) {
 					return redirect()->back()->with('error', 'Gagal menyimpan. Data terkait RIPH dimaksud tidak lengkap. silahkan lengkapi terlebih dahulu di aplikasi SIAP RIPH atau hubungi Administrator terkait.');
 				} else {
+					DataRealisasi::where([
+						'npwp_company' => $stnpwp,
+						'no_ijin' => $noijin,
+					])->forceDelete();
+
+					Lokasi::where([
+						'npwp' => $stnpwp,
+						'no_ijin' => $noijin,
+					])->forceDelete();
+					PKS::where([
+						'npwp' => $stnpwp,
+						'no_ijin' => $noijin,
+					])->forceDelete();
 					if (is_array($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
 						// Kelompoktani adalah array
 						foreach ($dtjson->riph->wajib_tanam->kelompoktani->loop as $poktan) {
@@ -181,8 +175,7 @@ class PullRiphController extends Controller
 								$ktp = trim($ktp, "\u{00c2}");
 							} else {
 								// Kesalahan terdeteksi jika $ktp bukan string
-								DB::rollback();
-								return redirect()->back()->with('error', 'Gagal menyimpan. Data KTP petani tidak valid. Silakan periksa kembali atau hubungi Administrator terkait.');
+								$ktp = "";
 							}
 							$idpoktan = isset($poktan->id_poktan) ? trim($poktan->id_poktan, ' ') : '';
 							$idpetani = isset($poktan->id_petani) ? trim($poktan->id_petani, ' ') : '';
@@ -232,45 +225,19 @@ class PullRiphController extends Controller
 									'user_id' => $user->id,
 									'nama_petani'  => trim($poktan->nama_petani, ' '),
 									'ktp_petani' => $ktp,
-									// 'luas_lahan' => trim($poktan->luas_lahan, ' '),
-									// 'periode_tanam' => trim($poktan->periode_tanam, ' ')
 								]
 							);
 
-							// DataRealisasi::where([
-							// 	'npwp_company' => $stnpwp,
-							// 	'no_ijin' => $noijin,
-							// ])->forceDelete();
-
-							// Lokasi::where([
-							// 	'npwp' => $stnpwp,
-							// 	'no_ijin' => $noijin,
-							// 	'poktan_id' => $idpoktan,
-							// 	'anggota_id' => $idpetani,
-							// ])->forceDelete();
-
-							Lokasi::updateOrCreate(
+							Lokasi::create(
 								[
 									'npwp' => $stnpwp,
 									'no_ijin' => $noijin,
 									'poktan_id' => $idpoktan,
 									'anggota_id' => $idpetani,
+									'luas_lahan' => trim($poktan->luas_lahan, ' '),
+									'periode_tanam' => trim($poktan->periode_tanam, ' ')
 								],
-								// [
-								// 	'luas_lahan' => trim($poktan->luas_lahan, ' '),
-								// 	'periode_tanam' => trim($poktan->periode_tanam, ' ')
-								// ]
 							);
-							// Lokasi::create(
-							// 	[
-							// 		'npwp' => $stnpwp,
-							// 		'no_ijin' => $noijin,
-							// 		'poktan_id' => $idpoktan,
-							// 		'anggota_id' => $idpetani,
-							// 		'luas_lahan' => trim($poktan->luas_lahan, ' '),
-							// 		'periode_tanam' => trim($poktan->periode_tanam, ' ')
-							// 	],
-							// );
 						}
 					} elseif (is_object($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
 						$poktan = $dtjson->riph->wajib_tanam->kelompoktani->loop;
@@ -283,14 +250,35 @@ class PullRiphController extends Controller
 							$ktp = trim($ktp, "\u{00c2}");
 						} else {
 							// Kesalahan terdeteksi jika $ktp bukan string
-							DB::rollback();
-							return redirect()->back()->with('error', 'Gagal menyimpan. Data KTP petani tidak valid. Silakan periksa kembali atau hubungi Administrator terkait.');
+							$ktp = "";
 						}
 						$idpoktan = isset($poktan->id_poktan) ? trim($poktan->id_poktan, ' ') : '';
 						$idpetani = isset($poktan->id_petani) ? trim($poktan->id_petani, ' ') : '';
 						$idkabupaten = isset($poktan->id_kabupaten) ? trim($poktan->id_kabupaten, ' ') : '';
 						$idkecamatan = isset($poktan->id_kecamatan) ? trim($poktan->id_kecamatan, ' ') : '';
 						$idkelurahan = isset($poktan->id_kelurahan) && is_string($poktan->id_kelurahan) ? trim($poktan->id_kelurahan, ' ') : '';
+
+						DataRealisasi::where([
+							'npwp_company' => $stnpwp,
+							'no_ijin' => $noijin,
+						])->forceDelete();
+
+						Lokasi::where([
+							'npwp' => $stnpwp,
+							'no_ijin' => $noijin,
+							'poktan_id' => $idpoktan,
+							'anggota_id' => $idpetani,
+						])->forceDelete();
+						PKS::where([
+							'npwp' => $stnpwp,
+							'no_ijin' => $noijin,
+							'poktan_id' => $idpoktan,
+						])->forceDelete();
+
+						MasterPoktan::where([
+							'npwp' => $stnpwp,
+							'poktan_id' => $idpoktan,
+						])->forceDelete();
 
 						MasterPoktan::updateOrCreate(
 							[
@@ -334,34 +322,18 @@ class PullRiphController extends Controller
 								'user_id' => $user->id,
 								'nama_petani'  => trim($poktan->nama_petani, ' '),
 								'ktp_petani' => $ktp,
-								'luas_lahan' => trim($poktan->luas_lahan, ' '),
-								'periode_tanam' => trim($poktan->periode_tanam, ' ')
 							]
 						);
 
-						// DataRealisasi::where([
-						// 	'npwp_company' => $stnpwp,
-						// 	'no_ijin' => $noijin,
-						// ])->forceDelete();
-
-						// Lokasi::where([
-						// 	'npwp' => $stnpwp,
-						// 	'no_ijin' => $noijin,
-						// 	'poktan_id' => $idpoktan,
-						// 	'anggota_id' => $idpetani,
-						// ])->forceDelete();
-
-						Lokasi::updateOrCreate(
+						Lokasi::create(
 							[
 								'npwp' => $stnpwp,
 								'no_ijin' => $noijin,
 								'poktan_id' => $idpoktan,
 								'anggota_id' => $idpetani,
+								'luas_lahan' => trim($poktan->luas_lahan, ' '),
+								'periode_tanam' => trim($poktan->periode_tanam, ' ')
 							],
-							// [
-							// 	'luas_lahan' => trim($poktan->luas_lahan, ' '),
-							// 	'periode_tanam' => trim($poktan->periode_tanam, ' ')
-							// ]
 						);
 					}
 				}

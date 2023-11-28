@@ -15,6 +15,9 @@
 						Data <span class="fw-300"><i>Informasi</i></span>
 					</h2>
 					<div class="panel-toolbar">
+						<a href="{{route('admin.task.commitment.realisasi', $pks->commitment->id)}}" class="btn btn-info btn-xs">
+							<i class="fal fa-undo mr-1"></i>Kembali
+						</a>
 					</div>
 				</div>
 				<div class="panel-container show">
@@ -69,7 +72,7 @@
 										<div class="d-flex justify-content-between px-2">
 											<span>
 												{{$lokasi->masteranggota->nama_petani}} -
-												{{$lokasi->masteranggota->ktp_petani}}
+												{{$lokasi->masteranggota->ktp_petani}} / {{$lokasi->luas_lahan}} ha
 											</span>
 											{{-- <span class="small">
 												@php
@@ -122,11 +125,11 @@
 											</span> --}}
 										</div>
 									</td>
-									<td class="text-right">{{$lokasi->nama_lokasi}} titik</td>
-									<td class="text-right">{{$lokasi->luas_tanam}} ha</td>
-									<td class="text-center">{{$lokasi->tgl_tanam}}</td>
-									<td class="text-right">{{$lokasi->volume}} ton</td>
-									<td class="text-center">{{$lokasi->tgl_panen}}</td>
+									<td class="text-right">{{$lokasi->datarealisasi->count('id')}} titik</td>
+									<td class="text-right">{{$lokasi->datarealisasi->sum('luas_lahan')}} ha</td>
+									<td class="text-center">{{$lokasi->datarealisasi->min('mulai_tanam')}}</td>
+									<td class="text-right">{{$lokasi->datarealisasi->sum('volume')}} ton</td>
+									<td class="text-center">{{$lokasi->datarealisasi->min('mulai_panen')}}</td>
 									<td  class="text-center">
 										<a href="{{route('admin.task.pks.anggota.listLokasi', ['pksId' => $pks->id, 'anggotaId' => $lokasi->id])}}"
 											title="Tambah data lokasi tanam" class="btn btn-xs btn-icon btn-primary"
@@ -179,30 +182,21 @@
 				{
 					extend: 'pdfHtml5',
 					text: '<i class="fa fa-file-pdf"></i>',
+					title: 'Daftar Realisasi Lokasi dan Pelaksana',
 					titleAttr: 'Generate PDF',
 					className: 'btn-outline-danger btn-sm btn-icon mr-1'
 				},
 				{
 					extend: 'excelHtml5',
 					text: '<i class="fa fa-file-excel"></i>',
+					title: 'Daftar Realisasi Lokasi dan Pelaksana',
 					titleAttr: 'Generate Excel',
 					className: 'btn-outline-success btn-sm btn-icon mr-1'
 				},
 				{
-					extend: 'csvHtml5',
-					text: '<i class="fal fa-file-csv"></i>',
-					titleAttr: 'Generate CSV',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'copyHtml5',
-					text: '<i class="fa fa-copy"></i>',
-					titleAttr: 'Copy to clipboard',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
 					extend: 'print',
 					text: '<i class="fa fa-print"></i>',
+					title: 'Daftar Realisasi Lokasi dan Pelaksana',
 					titleAttr: 'Print Table',
 					className: 'btn-outline-primary btn-sm btn-icon mr-1'
 				}

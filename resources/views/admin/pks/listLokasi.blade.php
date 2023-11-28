@@ -10,6 +10,9 @@
 				Data <span class="fw-300"><i>Informasi</i></span>
 			</h2>
 			<div class="panel-toolbar">
+				<a href="{{route('admin.task.pks.anggotas', $pks->id)}}" class="btn btn-info btn-xs" data-toggle="tooltip" data-original-title="Kembali ke Daftar Anggota" >
+					<i class="fal fa-undo mr-1"></i>Kembali
+				</a>
 			</div>
 		</div>
 		<div class="panel-container show">
@@ -36,7 +39,7 @@
 					<label for="">Luas Rencana</label>
 					<input disabled class="form-control form-control-sm fw-500 text-primary"
 					placeholder="nama anggota" aria-describedby="helpId"
-					value="{{$anggota->masteranggota->luas_lahan}} ha">
+					value="{{$anggota->luas_lahan}} ha">
 				</div>
 			</div>
 		</div>
@@ -154,6 +157,23 @@
 							</tr>
 						@endforeach
 					</tbody>
+					<tfoot class="thead-themed fw-500">
+						<tr>
+							<td colspan="2" class="text-right">
+								Total Luas:
+							</td>
+							<td class="text-right">
+								{{$anggota->datarealisasi->sum('luas_lahan')}}
+							</td>
+							<td class="text-right">
+								Total Luas:
+							</td>
+							<td class="text-right">
+								{{$anggota->datarealisasi->sum('volume')}}
+							</td>
+							<td colspan="2"></td>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
 		</div>
@@ -180,17 +200,19 @@
 				{
 					extend: 'excelHtml5',
 					text: '<i class="fa fa-file-excel"></i>',
+					title: 'Daftar Lokasi Tanam',
 					titleAttr: 'Generate Excel',
 					className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
 				},
 				{
 					extend: 'print',
 					text: '<i class="fa fa-print"></i>',
+					title: 'Daftar Lokasi Tanam {{$anggota->masteranggota->nama_petani}} / {{$pks->masterpoktan->nama_kelompok}}',
 					titleAttr: 'Print Table',
 					className: 'btn-outline-primary btn-xs btn-icon mr-3'
 				},
 
-				@if($anggota->datarealisasi->sum('luas_lahan') < $anggota->masteranggota->luas_lahan )
+				@if($anggota->datarealisasi->sum('luas_lahan') < $anggota->luas_lahan )
 				{
 					text: '<i class="fal fa-plus"></i> Tambah Lokasi',
 					titleAttr: 'Tambah data',

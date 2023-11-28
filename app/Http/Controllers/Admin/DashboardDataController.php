@@ -37,16 +37,16 @@ class DashboardDataController extends Controller
 		$company = $commitments->count('no_ijin'); // jumlah RIPH yang telah melakukan sinkronisasi data di simethris
 
 		$total_luastanam = $commitments->flatMap(function ($commitment) {
-			return $commitment->lokasi->pluck('luas_tanam');
+			return $commitment->datarealisasi->pluck('luas_lahan');
 		})->sum();
 		$total_volume = $commitments->flatMap(function ($commitment) {
-			return $commitment->lokasi->pluck('volume');
+			return $commitment->datarealisasi->pluck('volume');
 		})->sum();
 
 		$dataRealisasi = $commitments->map(function ($realisasi) {
 			// Menghitung total luas tanam dan total volume
-			$totalLuasTanam = $realisasi->lokasi->sum('luas_tanam');
-			$totalVolume = $realisasi->lokasi->sum('volume');
+			$totalLuasTanam = $realisasi->datarealisasi->sum('luas_lahan');
+			$totalVolume = $realisasi->datarealisasi->sum('volume');
 
 			return [
 				'company' => $realisasi->datauser->company_name,
@@ -325,10 +325,10 @@ class DashboardDataController extends Controller
 			return $commitment->lokasi->pluck('id');
 		})->count();
 		$realisasi_tanam = $commitments->flatMap(function ($commitment) {
-			return $commitment->lokasi->pluck('luas_tanam');
+			return $commitment->datarealisasi->pluck('luas_lahan');
 		})->sum();
 		$realisasi_produksi = $commitments->flatMap(function ($commitment) {
-			return $commitment->lokasi->pluck('volume');
+			return $commitment->datarealisasi->pluck('volume');
 		})->sum();
 
 
@@ -422,8 +422,8 @@ class DashboardDataController extends Controller
 
 		$dataRealisasi = $commitments->map(function ($realisasi) {
 			// Menghitung total luas tanam dan total volume
-			$totalLuasTanam = $realisasi->lokasi->sum('luas_tanam');
-			$totalVolume = $realisasi->lokasi->sum('volume');
+			$totalLuasTanam = $realisasi->datarealisasi->sum('luas_lahan');
+			$totalVolume = $realisasi->datarealisasi->sum('volume');
 
 			return [
 				'company' => $realisasi->datauser->company_name,

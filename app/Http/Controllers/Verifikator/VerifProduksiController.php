@@ -36,9 +36,22 @@ class VerifProduksiController extends Controller
 		$page_heading = 'Pengajuan Verifikasi Produksi';
 		$heading_class = 'fa fa-map-marked-alt';
 
-		//table pengajuan. jika sudah mengajukan SKL, maka pengajuan terkait tidak muncul
-		$verifikasis = AjuVerifProduksi::orderBy('created_at', 'desc')
+		$verifikator = Auth::user()->id;
+
+		$verifTanams = AjuVerifTanam::where('check_by', $verifikator)->get();
+		$noIjins = $verifTanams->pluck('no_ijin')->toArray();
+
+		$verifikasis1 = AjuVerifProduksi::where('check_by', $verifikator)
+			->orderBy('created_at', 'desc')
 			->get();
+
+		$verifikasis2 = AjuVerifProduksi::whereNull('check_by')
+			->whereIn('no_ijin', $noIjins)
+			->orderBy('created_at', 'desc')
+			->get();
+
+		$verifikasis = $verifikasis1->merge($verifikasis2)->sortByDesc('created_at');
+
 
 
 		// dd($verifikasis);
@@ -89,8 +102,8 @@ class VerifProduksiController extends Controller
 			$lokasis->push($lokasi);
 		}
 
-		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
+		$total_luastanam = $commitment->datarealisasi->sum('luas_lahan');
+		$total_volume = $commitment->datarealisasi->sum('volume');
 
 		// $pks = Pks::where('no_ijin', $commitment->no_ijin)->get();
 		$countPoktan = $pkss->count();

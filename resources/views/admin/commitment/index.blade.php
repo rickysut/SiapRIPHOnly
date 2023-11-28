@@ -123,6 +123,7 @@ td {
 										@endif
 									{{-- @endif --}}
 								</td>
+								{{-- produksi --}}
 								<td class="text-center">
 									{{-- @if ($pksFileCount == $pksCount) --}}
 										@if (!empty($commitment->userDocs->sptjmproduksi))

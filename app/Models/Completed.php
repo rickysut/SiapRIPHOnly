@@ -39,7 +39,7 @@ class Completed extends Model
 
 	public function commitment()
 	{
-		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
+		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
 	}
 
 	public function skl()

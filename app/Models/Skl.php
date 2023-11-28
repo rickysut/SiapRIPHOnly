@@ -96,6 +96,11 @@ class Skl extends Model
 		return $this->belongsTo(AjuVerifSkl::class, 'pengajuan_id', 'id');
 	}
 
+	public function reads()
+	{
+		return $this->hasMany(SklReads::class, 'skl_id', 'id');
+	}
+
 	public function datauser()
 	{
 		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');

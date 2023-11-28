@@ -1,4 +1,7 @@
 @extends('layouts.admin')
+@section ('styles')
+<link rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/notifications/sweetalert2/sweetalert2.bundle.css') }}">
+@endsection
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 {{-- @include('partials.subheader') --}}
@@ -267,6 +270,7 @@
 <script src="{{ asset('js/jquery/jquery.validate.js') }}"></script>
 <script src="{{ asset('js/jquery/additional-methods.js') }}"></script>
 <script src="{{ asset('js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
+<script src="{{ asset('js/smartadmin/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script>
 	function getCookie(name) {
 		if (!document.cookie) {
@@ -282,6 +286,7 @@
 		}
 		return decodeURIComponent(xsrfCookies[0].split('=')[1]);
 	}
+
 	$(document).ready(function()
 	{
 		var $validator = $("#dataForm").validate({

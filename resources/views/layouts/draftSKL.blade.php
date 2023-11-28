@@ -71,7 +71,7 @@
 		</form>
 		<!-- end page wrapper -->
 		<!-- begin quick menu -->
-		@include('partials.navquickmenu')
+		{{-- @include('partials.navquickmenu') --}}
 		<!-- end quick menu -->
 		{{-- base app script --}}
 		<script src="{{ asset('js/app.js') }}"></script>

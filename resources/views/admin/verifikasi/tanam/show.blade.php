@@ -244,7 +244,7 @@
 										<td>:</td>
 										<td class="fw-500">
 											@if ($userDocs->logbooktanamcheck)
-												@if ($userDocs->logbooktanamcheck === 'sesuai')
+												@if ($userDocs->logbooktanamcheck == 'sesuai')
 													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->logbooktanam) }}">
 														Ada
 													</a>

@@ -40,7 +40,7 @@
 			<i class="fal fa-badge-check fa-3x subheader-icon"></i>
 			<h2>Ringkasan Data</h2>
 			<div class="row justify-content-center">
-				<p class="lead">Ringkasan data pengajuan penerbitan Surat Keterangan Lunas.</p>
+				<p class="lead">Ringkasan {{$page_heading}}.</p>
 			</div>
 		</div>
 
@@ -729,12 +729,14 @@
 					{
 						extend: 'excelHtml5',
 						text: '<i class="fa fa-file-excel"></i>',
+						title: 'Ringkasan Pengajuan {{$page_heading}}',
 						titleAttr: 'Ekspor data ke MS. Excel',
 						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
 					},
 					{
 						extend: 'print',
 						text: '<i class="fa fa-print"></i>',
+						title: 'Ringkasan Pengajuan {{$page_heading}}',
 						titleAttr: 'Cetak halaman data.',
 						className: 'btn-outline-primary btn-xs btn-icon mr-1'
 					},

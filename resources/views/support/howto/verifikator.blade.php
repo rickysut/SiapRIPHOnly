@@ -13,7 +13,7 @@
 		<div class="panel shadow" id="panel-1">
 			<div class="panel-container show card-body embed-responsive embed-responsive-16by9">
 				<iframe class="embed-responsive-item"
-					src="{{ asset('docs/howto_verifikator.pdf') }}" width="100%" frameborder="0">
+					src="{{ $asset }}" width="100%" frameborder="0">
 				</iframe>
 			</div>
 		</div>

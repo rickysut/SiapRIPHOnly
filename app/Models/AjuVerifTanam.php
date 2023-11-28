@@ -31,12 +31,21 @@ class AjuVerifTanam extends Model
 
 	public static function newPengajuanCount(): int
 	{
-		return self::where('status', '1')->count();
+		$user = Auth::user(); // Ambil informasi pengguna saat ini
+		return self::where('status', '1')
+			->where('check_by', $user->id)
+			->count();
 	}
 
 	public function NewRequest(): int
 	{
-		return self::where('status', '1')->count();
+		$user = Auth::user(); // Ambil informasi pengguna saat ini
+		return self::where('status', '1')
+			->where(function ($query) use ($user) {
+				$query->where('check_by', $user->id)
+					->orWhereNull('check_by');
+			})
+			->count();
 	}
 
 	public function proceedVerif(): int
@@ -52,7 +61,13 @@ class AjuVerifTanam extends Model
 
 	public static function getNewPengajuan()
 	{
-		return self::where('status', '1')->get();
+		$user = Auth::user(); // Ambil informasi pengguna saat ini
+		return self::where('status', '1')
+			->where(function ($query) use ($user) {
+				$query->where('check_by', $user->id)
+					->orWhereNull('check_by');
+			})
+			->get();
 	}
 
 	public function pks()

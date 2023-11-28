@@ -91,9 +91,9 @@ class PengajuanController extends Controller
 			'userDocs' => $userDocs,
 			'wajibTanam' => $commitment->luas_wajib_tanam,
 			'wajibProduksi' => $commitment->volume_produksi,
-			'realisasiTanam' => $lokasis->sum('luas_tanam'),
-			'realisasiProduksi' => $lokasis->sum('volume'),
-			'hasGeoloc' => $lokasis->sum('nama_lokasi'),
+			'realisasiTanam' => $commitment->datarealisasi->sum('luas_lahan'),
+			'realisasiProduksi' => $commitment->datarealisasi->sum('volume'),
+			'hasGeoloc' => $commitment->datarealisasi->count(),
 			'countPoktan' => $pks->count(),
 			'countPks' => $pks->where('berkas_pks', '!=', null)->count(),
 			'countAnggota' => $lokasis->count(),
@@ -186,8 +186,8 @@ class PengajuanController extends Controller
 		$commitment = PullRiph::where('npwp', $npwp_company)
 			->findOrFail($id);
 
-		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
+		$total_luastanam = $commitment->datarealisasi->sum('luas_lahan');
+		$total_volume = $commitment->datarealisasi->sum('volume');
 
 		// aktifkan saat production
 		abort_if($total_volume < $commitment->volume_produksi, Response::HTTP_FORBIDDEN, 'Total produksi dilaporkan tidak memenuhi syarat');
@@ -214,6 +214,9 @@ class PengajuanController extends Controller
 			return redirect()->back();
 		}
 
+		$checkTanam = AjuVerifTanam::where('no_ijin', $commitment->no_ijin)->first();
+		$checker = $checkTanam->check_by;
+
 		$verifTanam = AjuVerifTanam::where('no_ijin', $commitment->no_ijin)->first();
 		$verifProduksi = AjuVerifProduksi::where('no_ijin', $commitment->no_ijin)->first();
 		$userDoc = UserDocs::where('no_ijin', $commitment->no_ijin)->first();
@@ -223,8 +226,8 @@ class PengajuanController extends Controller
 		$lokasis = Lokasi::where('no_ijin', $commitment->no_ijin)->get();
 		$wajibTanam = $commitment->luas_wajib_tanam;
 		$wajibProduksi = $commitment->volume_produksi;
-		$realisasiTanam = $lokasis->sum('luas_tanam');
-		$realisasiProduksi = $lokasis->sum('volume');
+		$realisasiTanam = $commitment->datarealisasi->sum('luas_lahan');
+		$realisasiProduksi = $commitment->datarealisasi->sum('volume');
 
 		// Validasi berkas
 		if ($userDoc === null) {
@@ -238,7 +241,7 @@ class PengajuanController extends Controller
 		} elseif ($userDoc->sphproduksi === null) {
 			$errorMessage = 'Dokumen SPH-SBS (Produksi) tidak ditemukan.';
 		} elseif ($realisasiProduksi < $wajibProduksi) {
-			$errorMessage = 'Realisasi Produksi yang dilaporkan tidak memenuhi syarat.';
+			$errorMessage = 'Jumlah Realisasi Produksi yang dilaporkan tidak memenuhi syarat.';
 		}
 
 		$optionalMessage = 'Pengajuan Verifikasi Produksi untuk RIPH No ' . $commitment->no_ijin . ' tidak dapat dilakukan. Ajukan kembali setelah Anda melengkapi data dan syarat-syarat yang diperlukan.';
@@ -246,6 +249,8 @@ class PengajuanController extends Controller
 		if (isset($errorMessage)) {
 			return redirect()->route('admin.task.commitment')->withErrors($errorMessage . $optionalMessage);
 		}
+
+
 
 		// Continue with creating or updating AjuVerifProduksi.
 		AjuVerifProduksi::updateOrCreate(
@@ -256,6 +261,7 @@ class PengajuanController extends Controller
 			],
 			[
 				'status' => '1',
+				'check_by' => $checker,
 			]
 		);
 
@@ -305,9 +311,9 @@ class PengajuanController extends Controller
 		//data validasi
 		$lokasis = Lokasi::where('no_ijin', $commitment->no_ijin)->get();
 		$wajibTanam = $commitment->luas_wajib_tanam;
-		$realisasiTanam = $lokasis->sum('luas_tanam');
+		$realisasiTanam = $commitment->datarealisasi->sum('luas_lahan');
 		$wajibProduksi = $commitment->volume_produksi;
-		$realisasiProduksi = $lokasis->sum('volume');
+		$realisasiProduksi = $commitment->datarealisasi->sum('volume');
 
 		// Validasi berkas
 		if ($userDoc === null) {

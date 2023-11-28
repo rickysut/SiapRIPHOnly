@@ -174,8 +174,7 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 					</div>
 					<div class="tab-pane fade" id="panel-3" role="tabpanel" aria-labelledby="panel-3">
 						<div id="panel-3" class="panel">
-							<form method="post"
-								action="{{route('verification.tanam.checkBerkas', $verifikasi->id)}}">
+							<form method="post" action="{{route('verification.tanam.checkBerkas', $verifikasi->id)}}">
 								@csrf
 								<div class="panel-container show">
 									<div class="panel-tag fade show">
@@ -211,8 +210,8 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 													<td>
 														<select class="form-control form-control-sm" name="sptjmtanamcheck" id="sptjmtanamcheck">
 															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->sptjmtanamcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->sptjmtanamcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															<option value="sesuai" {{ $userDocs->sptjmtanamcheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+															<option value="perbaiki" {{ $userDocs->sptjmtanamcheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada</option>
 														</select>
 													</td>
 												</tr>
@@ -230,8 +229,8 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 													<td>
 														<select class="form-control form-control-sm" name="spvtcheck" id="spvtcheck">
 															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->spvtcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->spvtcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															<option value="sesuai" {{ $userDocs->spvtcheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+															<option value="perbaiki" {{ $userDocs->spvtcheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada</option>
 														</select>
 													</td>
 												</tr>
@@ -249,8 +248,8 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 													<td>
 														<select class="form-control form-control-sm" name="rtacheck" id="rtacheck">
 															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->rtacheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->rtacheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															<option value="sesuai" {{ $userDocs->rtacheck == 'sesuai' ? 'selected' : '' }}>Ada/Sesuai</option>
+															<option value="perbaiki" {{ $userDocs->rtacheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada/Perbaikan</option>
 														</select>
 													</td>
 												</tr>
@@ -268,8 +267,8 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 													<td>
 														<select class="form-control form-control-sm" name="sphtanamcheck" id="sphtanamcheck">
 															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->sphtanamcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->sphtanamcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															<option value="sesuai" {{ $userDocs->sphtanamcheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+															<option value="perbaiki" {{ $userDocs->sphtanamcheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada</option>
 														</select>
 													</td>
 												</tr>
@@ -285,11 +284,10 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 														@endif
 													</td>
 													<td>
-														<select class="form-control form-control-sm" name="logbookcheck" id="logbookcheck">
+														<select class="form-control form-control-sm" name="logbooktanamcheck" id="logbooktanamcheck">
 															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->logbookcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->logbookcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-															<option value="" {{ $userDocs->logbookcheck == '' ? 'selected' : '' }}>Tidak ada</option>
+															<option value="sesuai" {{ $userDocs->logbooktanamcheck == 'sesuai' ? 'selected' : '' }}>Ada</option>
+															<option value="perbaiki" {{ $userDocs->logbooktanamcheck == 'perbaiki' ? 'selected' : '' }}>Tidak Ada</option>
 														</select>
 													</td>
 												</tr>
@@ -433,6 +431,17 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 										<input type="text" name="npwp" value="{{$verifikasi->npwp}}" hidden>
 
 										<div class="form-group row">
+											<label class="col-md-3 col-lg-2 col-form-label">Hasil Pemeriksaan<sup class="text-danger"> *</sup></label>
+											<div class="col-md-9 col-lg-10">
+												<select name="status" id="status" class="form-control custom-select" onchange="handleStatusChange()" required>
+													<option value="" hidden>-- pilih status --</option>
+													<option value="4" {{ old('status', $verifikasi ? $verifikasi->status : '') == '4' ? 'selected' : '' }}>Sesuai</option>
+													<option value="5" {{ old('status', $verifikasi ? $verifikasi->status : '') == '5' ? 'selected' : '' }}>Perbaikan Data</option>
+												</select>
+												<small id="helpId" class="text-muted">Pilih hasil pemeriksaan</small>
+											</div>
+										</div>
+										<div class="form-group row" id="ndhprtContainer" hidden>
 											<label class="col-md-3 col-lg-2 col-form-label">Nota Dinas<sup class="text-danger"> *</sup></label>
 											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
@@ -449,7 +458,7 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 												@endif
 											</div>
 										</div>
-										<div class="form-group row">
+										<div class="form-group row" id="batanamContainer" hidden>
 											<label class="col-md-3 col-lg-2 col-form-label">Berita Acara<sup class="text-danger">*</sup></label>
 											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
@@ -476,17 +485,6 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 													<option value="Wawancara" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Wawancara' ? 'selected' : '' }}>Wawancara</option>
 												</select>
 												<small id="helpId" class="text-muted">Pilih metode pemeriksaan</small>
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="col-md-3 col-lg-2 col-form-label">Hasil Pemeriksaan<sup class="text-danger"> *</sup></label>
-											<div class="col-md-9 col-lg-10">
-												<select name="status" id="status" class="form-control custom-select" required>
-													<option value="" hidden>-- pilih status --</option>
-													<option value="4" {{ old('status', $verifikasi ? $verifikasi->status : '') == '4' ? 'selected' : '' }}>Sesuai</option>
-													<option value="5" {{ old('status', $verifikasi ? $verifikasi->status : '') == '5' ? 'selected' : '' }}>Perbaikan Data</option>
-												</select>
-												<small id="helpId" class="text-muted">Pilih hasil pemeriksaan</small>
 											</div>
 										</div>
 										<div class="form-group row">
@@ -701,7 +699,7 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 								var tanamStart = (awalTanam < ijinStart || awalTanam > ijinEnd || awalTanam < pksAwal || awalTanam > pksAkhir) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku atau tanggal berlaku PKS">' + awalTanam + '</span>' : awalTanam;
 								var tanamEnd = (akhirTanam < ijinStart || akhirTanam > ijinEnd || akhirTanam < pksAwal || akhirTanam > pksAkhir) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku atau tanggal berlaku PKS">' + akhirTanam + '</span>' : akhirTanam;
 
-								tableTanam.row.add([lokasi, petani, kelompok, pksStart, pksEnd, tanamStart, tanamEnd, awalPanen, akhirPanen]).draw(false);
+								tableTanam.row.add([kelompok, petani, lokasi, pksStart, pksEnd, tanamStart, tanamEnd, awalPanen, akhirPanen]).draw(false);
 							});
 						}
 					},
@@ -737,8 +735,8 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 
 								var poktan = lokasi.poktan;
 								var anggota = lokasi.anggota;
-								var namaLokasi = lokasi.nama_lokasi;
-								var jmlLokasi = noDecimal.format(namaLokasi) + ' titik';
+								var jmlTitik = lokasi.jumlahTitik;
+								var jmlLokasi = noDecimal.format(jmlTitik) + ' titik';
 								var actionBtn = `
 									<a href="${lokasi.show}" class="btn btn-xs btn-icon btn-primary" title="Lihat detail">
 										<i class="fal fa-search"></i>
@@ -960,19 +958,39 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 	</script>
 
 	<script>
-		function validateInput() {
-			// get the input value and the current username from the page
-			var inputVal = document.getElementById('validasi').value;
-			var currentUsername = '{{ Auth::user()->username }}';
+		function handleStatusChange() {
 			var status = document.getElementById("status").value;
 			var ndhprtInput = document.getElementById("ndhprt");
 			var batanamInput = document.getElementById("batanam");
+			var ndhprtContainer = document.getElementById("ndhprtContainer");
+			var batanamContainer = document.getElementById("batanamContainer");
+
+			if (status === "5") { // Jika status adalah 'Perbaikan Data' (5)
+				ndhprtInput.disabled = true;
+				batanamInput.disabled = true;
+				ndhprtContainer.hidden = true;
+				batanamContainer.hidden = true;
+			} else if (status === "4") { // Jika status adalah 'Sesuai' (4)
+				ndhprtContainer.hidden = false;
+				batanamContainer.hidden = false;
+				ndhprtInput.disabled = false;
+				batanamInput.disabled = false;
+			}
+		}
+		function validateInput() {
+			// get the input value and the current username from the page
+			var status = document.getElementById("status").value;
+			var inputVal = document.getElementById('validasi').value;
+			var currentUsername = '{{ Auth::user()->username }}';
+			var status = document.getElementById("status").value;
+			var ndhprtInput = document.getElementById("ndhprt").value;
+			var batanamInput = document.getElementById("batanam").value;
 
 			// check if the input is not empty and matches the current username
 			if (inputVal !== '' && inputVal === currentUsername) {
 				// Jika status = 4, lakukan validasi tambahan
 				if (status === "4") {
-					if (ndhprtInput.files.length === 0 || batanamInput.files.length === 0) {
+					if (ndhprtInput === '' || batanamInput === '') {
 						alert("Nota Dinas dan Berita Acara harus diunggah jika status adalah 'Sesuai' (4).");
 						return false; // Menghentikan pengiriman formulir
 					}

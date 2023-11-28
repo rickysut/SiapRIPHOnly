@@ -48,10 +48,18 @@
 										<td>{{$pks->masterpoktan->nama_kelompok}}</td>
 										<td class="text-right">{{$pks->lokasi_count}} org</td>
 										<td class="text-right">
-											{{$pks->luas_rencana}} ha
+											{{$pks->lokasi->sum('luas_lahan')}} ha
 										</td>
 										<td>
-											@php
+											@if (empty($pks->tgl_perjanjian_start || $pks->tgl_perjanjian_end || $pks->varietas_tanam || $pks->berkas_pks))
+												<button type="button" class="btn btn-icon btn-xs btn-danger" data-toggle="modal" data-target="#modalId{{ $pks->id }}"><i class="fal fa-cassette-tape" data-toggle="tooltip" data-original-title="Lengkapi data"></i></button>
+											@else
+												<button type="button" class="btn btn-icon btn-xs btn-success" data-toggle="modal" data-target="#modalId{{ $pks->id }}"><i class="fal fa-file-check" data-toggle="tooltip" data-original-title="Data PKS lengkap. Klik jika ingin mengubah data"></i></button>
+												<a href="{{route('admin.task.pks.anggotas', $pks->id)}}" class="btn btn-icon btn-xs btn-primary" data-toggle="tooltip" data-original-title="Lengkapi data realisasi Komitmen Wajib Tanam-produksi">
+													<i class="fal fa-seedling"></i>
+												</a>
+											@endif
+											{{-- @php
 												$emptyColumns = collect($pks->getAttributes())->except([
 													'pengajuan_id','docstatus','status','note','verif_at','verif_by',
 													'jumlah_anggota','provinsi_id','kabupaten_id','kecamatan_id',
@@ -71,7 +79,7 @@
 													</a>
 													';
 												}
-											@endphp
+											@endphp --}}
 										</td>
 										<div class="modal fade" id="modalId{{ $pks->id }}" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
 											<div class="modal-dialog modal-dialog-right" role="document">

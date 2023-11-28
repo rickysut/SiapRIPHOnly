@@ -53,7 +53,7 @@
 														<div class="form-group">
 															<label class="form-label" for="firstname">Ganti foto</label>
 															<div class="custom-file">
-																<input type="file" accept=".jpg, .png" class="custom-file-input" name="avatar" aria-describedby="avatar" onchange="readURL(this,1);">
+																<input type="file" class="custom-file-input" name="avatar" aria-describedby="avatar" onchange="readURL(this,1);">
 																<label class="custom-file-label" for="avatar"></label>
 															</div>
 															<span class="help-block">Klik browse untuk memilih file</span>
@@ -72,7 +72,7 @@
 														<div class="form-group">
 															<label class="form-label" for="firstname">Ganti Logo Perusahaan</label>
 															<div class="custom-file">
-																<input type="file" accept=".jpg, .png" class="custom-file-input" name="logo" aria-describedby="logo" onchange="readURL(this,2);">
+																<input type="file" class="custom-file-input" name="logo" aria-describedby="logo" onchange="readURL(this,2);">
 																<label class="custom-file-label" for="logo"></label>
 															</div>
 															<span class="help-block">Klik browse untuk mengganti logo</span>
