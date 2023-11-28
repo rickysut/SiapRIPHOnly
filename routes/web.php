@@ -371,7 +371,7 @@ Route::group(['prefix' => 'support', 'as' => 'support.', 'middleware' => ['auth'
 	// Route::group(['prefix' => 'how_to', 'as' => 'howto.', 'namespace' => 'HowTo'], function () {
 	// 	Route::get('/',		'HowToController@show')->name('show');
 	// });
-	Route::group(['prefix' => 'how_to', 'as' => 'howto.', 'namespace' => 'HowTo'], function () {
+	Route::group(['prefix' => 'how_to', 'as' => 'howto.', 'namespace' => 'Howto'], function () {
 		Route::get('importir',		'HowtoController@importir')->name('importir');
 		Route::get('administrator',	'HowtoController@administrator')->name('administrator');
 		Route::get('verifikator',	'HowtoController@verifikator')->name('verifikator');
