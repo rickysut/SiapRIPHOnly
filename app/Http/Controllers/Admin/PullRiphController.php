@@ -177,6 +177,15 @@ class PullRiphController extends Controller
 								// Kesalahan terdeteksi jika $ktp bukan string
 								$ktp = "";
 							}
+
+							$periodeTanam = isset($poktan->periode_tanam) ? $poktan->periode_tanam : '';
+							if (is_string($periodeTanam)) {
+								$periodeTanam = $poktan->periode_tanam;
+							} else {
+								// Kesalahan terdeteksi jika $ktp bukan string
+								$periodeTanam = "";
+							}
+
 							$idpoktan = isset($poktan->id_poktan) ? trim($poktan->id_poktan, ' ') : '';
 							$idpetani = isset($poktan->id_petani) ? trim($poktan->id_petani, ' ') : '';
 							$idkabupaten = isset($poktan->id_kabupaten) ? trim($poktan->id_kabupaten, ' ') : '';
@@ -235,7 +244,7 @@ class PullRiphController extends Controller
 									'poktan_id' => $idpoktan,
 									'anggota_id' => $idpetani,
 									'luas_lahan' => trim($poktan->luas_lahan, ' '),
-									'periode_tanam' => trim($poktan->periode_tanam, ' ')
+									'periode_tanam' => $periodeTanam,
 								],
 							);
 						}
@@ -251,6 +260,14 @@ class PullRiphController extends Controller
 						} else {
 							// Kesalahan terdeteksi jika $ktp bukan string
 							$ktp = "";
+						}
+
+						$periodeTanam = isset($poktan->periode_tanam) ? $poktan->periode_tanam : '';
+						if (is_string($periodeTanam)) {
+							$periodeTanam = $poktan->periode_tanam;
+						} else {
+							// Kesalahan terdeteksi jika $ktp bukan string
+							$periodeTanam = "";
 						}
 						$idpoktan = isset($poktan->id_poktan) ? trim($poktan->id_poktan, ' ') : '';
 						$idpetani = isset($poktan->id_petani) ? trim($poktan->id_petani, ' ') : '';
@@ -332,7 +349,7 @@ class PullRiphController extends Controller
 								'poktan_id' => $idpoktan,
 								'anggota_id' => $idpetani,
 								'luas_lahan' => trim($poktan->luas_lahan, ' '),
-								'periode_tanam' => trim($poktan->periode_tanam, ' ')
+								'periode_tanam' => $periodeTanam
 							],
 						);
 					}
