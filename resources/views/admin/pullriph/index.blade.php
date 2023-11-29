@@ -378,8 +378,14 @@
 						$('#h-tgl_ijin').val(response.riph.persetujuan.tgl_ijin);
 						$('#tgl_akhir').html(response.riph.persetujuan.tgl_akhir);
 						$('#h-tgl_akhir').val(response.riph.persetujuan.tgl_akhir);
-						$('#no_hs').html(response.riph.komoditas.loop[0].no_hs  + response.riph.komoditas.loop[0].nama_produk);
-						$('#h-no_hs').val(response.riph.komoditas.loop[0].no_hs  + response.riph.komoditas.loop[0].nama_produk);
+						if (response.riph.komoditas.loop.length > 1)
+						{
+							$('#no_hs').html(response.riph.komoditas.loop[0].no_hs  + response.riph.komoditas.loop[0].nama_produk);
+							$('#h-no_hs').val(response.riph.komoditas.loop[0].no_hs  + response.riph.komoditas.loop[0].nama_produk);
+						} else {
+							$('#no_hs').html(response.riph.komoditas.loop.no_hs  + response.riph.komoditas.loop.nama_produk);
+							$('#h-no_hs').val(response.riph.komoditas.loop.no_hs  + response.riph.komoditas.loop.nama_produk);
+						}
 						$('#volume_riph').html(response.riph.wajib_tanam.volume_riph);
 						$('#h-volume_riph').val(response.riph.wajib_tanam.volume_riph);
 						$('#volume_produksi').html(response.riph.wajib_tanam.volume_produksi);
