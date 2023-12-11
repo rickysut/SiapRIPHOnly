@@ -322,7 +322,7 @@ class VerifProduksiController extends Controller
 			->get();
 
 		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
+		$total_volume = $commitment->datarealisasi->sum('volume');
 
 		$countPoktan = $pkss->count();
 		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
