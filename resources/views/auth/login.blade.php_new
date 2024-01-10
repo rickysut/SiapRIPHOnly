@@ -9,7 +9,7 @@
             <small class="h3 fw-300 mt-3 mb-5 text-white opacity-100">
                 Bagi Pemegang RIPH yang akan mengakses aplikasi ini, Anda harus memiliki akun pada Aplikasi RIPH Online terlebih dahulu.
                 <br>
-                <p>Belum memiliki akun? silahkan melakukan pendaftaran <a href="http://riph.pertanian.go.id/" class="fw-700 text-white">di sini.</a></p>
+                <p>Belum memiliki akun? silahkan melakukan pendaftaran <a href="https://riph.pertanian.go.id/" class="fw-700 text-white">di sini.</a></p>
             </small>
         </h2>
         {{-- <a href="#" class="fs-lg fw-500 text-white opacity-70">Learn more &gt;&gt;</a> --}}
@@ -18,7 +18,7 @@
                 Associate
             </div>
             <div class="d-flex flex-row opacity-70 align-items-center">
-                <a href="http://riph.pertanian.go.id/" class="text-white mr-2">
+                <a href="https://riph.pertanian.go.id/" class="text-white mr-2">
                     <img src="/img/riphonline.svg" alt="simethris" aria-roledescription="logo" style="width:25px; height:auto;">
                 </a>
                 

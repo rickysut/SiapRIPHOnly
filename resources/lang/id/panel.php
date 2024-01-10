@@ -4,7 +4,7 @@ return [
     'site_title' => 'SIMETHRIS 2022 - BETTER NEW',
     'site_subtitle' => 'Bagi Pemegang RIPH yang akan mengakses aplikasi ini, Anda harus memiliki akun pada Aplikasi RIPH Online terlebih dahulu.',
     'site_registertitle' => 'Belum memiliki akun? silahkan melakukan pendaftaran di:',
-    'site_riph' => 'http://riph.pertanian.go.id',
+    'site_riph' => 'https://riph.pertanian.go.id',
     'site_footer' => 'Sistem Monitoring Wajib Tanam Hortikultura Strategis',
     'site_maker' => 'Dit. STO - Ditjen Hortikultura',
     'login_title' => 'Bagi Pemegang RIPH, Gunakan akun dan katakunci yang sama dengan yang digunakan pada aplikasi RIPH Online',

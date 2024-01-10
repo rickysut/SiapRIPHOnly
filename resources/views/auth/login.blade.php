@@ -297,7 +297,7 @@
 				$("#regbutton").hide();
 			} else if (role_access==2){
 				$("#regbutton").show();
-				regbut.href = 'http://riph.pertanian.go.id/';
+				regbut.href = 'https://riph.pertanian.go.id/';
 			} else {
 				$("#regbutton").show();
 				regbut.href = "{{ route('register') }}";

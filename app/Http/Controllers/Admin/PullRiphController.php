@@ -61,7 +61,7 @@ class PullRiphController extends Controller
 				'use' => SOAP_ENCODED,
 			);
 
-			$client = new \SoapClient('http://riph.pertanian.go.id/api.php/simethris?wsdl', $options);
+			$client = new \SoapClient('https://riph.pertanian.go.id/api.php/simethris?wsdl', $options);
 			$parameter = array(
 				'user' => 'simethris',
 				'pass' => 'wsriphsimethris',
@@ -93,7 +93,7 @@ class PullRiphController extends Controller
 				'use' => SOAP_ENCODED,
 			);
 
-			$client = new \SoapClient('http://riph.pertanian.go.id/api.php/simethris?wsdl', $options);
+			$client = new \SoapClient('https://riph.pertanian.go.id/api.php/simethris?wsdl', $options);
 			$stnpwp = $request->get('npwp');
 			$npwp = str_replace('.', '', $stnpwp);
 			$npwp = str_replace('-', '', $npwp);

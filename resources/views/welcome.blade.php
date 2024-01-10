@@ -306,7 +306,7 @@
             else
             if (role_access==2){
                 regbut.addClass('d-none');
-                regbut.href = 'http://riph.pertanian.go.id/';    
+                regbut.href = 'https://riph.pertanian.go.id/';    
             } else {
                 regbut.removeClass('hidden');
                 regbut.href = '/v2/register'; 
