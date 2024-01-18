@@ -2,7 +2,7 @@
 @section('styles')
 <link rel="stylesheet" media="screen, print" href="{{ asset('css/miscellaneous/lightgallery/lightgallery.bundle.css') }}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1ea90fk4RXPswzkOJzd17W3EZx_KNB1M&libraries=drawing,geometry"></script>
+
 
 
 @endsection
@@ -131,7 +131,7 @@
 											</div>
 											<input id="mapId" name="mapId" placeholder="contoh: 1cwFsptUJ7EdW1IoHxFB_VRHsD10TEJ0" class="form-control">
 											<div class="input-group-append">
-												
+
 												<button class="btn btn-default waves-effect waves-themed"
 													onclick="link_parser()">Open</button>
 											</div>
@@ -368,17 +368,17 @@
 				name: "Dokumen Panen"
 			}
 		];
-	
+
 		pdfUrls.forEach(function (item) {
 			const option = document.createElement('option');
 			option.value = item.url;
 			option.textContent = item.name;
 			pdfSelect.appendChild(option);
 		});
-	
+
 		// Set the default value to the Tanam Doc url
 		pdfSelect.value = pdfUrls[0].url;
-	
+
 		pdfSelect.addEventListener('change', function () {
 			const pdfUrl = this.value;
 			pdfIframe.src = pdfUrl;

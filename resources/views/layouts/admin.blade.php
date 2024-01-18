@@ -45,15 +45,17 @@
 		<link rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/fa-solid.css') }}">
 		<link rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/fa-brands.css') }}">
 
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 		<!-- coreui -->
 		<link href="{{ asset('css/ajax/all.css') }}" rel="stylesheet" />
-		<link href="{{ asset('css/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+		{{-- <link href="{{ asset('css/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
 		<link href="{{ asset('css/datatables/buttons.dataTables.min.css') }}" rel="stylesheet" />
-		<link href="{{ asset('css/datatables/select.dataTables.min.css') }}" rel="stylesheet" />
+		<link href="{{ asset('css/datatables/select.dataTables.min.css') }}" rel="stylesheet" /> --}}
 
 		<link href="{{ asset('css/toastr.css') }}" rel="stylesheet" />
 
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1ea90fk4RXPswzkOJzd17W3EZx_KNB1M&libraries=drawing,geometry&callback=initMap" async defer></script>
 
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		@yield('styles')
