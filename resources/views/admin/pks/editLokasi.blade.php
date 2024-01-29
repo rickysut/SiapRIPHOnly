@@ -212,7 +212,10 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text"><i class="fal fa-map"></i></span>
 											</div>
-											<input type="number" step="0.01" value="{{$lokasi->luas_lahan}}" name="luas_lahan" id="luas_lahan" class="font-weight-bold form-control form-control-sm bg-white" max="{{ $anggota->luas_lahan - ($anggota->datarealisasi->sum('luas_lahan') - $lokasi->luas_lahan) }}"/>
+											{{-- tambahkan ini
+											max="{{ $anggota->luas_lahan - $anggota->datarealisasi->sum('luas_lahan') }}"
+											untuk pembatasan dan aktifkan script --}}
+											<input type="number" step="0.001" value="{{$lokasi->luas_lahan}}" name="luas_lahan" id="luas_lahan" class="font-weight-bold form-control form-control-sm bg-white"/>
 										</div>
 										<span class="help-block">Luas lahan yang ditanami.</span>
 									</div>
@@ -253,12 +256,13 @@
 	window.addEventListener('load', function() {
 		initMap();
 	});
-	document.getElementById("luas_lahan").addEventListener("input", function() {
-		var maxLuasLahan = parseFloat({{ $anggota->luas_lahan - ($anggota->datarealisasi->sum('luas_lahan') - $lokasi->luas_lahan) }});
-		var inputLuasLahan = parseFloat(this.value);
-		if (inputLuasLahan > maxLuasLahan) {
-			this.value = maxLuasLahan;
-		}
-	});
+	// aktifkan untuk pembatasan max input luas lahan
+	// document.getElementById("luas_lahan").addEventListener("input", function() {
+	// 	var maxLuasLahan = parseFloat({{ $anggota->luas_lahan - ($anggota->datarealisasi->sum('luas_lahan') - $lokasi->luas_lahan) }});
+	// 	var inputLuasLahan = parseFloat(this.value);
+	// 	if (inputLuasLahan > maxLuasLahan) {
+	// 		this.value = maxLuasLahan;
+	// 	}
+	// });
 </script>
 @endsection

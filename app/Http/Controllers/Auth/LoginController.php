@@ -88,8 +88,10 @@ class LoginController extends Controller
 				);
 				$response = $client->__soapCall('get_akses', $parameter);
 			} catch (\Exception $e) {
-
-				Log::error('Soap Exception: ' . $e->getMessage());
+				$errorMessage = $e->getMessage();
+				// Log pesan kesalahan ke dalam file log laravel
+				Log::error("Error: $errorMessage. Code: " . $e->getCode() . ". Trace: " . $e->getTraceAsString());
+				return redirect()->back()->with('error', 'Login Error. Error while trying to retrieve login data. Please Contact Administrator for this error: (' . $errorMessage . ')');
 				// throw new \Exception('Problem with SOAP call');
 				$response = null;
 			}
@@ -133,7 +135,7 @@ class LoginController extends Controller
 						// if ($datauser) dd('updated...'); else dd('update or create fail');
 					};
 				}
-			}	
+			}
 		}
 
 

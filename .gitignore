@@ -13,3 +13,5 @@ simethris_public.zip
 database/simethirsstarter.sql
 public/public.zip
 /storage/*
+composer.json
+composer.lock
