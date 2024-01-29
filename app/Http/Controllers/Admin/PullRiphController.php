@@ -71,8 +71,10 @@ class PullRiphController extends Controller
 
 			$response = $client->__soapCall('get_riph', $parameter);
 		} catch (\Exception $e) {
-			Log::error('Soap Exception: ' . $e->getMessage());
-			throw new \Exception('Problem with SOAP call');
+			$errorMessage = $e->getMessage();
+			// Log pesan kesalahan ke dalam file log laravel
+			Log::error("Error: $errorMessage. Code: " . $e->getCode() . ". Trace: " . $e->getTraceAsString());
+			return redirect()->back()->with('error', 'Pull Method. Error while trying to retrieve data. Please Contact Administrator for this error: (' . $errorMessage . ')');
 		}
 		$res = json_decode(json_encode((array)simplexml_load_string($response)), true);
 
@@ -111,8 +113,10 @@ class PullRiphController extends Controller
 			$filepath = 'uploads/' . $npwp . '/' . $fijin . '.json';
 			Storage::disk('public')->put($filepath, $datariph);
 		} catch (\Exception $e) {
-			Log::error('Soap Exception: ' . $e->getMessage());
-			throw new \Exception('Problem with SOAP call');
+			$errorMessage = $e->getMessage();
+			// Log pesan kesalahan ke dalam file log laravel
+			Log::error("Error: $errorMessage. Code: " . $e->getCode() . ". Trace: " . $e->getTraceAsString());
+			return redirect()->back()->with('error', 'Soap Error while trying to connect to Client. Please Contact Administrator for this error: (' . $errorMessage . ')');
 		}
 
 		$user = Auth::user();
@@ -148,7 +152,7 @@ class PullRiphController extends Controller
 			if ($riph) {
 				$lastPoktan = '';
 				if ($dtjson->riph->wajib_tanam->kelompoktani->loop === null) {
-					return redirect()->back()->with('error', 'Gagal menyimpan. Data terkait RIPH dimaksud tidak lengkap. silahkan lengkapi terlebih dahulu di aplikasi SIAP RIPH atau hubungi Administrator terkait.');
+					return redirect()->back()->with('error', 'Gagal menyimpan. Data Kelompok tani tidak lengkap.');
 				} else {
 					DataRealisasi::where([
 						'npwp_company' => $stnpwp,
@@ -358,7 +362,10 @@ class PullRiphController extends Controller
 			DB::commit();
 		} catch (\Exception $e) {
 			DB::rollback();
-			return redirect()->back()->with('error', 'Gagal menyimpan. Data terkait RIPH dimaksud tidak lengkap. silahkan lengkapi terlebih dahulu di aplikasi SIAP RIPH atau hubungi Administrator terkait.');
+			$errorMessage = $e->getMessage();
+			// Log pesan kesalahan ke dalam file log laravel
+			Log::error("Error: $errorMessage. Code: " . $e->getCode() . ". Trace: " . $e->getTraceAsString());
+			return redirect()->back()->with('error', 'Pull Store Method. Please Contact Administrator for this error: (' . $errorMessage . ')');
 		}
 		return redirect()->route('admin.task.commitment')->with('success', 'Sukses menyimpan data dan dapat Anda lihat pada daftar di bawah ini.');
 	}

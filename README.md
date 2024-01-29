@@ -16,3 +16,12 @@
 6. npm run dev
 7. php artisan serve
 8. run php artisan schedule:test, select 0 then.
+
+## Perubahan terbaru
+
+1. addLokasi dan editLokasi.blade pembatasan input max luas lahan di remark
+2. data step menjadi 3 digit
+3. field anggota_id di db master_anggotas menjadi not unique
+4. field luas_lahan di db data_realisasi menjadi double
+5. menambahkan catch error message untuk debug di PullRiphController
+6. menambahkan catch error message untuk debug di LoginController
