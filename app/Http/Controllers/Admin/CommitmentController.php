@@ -17,6 +17,7 @@ use App\Http\Controllers\Traits\SimeviTrait;
 use App\Models\AjuVerifProduksi;
 use App\Models\AjuVerifSkl;
 use App\Models\AjuVerifTanam;
+use App\Models\MasterAnggota;
 use App\Models\Skl;
 use App\Models\UserDocs;
 use App\Models\Varietas;
@@ -115,10 +116,19 @@ class CommitmentController extends Controller
 		$npwp = Auth::user()->data_user->npwp_company;
 		$commitment = PullRiph::where('npwp', $npwp)
 			->findOrFail($id);
-		$pkss = Pks::withCount('lokasi')
-			->where('npwp', $npwp)
+		$pkss = Pks::where('npwp', $npwp)
 			->where('no_ijin', $commitment->no_ijin)
+			->withCount(['lokasi' => function ($query) use ($npwp, $commitment) {
+				$query->where('npwp', $npwp)
+					->where('no_ijin', $commitment->no_ijin);
+			}])
+			->withSum(['lokasi' => function ($query) use ($npwp, $commitment) {
+				$query->where('npwp', $npwp)->where('no_ijin', $commitment->no_ijin);
+			}], 'luas_lahan')
 			->get();
+
+		// dd($pkss);
+
 		foreach ($pkss as $pks) {
 			// Calculate the sum of luas_lahan for this Pks record
 			$luasLahanSum = $pks->masterpoktan->anggota->sum('luas_lahan');

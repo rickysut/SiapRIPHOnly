@@ -182,7 +182,7 @@ class PksController extends Controller
 	{
 		$module_name = 'Realisasi';
 		$page_title = 'Daftar Petani Mitra';
-		$page_heading = 'Daftar Petani Mitra';
+		$page_heading = 'Daftar Petani Mitras';
 		$heading_class = 'fal fa-user-hard-hat';
 
 		$npwpCompany = Auth::user()->data_user->npwp_company;
@@ -193,6 +193,7 @@ class PksController extends Controller
 			->first();
 		$anggotas = MasterAnggota::where('npwp', $npwpCompany)
 			->where('poktan_id', $pks->poktan_id)
+			->where('no_ijin', $pks->no_ijin)
 			->get();
 		$lokasis = Lokasi::where('npwp', $npwpCompany)
 			->where('no_ijin', $pks->no_ijin)
