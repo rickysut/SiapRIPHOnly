@@ -48,7 +48,7 @@
 										<td>{{$pks->masterpoktan->nama_kelompok}}</td>
 										<td class="text-right">{{$pks->lokasi_count}} org</td>
 										<td class="text-right">
-											{{$pks->lokasi->sum('luas_lahan')}} ha
+											{{$pks->lokasi_sum_luas_lahan}} ha
 										</td>
 										<td>
 											@if (empty($pks->tgl_perjanjian_start || $pks->tgl_perjanjian_end || $pks->varietas_tanam || $pks->berkas_pks))
