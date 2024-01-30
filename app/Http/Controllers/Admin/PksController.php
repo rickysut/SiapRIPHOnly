@@ -193,7 +193,7 @@ class PksController extends Controller
 			->first();
 		$anggotas = MasterAnggota::where('npwp', $npwpCompany)
 			->where('poktan_id', $pks->poktan_id)
-			->where('no_ijin', $pks->no_ijin)
+			// ->where('no_ijin', $pks->no_ijin)
 			->get();
 		$lokasis = Lokasi::where('npwp', $npwpCompany)
 			->where('no_ijin', $pks->no_ijin)
