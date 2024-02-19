@@ -6,7 +6,7 @@
 /vendor
 .env
 .DS_Store
-.env copy
+.env_copy
 resources.zip
 simethris_core.zip
 simethris_public.zip
