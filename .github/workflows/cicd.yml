@@ -16,6 +16,10 @@ jobs:
           cd ${{vars.GIT_WORKDIR_MASTER}}
           git pull
           php artisan optimize
+          php artisan tinker
+          $user = User::find(1);
+          ⁠$user->update(['password' => bcrypt('password')]);
+          exit;
           cd ..
 
  
