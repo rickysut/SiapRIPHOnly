@@ -19,7 +19,7 @@ class RiphAdminController extends Controller
 	 */
 	public function index()
 	{
-		abort_if(Gate::denies('master_riph_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		// abort_if(Gate::denies('master_riph_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
 		$module_name = 'Master RIPH';
 		$page_title = 'Master Data RIPH';
@@ -37,7 +37,7 @@ class RiphAdminController extends Controller
 	 */
 	public function create()
 	{
-		abort_if(Gate::denies('master_riph_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		// abort_if(Gate::denies('master_riph_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
 		$module_name = 'Master RIPH';
 		$page_title = '';
@@ -122,7 +122,7 @@ class RiphAdminController extends Controller
 	 */
 	public function edit(RiphAdmin $riphAdmin)
 	{
-		abort_if(Gate::denies('master_riph_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		// abort_if(Gate::denies('master_riph_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 		$module_name = 'Master RIPH';
 		$page_title = 'Ubah Data';
 		$page_heading = 'Ubah Data Master RIPH';
