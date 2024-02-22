@@ -366,6 +366,14 @@
 						<span class="nav-link-text">{{ trans('cruds.auditLog.title_lang') }}</span>
 					</a>
 				</li>
+				<li class="c-sidebar-nav-item {{ request()->is('admin/roles')
+					|| request()->is('admin/roles/*') ? 'active' : '' }}">
+					<a href="{{ route('admin.roles.index') }}" title="Roles"
+						data-filter-tags="setting role user">
+						<i class="fa-fw fal fa-briefcase c-sidebar-nav-icon"></i>
+						<span class="nav-link-text">{{ trans('cruds.role.title_lang') }}</span>
+					</a>
+				</li>
 				<li class="c-sidebar-nav-item {{ request()->is('verification/skl/recomendation*') ? 'active' : '' }}">
 					<a href="{{ route('verification.skl.recomendations') }}"
 						data-filter-tags="daftar rekomendasi penerbitan skl"
