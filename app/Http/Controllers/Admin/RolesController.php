@@ -17,7 +17,7 @@ class RolesController extends Controller
 {
     public function index(Request $request)
     {
-        abort_if(Gate::denies('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
             $query = Role::with(['permissions'])->select(sprintf('%s.*', (new Role())->table));
@@ -65,7 +65,7 @@ class RolesController extends Controller
 
     public function create()
     {
-        abort_if(Gate::denies('role_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('role_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $permissions = Permission::pluck('title','id' );
         $permi = Permission::all();
@@ -79,14 +79,14 @@ class RolesController extends Controller
     {
         $role = Role::create($request->all());
         $role->permissions()->sync($request->input('permissions', []));
-        
+
         session()->flash('message', trans('global.create_success'));
         return redirect()->route('admin.roles.index');
     }
 
     public function edit(Role $role)
     {
-        abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $permissions = Permission::pluck('title','id' );
         $permi = Permission::all();
@@ -109,7 +109,7 @@ class RolesController extends Controller
 
     public function show(Role $role)
     {
-        abort_if(Gate::denies('role_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('role_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $role->load('permissions');
         $breadcrumb = trans('global.show') . " ".  trans('cruds.role.title') ;
@@ -118,7 +118,7 @@ class RolesController extends Controller
 
     public function destroy(Role $role)
     {
-        abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $role->delete();
 
