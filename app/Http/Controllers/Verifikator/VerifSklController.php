@@ -28,6 +28,7 @@ use App\Models\UserDocs;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
+//a little change
 class VerifSklController extends Controller
 {
 	protected $sklid = -1;
