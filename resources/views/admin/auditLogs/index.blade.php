@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 @include('partials.subheader')
-
+@can('audit_log_access')
 <div class="row">
 	<div class="col-12">
 		<div id="panel-1" class="panel show" data-panel-sortable data-panel-close data-panel-collapsed>
@@ -55,7 +55,7 @@
         </div>
     </div>
 </div>
-
+@endcan
 
 
 @endsection

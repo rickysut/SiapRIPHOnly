@@ -13,7 +13,7 @@ class AuditLogsController extends Controller
 {
     public function index(Request $request)
     {
-        // abort_if(Gate::denies('audit_log_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('audit_log_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
             // $query = AuditLog::query()->select(sprintf('%s.*', (new AuditLog())->table));
@@ -68,10 +68,10 @@ class AuditLogsController extends Controller
 
     public function show(AuditLog $auditLog)
     {
-        // abort_if(Gate::denies('audit_log_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('audit_log_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $auditLog->load('user_info');
         $breadcrumb = "View Audit Log";
-        $breadcrumb =trans('global.show')  ." ". trans('cruds.auditLog.title');
+        $breadcrumb =trans('global.show')  ." ". trans('cruds.auditLog.title'); 
         return view('admin.auditLogs.show', compact('auditLog', 'breadcrumb'));
     }
 }

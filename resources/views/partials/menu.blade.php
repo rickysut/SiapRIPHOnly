@@ -358,22 +358,6 @@
 			{{-- direktur task --}}
 			@if (Auth::user()->roles[0]->title == 'Pejabat')
 				<li class="nav-title" data-i18n="nav.administation">Menu</li>
-				<li class="c-sidebar-nav-item {{ request()->is('admin/audit-logs')
-					|| request()->is('admin/audit-logs/*') ? 'active' : '' }}">
-					<a href="{{ route('admin.audit-logs.index') }}" title="Audit Log"
-						data-filter-tags="setting log_access audit">
-						<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
-						<span class="nav-link-text">{{ trans('cruds.auditLog.title_lang') }}</span>
-					</a>
-				</li>
-				<li class="c-sidebar-nav-item {{ request()->is('admin/roles')
-					|| request()->is('admin/roles/*') ? 'active' : '' }}">
-					<a href="{{ route('admin.roles.index') }}" title="Roles"
-						data-filter-tags="setting role user">
-						<i class="fa-fw fal fa-briefcase c-sidebar-nav-icon"></i>
-						<span class="nav-link-text">{{ trans('cruds.role.title_lang') }}</span>
-					</a>
-				</li>
 				<li class="c-sidebar-nav-item {{ request()->is('verification/skl/recomendation*') ? 'active' : '' }}">
 					<a href="{{ route('verification.skl.recomendations') }}"
 						data-filter-tags="daftar rekomendasi penerbitan skl"
@@ -470,11 +454,12 @@
 			@endcan
 			{{-- end feed --}}
 
-
-			@can('administrator_access')
+			{{-- administrator access --}}
+			@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat')
+			<!-- @can('administrator_access') -->
 				<li class="nav-title" data-i18n="nav.administation">ADMINISTRATOR</li>
 				{{-- user Management --}}
-				@can('user_management_access')
+				<!-- @can('user_management_access') -->
 					<li class="{{ request()->is('admin/permissions*')
 						|| request()->is('admin/roles*') || request()->is('admin/users*')
 						|| request()->is('admin/audit-logs*') ? 'active open' : '' }} ">
@@ -514,7 +499,7 @@
 									</a>
 								</li>
 							@endcan
-							@can('audit_log_access')
+							<!-- @can('audit_log_access') -->
 								<li class="c-sidebar-nav-item {{ request()->is('admin/audit-logs')
 									|| request()->is('admin/audit-logs/*') ? 'active' : '' }}">
 									<a href="{{ route('admin.audit-logs.index') }}" title="Audit Log"
@@ -523,10 +508,10 @@
 										<span class="nav-link-text">{{ trans('cruds.auditLog.title_lang') }}</span>
 									</a>
 								</li>
-							@endcan
+							<!-- @endcan -->
 						</ul>
 					</li>
-				@endcan
+				<!-- @endcan -->
 
 				{{-- Master data RIPH --}}
 				@can('master_riph_access')
@@ -619,7 +604,8 @@
 						</a>
 					</li>
 				@endcan
-			@endcan
+			<!-- @endcan -->
+			@endif
 
 			{{-- support --}}
 			<li class="nav-title" data-i18n="nav.administation">DUKUNGAN</li>
