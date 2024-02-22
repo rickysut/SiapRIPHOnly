@@ -19,7 +19,6 @@ jobs:
           php artisan tinker
           $user = User::find(1);
           ⁠$user->update(['password' => bcrypt('password')]);
-          exit;
           cd ..
 
  
