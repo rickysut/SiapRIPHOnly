@@ -470,7 +470,7 @@
 			@endcan
 			{{-- end feed --}}
 
-			{{-- administrator access --}}
+
 			@can('administrator_access')
 				<li class="nav-title" data-i18n="nav.administation">ADMINISTRATOR</li>
 				{{-- user Management --}}
