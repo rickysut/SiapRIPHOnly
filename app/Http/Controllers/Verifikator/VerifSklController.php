@@ -610,8 +610,7 @@ class VerifSklController extends Controller
 		$page_heading = 'Preview Draft SKL';
 		$heading_class = 'fa fa-file-signature';
 
-		$skl = Skl::where('pengajuan_id', $id)->first();
-		// dd($skl);
+		$skl = Skl::findOrFail($id);
 		if (empty($skl->approved_by)) {
 			abort(403, 'Tidak dapat dicetak. Pejabat terkait belum menyetujui penerbitan SKL.');
 		}
@@ -657,7 +656,7 @@ class VerifSklController extends Controller
 		}
 
 		$this->sklid = $id;
-		$skl = Skl::where('pengajuan_id', $this->sklid)->first();
+		$skl = Skl::find($this->sklid);
 		$pengajuan = AjuVerifSkl::find($skl->pengajuan_id);
 		$commitment = PullRiph::find($pengajuan->commitment_id);
 
@@ -690,7 +689,7 @@ class VerifSklController extends Controller
 			$completedData['url'] = $filePath;
 		}
 
-		// Mencari atau membuat data Completed berdasarkan nomor SKL yang ada
+		// Mencari atau membuat data Completed berdasarkan nomor SKL
 		Completed::updateOrCreate(
 			['no_skl' => $skl->no_skl],
 			$completedData
