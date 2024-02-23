@@ -22,23 +22,7 @@
 	<div data-size="A4">
 		<div class="row">
 			<div class="col-sm-12 mb-5">
-				<div class="d-flex align-items-center mb-3">
-					<img class="mr-2" src="{{asset('/img/favicon.png')}}" alt="Simethris" aria-roledescription="logo" style="width: 100px">
-					<div class="keep-print-font mb-0 flex-1 position-relative">
-						<h5 class="keep-print-font text-center fw-500 mb-0">KEMENTERIAN PERTANIAN</h5>
-						<h3 class="keep-print-font text-center fw-500 mb-0">DIREKTORAT JENDERAL HORTIKULTURA</h3>
-						<h1 class="fw-500 keep-print-font l-h-n m-0 text-center mb-2">DIREKTORAT SAYURAN DAN TANAMAN OBAT</h1>
-						<h6 class="keep-print-font l-h-n m-0 text-center fs-md mb-2">
-							Jalan AUP No. 3 Pasar Minggu - Jakarta Selatan 12520
-						</h6>
-						<h6 class="keep-print-font l-h-n m-0 text-center fs-sm">
-								<span class="keep-print-font mr-2">TELP/FAX (021) 780665 - 7817611 |</span>
-								<span class="keep-print-font mr-2">EMAIL: ditsayurobat@pertanian.go.id |</span>
-								<span class="keep-print-font">WEBSITE http://ditsayur.hortikultura.pertanian.go.id</span>
-						</h6>
-					</div>
-				</div>
-				<img src="{{asset('/img/border.png')}}" width="100%" height="7px">
+				<img src="{{asset('/img/kopsto.png')}}" width="100%">
 			</div>
 		</div>
 		<div class="row mb-5">
