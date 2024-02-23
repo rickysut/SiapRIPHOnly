@@ -5,29 +5,40 @@
 @endsection
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
-
-<form action="{{route('verification.skl.recomendation.approve', $skl->id)}}" method="post" onsubmit="return confirm('Anda setuju untuk menerbitkan Surat Keterangan Lunas untuk RIPH Nomor: {{$skl->no_ijin}}')">
-	@csrf
-	@method('PUT')
-	<div class="d-flex align-items-center justify-content-center text-center mt-5 mb-5">
-		@if (Auth::user()->roles[0]->title == 'Admin')
-			<a class="btn btn-sm btn-info mr-1" href="{{route('verification.skl')}}" role="button"><i class="fal fa-undo text-align-center"></i> Kembali</a>
-			<button type="button" onclick="printPage()" class="btn btn-sm btn-primary btn-sm">
-				<i class="fal fa-print mr-1"></i> Cetak SKL
-			</button>
-		@elseif (Auth::user()->roles[0]->title == 'Pejabat')
-			<a class="btn btn-sm btn-info mr-1" href="{{route('verification.skl.recomendation.show', $verifikasi->id)}}" role="button"><i class="fal fa-undo text-align-center"></i> Kembali</a>
-			<button class="btn btn-sm btn-danger" type="submit">
-				<i class="fas fa-upload text-align-center"></i>Terbitkan SKL
-			</button>
-		@endif
-	</div>
-</form>
+<div class="d-flex flex-column align-items-center justify-content-center text-center mt-5 mb-5">
+	{{-- <button onclick="printPage()" class="btn btn-sm btn-primary btn-sm">
+		<i class="fal fa-print mr-1"></i> Cetak SKL
+	</button> --}}
+	<form action="{{route('verification.skl.recomendation.approve', $skl->id)}}" method="post" onsubmit="return confirm('Anda setuju untuk menerbitkan Surat Keterangan Lunas untuk RIPH Nomor: {{$skl->no_ijin}}')">
+		<a class="btn btn-sm btn-info" href="{{route('verification.skl.recomendation.show', $verifikasi->id)}}" role="button"><i class="fal fa-undo text-align-center mr-1"></i> Kembali</a>
+		@csrf
+		@method('PUT')
+		<button class="btn btn-sm btn-danger" type="submit">
+			<i class="fas fa-upload text-align-center mr-1"></i>Terbitkan SKL
+		</button>
+	</form>
+</div>
 <div class="container" style="background-color: white !important;">
 	<div data-size="A4">
 		<div class="row">
 			<div class="col-sm-12 mb-5">
-				<img src="{{asset('/img/kopsto.png')}}" width="100%">
+				<div class="d-flex align-items-center mb-3">
+					<img class="mr-2" src="{{asset('/img/favicon.png')}}" alt="Simethris" aria-roledescription="logo" style="width: 100px">
+					<div class="keep-print-font mb-0 flex-1 position-relative">
+						<h5 class="keep-print-font text-center fw-500 mb-0">KEMENTERIAN PERTANIAN</h5>
+						<h3 class="keep-print-font text-center fw-500 mb-0">DIREKTORAT JENDERAL HORTIKULTURA</h3>
+						<h1 class="fw-500 keep-print-font l-h-n m-0 text-center mb-2">DIREKTORAT SAYURAN DAN TANAMAN OBAT</h1>
+						<h6 class="keep-print-font l-h-n m-0 text-center fs-md mb-2">
+							Jalan AUP No. 3 Pasar Minggu - Jakarta Selatan 12520
+						</h6>
+						<h6 class="keep-print-font l-h-n m-0 text-center fs-sm">
+								<span class="keep-print-font mr-2">TELP/FAX (021) 780665 - 7817611 |</span>
+								<span class="keep-print-font mr-2">EMAIL: ditsayurobat@pertanian.go.id |</span>
+								<span class="keep-print-font">WEBSITE http://ditsayur.hortikultura.pertanian.go.id</span>
+						</h6>
+					</div>
+				</div>
+				<img src="{{asset('/img/border.png')}}" width="100%" height="7px">
 			</div>
 		</div>
 		<div class="row mb-5">
@@ -69,9 +80,7 @@
 						<tbody>
 							<tr>
 								<td>
-									{{-- <span class="js-get-date fw-500"></span> --}}
-									<span class="fw-500">{{ \Carbon\Carbon::parse($skl->published_date)->translatedFormat('d F Y') }}
-									</span>
+									<span class="js-get-date fw-500"></span>
 								</td>
 							</tr>
 						</tbody>
@@ -79,8 +88,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="row fs-xl keep-print-font">
-			<div class="col-12">
+		<div class="row fs-xl">
+			<div class="col-sm-12">
 				Kepada Yth.<br>
 				Pimpinan<br>
 				<strong>
@@ -88,9 +97,9 @@
 				</strong><br>
 				di<br>
 				Tempat<br>
-				<div class="row">
-					<p class="justify-align-stretch mt-5">Berdasarkan hasil evaluasi dan validasi laporan realisasi tanam dan produksi, dengan ini kami menyatakan:</p>
-				</div>
+				<p class="justify-align-stretch mt-5">
+					Berdasarkan hasil evaluasi dan validasi laporan realisasi tanam dan produksi, dengan ini kami menyatakan:
+				</p>
 			</div>
 			<div class="col-12">
 				<dl class="row">
@@ -98,13 +107,27 @@
 					<dt class="col-sm-9">: {{$commitment->user->data_user->company_name}}</dt>
 					<dd class="col-sm-3">Nomor RIPH</dd>
 					<dt class="col-sm-9">: {{$commitment->no_ijin}}</dt>
-					<dd class="col-sm-3">Wajib Tanam</dd>
+					<dd class="col-sm-3">Komitmen Wajib Tanam</dd>
 					<dt class="col-sm-9">
-						: {{ number_format($commitment->luas_wajib_tanam, 2, '.', ',') }} ha, Realisasi: {{ number_format($total_luas, 2, '.', ',') }} ha.
+						<dl class="row">
+							<dd class="col-sm-3">Komitmen</dd>
+							<dt class="col-sm-9">: {{ number_format($commitment->luas_wajib_tanam, 2, '.', ',') }} ha;</dt>
+							<dd class="col-sm-3">Realisasi</dd>
+							<dt class="col-sm-9">: {{ number_format($total_luas, 2, '.', ',') }} ha.</dt>
+							<dd class="col-sm-3">Verifikasi</dd>
+							<dt class="col-sm-9">: </dt>
+						</dl>
 					</dt>
 					<dd class="col-sm-3">Wajib Produksi</dd>
 					<dt class="col-sm-9">
-						: {{ number_format($commitment->volume_produksi, 2, '.', ',') }} ton, Realisasi: {{ number_format($total_volume, 2, '.', ',') }} ton.
+						<dl class="row">
+							<dd class="col-sm-3">Komitmen</dd>
+							<dt class="col-sm-9">: {{ number_format($commitment->volume_produksi, 2, '.', ',') }} ton;</dt>
+							<dd class="col-sm-3">Realisasi</dd>
+							<dt class="col-sm-9">: {{ number_format($total_volume, 2, '.', ',') }} ton.</dt>
+							<dd class="col-sm-3">Verifikasi</dd>
+							<dt class="col-sm-9">: </dt>
+						</dl>
 					</dt>
 				</dl>
 				{{-- <div class="row">
@@ -141,10 +164,12 @@
 				</div> --}}
 			</div>
 			<div class="col-12">
-				<div class="row">
-					<p class="justify-align-stretch">Telah melaksanakan kewajiban pengembangan bawang putih di dalam negeri sebagaimana ketentuan dalam Permentan 39 tahun 2019 dan perubahannya.</p>
-					<p class="justify-align-stretch mt-3">Atas perhatian dan kerjasama Saudara disampaikan terima kasih.</p>
-				</div>
+				<p class="justify-align-stretch">
+					Telah melaksanakan kewajiban pengembangan bawang putih di dalam negeri sebagaimana ketentuan dalam Permentan 39 tahun 2019 dan perubahannya.
+				</p>
+				<p class="justify-align-stretch mt-3">
+					Atas perhatian dan kerjasama Saudara disampaikan terima kasih.
+				</p>
 			</div>
 			<div class="col-12">
 				<dl class="row mt-5 align-items-center">
@@ -154,14 +179,14 @@
 					<dd class="col-sm-5">
 							<span class="mb-5" style="height: 7em">Direktur,</span>
 							<br><br><br>
-								{{-- @if ($pejabat)
-									@if ($pejabat->sign_img)
-										<img style="max-width: 7em" src="{{ asset('storage/uploads/dataadmin/'.$pejabat->sign_img) }}" alt="ttd">
+								@if ($pejabat->dataadmin)
+									@if ($pejabat->dataadmin->sign_img)
+										<img style="max-width: 7em" src="{{ asset('storage/uploads/dataadmin/'.$pejabat->dataadmin->sign_img) }}" alt="ttd">
 									@endif
-								@endif --}}
+								@endif
 							<br>
-							<u><strong>{{$pejabat->nama ?? ''}}</strong></u><br>
-							<span class="mr-1">NIP.</span>{{$pejabat->nip ??''}}
+							<u><strong>{{$pejabat->dataadmin->nama ?? ''}}</strong></u><br>
+							<span class="mr-1">NIP.</span>{{$pejabat->dataadmin->nip ??''}}
 						</div>
 					</dd>
 				</dl>

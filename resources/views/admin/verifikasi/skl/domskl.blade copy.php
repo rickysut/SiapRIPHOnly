@@ -1,33 +1,12 @@
-@extends('layouts.skl')
-@section ('styles')
+
 <link rel="stylesheet" media="screen, print" href="{{asset('/css/smartadmin/page-invoice.css')}}">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-@endsection
-@section('content')
-{{-- @include('partials.breadcrumb') --}}
-<div class="subheader d-print-none">
-	<h1 class="subheader-title">
-		<i class="subheader-icon {{ ($heading_class ?? '') }}"></i> {{  ($page_heading ?? '') }} <span class="fw-300"></span>
-		<small>
-			Surat Keterangan Lunas diterbitkan
-		</small>
-	</h1>
-	<div class="subheader-block d-lg-flex align-items-center">
-		<div class="form-group">
-			<label class="form-label" for="provinsi"></label>
-			<div class="input-group">
-				<button onclick="printPage()" class="btn btn-sm btn-primary btn-sm">
-					<i class="fal fa-print mr-1"></i> Cetak SKL
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+
 <div class="container" style="background-color: white !important;">
 	<div data-size="A4">
 		<div class="row">
 			<div class="col-sm-12 mb-5">
-				<img src="{{asset('/img/kopsto.png')}}" width="100%">
 				<div class="d-flex align-items-center mb-3">
 					<img class="mr-2" src="{{asset('/img/favicon.png')}}" alt="Simethris" aria-roledescription="logo" style="width: 100px">
 					<div class="keep-print-font mb-0 flex-1 position-relative">
@@ -38,9 +17,9 @@
 							Jalan AUP No. 3 Pasar Minggu - Jakarta Selatan 12520
 						</h6>
 						<h6 class="keep-print-font l-h-n m-0 text-center fs-sm">
-								<span class="keep-print-font mr-2">TELP/FAX (021) 780665 - 7817611 |</span>
-								<span class="keep-print-font mr-2">EMAIL: ditsayurobat@pertanian.go.id |</span>
-								<span class="keep-print-font">WEBSITE http://ditsayur.hortikultura.pertanian.go.id</span>
+							<span class="keep-print-font mr-2">TELP/FAX (021) 780665 - 7817611 |</span>
+							<span class="keep-print-font mr-2">EMAIL: ditsayurobat@pertanian.go.id |</span>
+							<span class="keep-print-font">WEBSITE http://ditsayur.hortikultura.pertanian.go.id</span>
 						</h6>
 					</div>
 				</div>
@@ -113,7 +92,7 @@
 					<dt class="col-sm-9">: {{$commitment->user->data_user->company_name}}</dt>
 					<dd class="col-sm-3">Nomor RIPH</dd>
 					<dt class="col-sm-9">: {{$commitment->no_ijin}}</dt>
-					<dd class="col-sm-3">Wajib Tanam</dd>
+					<dd class="col-sm-3">Komitmen Wajib Tanam</dd>
 					<dt class="col-sm-9">
 						<dl class="row">
 							<dd class="col-sm-3">Komitmen</dd>
@@ -136,38 +115,6 @@
 						</dl>
 					</dt>
 				</dl>
-				{{-- <div class="row">
-					<table class="table w-100 table-sm table-bordered table-striped">
-						<tbody>
-							<tr>
-								<td width="25%">Nama Perusahaan</td>
-								<th colspan="3">{{$commitment->datauser->company_name}}</th>
-							</tr>
-							<tr>
-								<td>Nomor RIPH</td>
-								<th colspan="3">{{$commitment->no_ijin}}</th>
-							</tr>
-							<tr>
-								<td></td>
-								<td width="25%" class="text-center">Komitmen</td>
-								<td width="25%" class="text-center">Realisasi</td>
-								<td width="25%" class="text-center">Terverifikasi</td>
-							</tr>
-							<tr>
-								<td>Wajib Tanam (ha)</td>
-								<th class="text-right pr-5">{{ number_format($wajib_tanam, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{ number_format($total_luas, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{number_format($luas_verif, 2,'.',',')}}</th>
-							</tr>
-							<tr>
-								<td>Wajib Produksi (ton)</td>
-								<th class="text-right pr-5">{{ number_format($wajib_produksi, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{ number_format($total_volume, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{number_format($volume_verif,2,'.',',')}}</th>
-							</tr>
-						</tbody>
-					</table>
-				</div> --}}
 			</div>
 			<div class="col-12">
 				<p class="justify-align-stretch">
@@ -207,14 +154,3 @@
 		</div>
 	</div>
 </div>
-@endsection
-<!-- @parent -->
-<!-- start script for this page -->
-@section('scripts')
-<script>
-	function printPage() {
-	  // Open print dialog
-	  window.print();
-	}
-</script>
-@endsection

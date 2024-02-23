@@ -1,33 +1,22 @@
-@extends('layouts.skl')
+@extends('layouts.draftSKL')
 @section ('styles')
-<link rel="stylesheet" media="screen, print" href="{{asset('/css/smartadmin/page-invoice.css')}}">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 @endsection
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
-<div class="subheader d-print-none">
-	<h1 class="subheader-title">
-		<i class="subheader-icon {{ ($heading_class ?? '') }}"></i> {{  ($page_heading ?? '') }} <span class="fw-300"></span>
-		<small>
-			Surat Keterangan Lunas diterbitkan
-		</small>
-	</h1>
-	<div class="subheader-block d-lg-flex align-items-center">
-		<div class="form-group">
-			<label class="form-label" for="provinsi"></label>
-			<div class="input-group">
-				<button onclick="printPage()" class="btn btn-sm btn-primary btn-sm">
-					<i class="fal fa-print mr-1"></i> Cetak SKL
-				</button>
-			</div>
-		</div>
-	</div>
+<div class="row d-flex align-items-center justify-content-center text-center mt-5 mb-5">
+	<a class="btn btn-sm btn-info mr-1" href="{{route('verification.skl')}}" role="button">
+		<i class="fal fa-undo text-align-center mr-1"></i> Kembali
+	</a>
+	<button onclick="printPage()" class="btn btn-sm btn-primary btn-sm">
+		<i class="fal fa-print mr-1"></i> Cetak SKL
+	</button>
 </div>
 <div class="container" style="background-color: white !important;">
 	<div data-size="A4">
 		<div class="row">
 			<div class="col-sm-12 mb-5">
-				<img src="{{asset('/img/kopsto.png')}}" width="100%">
 				<div class="d-flex align-items-center mb-3">
 					<img class="mr-2" src="{{asset('/img/favicon.png')}}" alt="Simethris" aria-roledescription="logo" style="width: 100px">
 					<div class="keep-print-font mb-0 flex-1 position-relative">
@@ -47,33 +36,25 @@
 				<img src="{{asset('/img/border.png')}}" width="100%" height="7px">
 			</div>
 		</div>
-		<div class="row mb-5">
+		<div class="row mb-5 fs-xl">
 			<div class="col-sm-6 d-flex">
 				<div class="table-responsive">
 					<table class="table table-clean table-sm align-self-end">
 						<tbody>
 							<tr>
-								<td>
-									<strong>Nomor</strong>
-								</td>
-								<td>
-									<span class="mr-1">: {{$skl->no_skl}}</span>
-								</td>
+								<td>Nomor</td>
+								<td class="text-center" width="1%">:</td>
+								<td class="fw-500">{{$skl->no_skl}}</td>
 							</tr>
 							<tr>
-								<td>
-									<strong>Lampiran</strong>
-								</td>
-								<td>
-									: -
-								</td>
+								<td>Lampiran</td>
+								<td class="text-center" width="1%">:</td>
+								<td> - </td>
 							</tr>
 							<tr>
-								<td>
-									<strong>Hal</strong>
-								</td>
-								<td>
-									: Keterangan Telah Melaksanakan Wajib Tanam dan Wajib Produksi
+								<td>Hal</td>
+								<td class="text-center" width="1%">:</td>
+								<td class="fw-500">Keterangan Telah Melaksanakan Wajib Tanam dan Wajib Produksi
 								</td>
 							</tr>
 						</tbody>
@@ -108,7 +89,7 @@
 				</p>
 			</div>
 			<div class="col-12">
-				<dl class="row">
+				{{-- <dl class="row">
 					<dd class="col-sm-3">Nama Perusahaan</dd>
 					<dt class="col-sm-9">: {{$commitment->user->data_user->company_name}}</dt>
 					<dd class="col-sm-3">Nomor RIPH</dd>
@@ -135,39 +116,39 @@
 							<dt class="col-sm-9">: {{number_format($pengajuan->volume_verif,2,'.',',')}} ton.</dt>
 						</dl>
 					</dt>
-				</dl>
-				{{-- <div class="row">
-					<table class="table w-100 table-sm table-bordered table-striped">
+				</dl> --}}
+				<div class="row pl-2">
+					<table class="table table table-sm table-clean w-100">
 						<tbody>
 							<tr>
 								<td width="25%">Nama Perusahaan</td>
-								<th colspan="3">{{$commitment->datauser->company_name}}</th>
+								<td class="text-center" width="1%">:</td>
+								<th>{{$commitment->datauser->company_name}}</th>
 							</tr>
 							<tr>
 								<td>Nomor RIPH</td>
-								<th colspan="3">{{$commitment->no_ijin}}</th>
+								<td class="text-center" width="1%">:</td>
+								<th>{{$commitment->no_ijin}}</th>
 							</tr>
 							<tr>
-								<td></td>
-								<td width="25%" class="text-center">Komitmen</td>
-								<td width="25%" class="text-center">Realisasi</td>
-								<td width="25%" class="text-center">Terverifikasi</td>
+								<td>Wajib Tanam</td>
+								<td class="text-center" width="1%">:</td>
+								<th>
+									<span class="mr-1">{{ number_format($wajib_tanam, 2, '.', ',') }} hektar,</span>
+									Realisasi: {{ number_format($total_luas, 2, '.', ',') }} hektar.
+								</th>
 							</tr>
 							<tr>
-								<td>Wajib Tanam (ha)</td>
-								<th class="text-right pr-5">{{ number_format($wajib_tanam, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{ number_format($total_luas, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{number_format($luas_verif, 2,'.',',')}}</th>
-							</tr>
-							<tr>
-								<td>Wajib Produksi (ton)</td>
-								<th class="text-right pr-5">{{ number_format($wajib_produksi, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{ number_format($total_volume, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{number_format($volume_verif,2,'.',',')}}</th>
+								<td>Wajib Produksi</td>
+								<td class="text-center" width="1%">:</td>
+								<th>
+									<span class="mr-1">{{ number_format($wajib_produksi, 2, '.', ',') }} ton,</span>
+									Realisasi: {{ number_format($total_volume, 2, '.', ',') }} ton.
+								</th>
 							</tr>
 						</tbody>
 					</table>
-				</div> --}}
+				</div>
 			</div>
 			<div class="col-12">
 				<p class="justify-align-stretch">
@@ -183,13 +164,16 @@
 						{{$QrCode}}
 					</dd>
 					<dd class="col-sm-5">
-						{{-- <div class="text-dark" style="background-image: url('{{ asset('storage/uploads/dataadmin/'.$pejabat->dataadmin->sign_img) }}'); background-size: 50%;background-repeat: no-repeat;"> --}}
-							Direktur,
+							<span class="mb-5" style="height: 7em">{{$pejabat->jabatan ?? ''}},</span>
+							<br><br><br>
+							@if($pejabat || $pejabat->sign_img)
+								<img style="max-width: 7em" src="{{ asset('storage/uploads/dataadmin/'.$pejabat->sign_img) }}" alt="ttd">
+							@else
+								ttd.
+							@endif
 							<br>
-								<img style="max-width: 7em" src="{{ asset('storage/uploads/dataadmin/'.$pejabat->dataadmin->sign_img) }}" alt="ttd">
-								<br>
-							<u><strong>{{$pejabat->dataadmin->nama ?? ''}}</strong></u><br>
-							<span class="mr-1">NIP.</span>{{$pejabat->dataadmin->nip ??''}}
+							<u><strong>{{$pejabat->nama ?? ''}}</strong></u><br>
+							<span class="mr-1">NIP.</span>{{$pejabat->nip ??''}}
 						</div>
 					</dd>
 				</dl>
