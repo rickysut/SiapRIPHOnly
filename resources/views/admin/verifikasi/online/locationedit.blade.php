@@ -2,7 +2,7 @@
 @section('styles')
 <link rel="stylesheet" media="screen, print" href="{{ asset('css/miscellaneous/lightgallery/lightgallery.bundle.css') }}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GMAP_API_KEY') }}&libraries=drawing,geometry"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ optional($mapkey)->key ?? 'Default Key' }}&libraries=drawing,geometry"></script>
 
 
 @endsection

@@ -166,7 +166,9 @@ class PksController extends Controller
 		if ($request->hasFile('berkas_pks')) {
 			$file = $request->file('berkas_pks');
 			if ($file->getClientOriginalExtension() === 'pdf') {
-				$filename = 'pks_' . $pks->poktan_id . '.' . $file->getClientOriginalExtension();
+				//baru
+				$filename = 'pks_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
+				//end baru
 				$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
 				$pks->berkas_pks = $filename;
 			} else {

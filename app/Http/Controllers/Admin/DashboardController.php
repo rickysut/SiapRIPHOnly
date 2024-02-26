@@ -19,6 +19,7 @@ use App\Models\RiphAdmin;
 use App\Models\Saprodi;
 use App\Models\Pengajuan;
 use App\Models\User;
+use App\Models\ForeignApi;
 use Illuminate\Console\Command;
 
 class DashboardController extends Controller
@@ -196,6 +197,8 @@ class DashboardController extends Controller
 		$page_desc = 'Peta Lahan Realisasi Komitmen Wajib Tanam-Produksi';
 		$heading_class = 'fal fa-map-marked-alt';
 
+		$mapkey = ForeignApi::find(1);
+
 		$anggotaMitras = Lokasi::with([
 			'pks' => function ($query) {
 				$query->with('commitment');
@@ -218,7 +221,7 @@ class DashboardController extends Controller
 
 		// dd($users);
 
-		return view('admin.dashboard.map', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'page_desc', 'periodeTahuns', 'users'));
+		return view('admin.dashboard.map', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'page_desc', 'periodeTahuns', 'users', 'mapkey'));
 	}
 
 	public function monitoring(Request $request)
