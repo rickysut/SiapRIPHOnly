@@ -603,6 +603,13 @@
 							<span class="nav-link-text">Daftar Varietas</span>
 						</a>
 					</li>
+					<li class="{{ request()->is('admin/gmapapi*') ? 'active open' : '' }} ">
+						<a href="{{route('admin.gmapapi.edit')}}" title="Goole Map API"
+							data-filter-tags="google map api key">
+							<i class="fab fa-google"></i>
+							<span class="nav-link-text">Google Map API</span>
+						</a>
+					</li>
 				@endcan
 			<!-- @endcan -->
 			@endif
