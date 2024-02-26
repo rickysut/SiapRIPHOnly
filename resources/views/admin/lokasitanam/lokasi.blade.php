@@ -208,6 +208,9 @@
 <!-- start script for this page -->
 @section('scripts')
 @parent
+<script>
+    const apiKey = "{{ $key->key }}";
+</script>
 <script src="{{ asset('js/gmap/map.js') }}"></script>
 <script src="{{ asset('js/gmap/location-search.js') }}"></script>
 <script src="{{ asset('js/gmap/kml_parser.js') }}"></script>

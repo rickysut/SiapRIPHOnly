@@ -8,7 +8,7 @@ function handleFormSubmit(event) {
 
 // Define geocoding function
 function geocode(location) {
-	const apiKey = "AIzaSyC1ea90fk4RXPswzkOJzd17W3EZx_KNB1M";
+
 	const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${apiKey}`;
 	fetch(url)
 		.then((response) => response.json())
