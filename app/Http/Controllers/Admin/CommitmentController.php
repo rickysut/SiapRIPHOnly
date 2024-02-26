@@ -196,7 +196,7 @@ class CommitmentController extends Controller
 						return redirect()->back()->with('error', 'Berkas ' . $clientFile . ' harus memiliki ekstensi .pdf.');
 					}
 
-					$file_name = $field . '_' . $noIjin . '.' . $fileExtension;
+					$file_name = $field . '_' . $noIjin . '_' . time() . '.' . $fileExtension;
 					$file_path = $file->storeAs('uploads/' . $npwp . '/' . $commitment->periodetahun, $file_name, 'public');
 					$userFiles[$field] = $file_name;
 				}
