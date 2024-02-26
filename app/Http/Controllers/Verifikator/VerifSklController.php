@@ -681,7 +681,7 @@ class VerifSklController extends Controller
 
 		if ($request->hasFile('skl_upload')) {
 			$file = $request->file('skl_upload');
-			$filename = 'skl_' . $noIjin . '.' . $file->getClientOriginalExtension();
+			$filename = 'skl_' . $noIjin . '_' . time() . '.' . $file->getClientOriginalExtension();
 			$filePath = $this->uploadFile($file, $filenpwp, $thn, $filename);
 			$skl->skl_upload = $filename;
 			// $skl->published_date = Carbon::now();
