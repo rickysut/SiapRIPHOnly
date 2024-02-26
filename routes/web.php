@@ -80,6 +80,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('profile/pejabat', 'AdminProfileController@index')->name('profile.pejabat');
 	Route::post('profile/pejabat/store', 'AdminProfileController@store')->name('profile.pejabat.store');
 
+	//google map api
+	Route::get('gmapapi', 'ForeignApiController@edit')->name('gmapapi.edit');
+	Route::put('gmapapi/update', 'ForeignApiController@update')->name('gmapapi.update');
+
 	//posts
 	Route::put('posts/{post}/restore', 'PostsController@restore')->name('posts.restore');
 	Route::resource('posts', 'PostsController');
