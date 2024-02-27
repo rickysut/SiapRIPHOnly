@@ -21,6 +21,7 @@ use App\Models\MasterAnggota;
 use App\Models\MasterPoktan;
 use App\Models\Pks;
 use App\Models\PullRiph;
+use App\Models\ForeignApi;
 
 class LokasiTanamController extends Controller
 {
@@ -139,6 +140,8 @@ class LokasiTanamController extends Controller
 		$page_heading = 'Pemeriksaan Data Tanam dan Produksi';
 		$heading_class = 'fal fa-ballot-check';
 
+		$mapkey = ForeignApi::find(1);
+
 		$lokasi = DataRealisasi::findOrFail($id);
 		$noIjin = $lokasi->no_ijin;
 		$realNpwp = $lokasi->npwp_company;
@@ -147,6 +150,6 @@ class LokasiTanamController extends Controller
 		$fotoTanams = FotoTanam::where('realisasi_id', $id)->get();
 		$fotoProduksis = FotoProduksi::where('realisasi_id', $id)->get();
 
-		return view('admin.verifikasi.locationcheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'lokasi', 'noIjin', 'realNpwp', 'pks', 'fotoTanams', 'fotoProduksis'));
+		return view('admin.verifikasi.locationcheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'lokasi', 'noIjin', 'realNpwp', 'pks', 'fotoTanams', 'fotoProduksis' ,'mapkey'));
 	}
 }

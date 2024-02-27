@@ -15,6 +15,7 @@ use App\Models\FotoProduksi;
 use App\Models\FotoTanam;
 use App\Models\Saprodi;
 use App\Models\Varietas;
+use App\Models\ForeignApi;
 use Dflydev\DotAccessData\Data;
 use Gate;
 use Illuminate\Http\Response;
@@ -239,11 +240,12 @@ class PksController extends Controller
 		$page_heading = 'Realisasi Tanam-Produksi';
 		$heading_class = 'fal fa-farm';
 
+		$mapkey = ForeignApi::find(1);
 		$npwpCompany = Auth::user()->data_user->npwp_company;
 		$pks = Pks::findOrFail($pksId);
 		$anggota = Lokasi::findOrFail($anggotaId);
 
-		return view('admin.pks.addLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'anggota'));
+		return view('admin.pks.addLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'anggota', 'mapkey'));
 	}
 
 	public function storeLokasiTanam(Request $request)
@@ -313,12 +315,14 @@ class PksController extends Controller
 		$page_heading = 'Realisasi Tanam dan Spasial';
 		$heading_class = 'fal fa-farm';
 
+		$mapkey = ForeignApi::find(1);
+
 		$npwpCompany = Auth::user()->data_user->npwp_company;
 		$pks = Pks::findOrFail($pksId);
 		$anggota = Lokasi::findOrFail($anggotaId);
 		$lokasi = DataRealisasi::find($id);
 
-		return view('admin.pks.editLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'anggota', 'lokasi'));
+		return view('admin.pks.editLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'anggota', 'lokasi', 'mapkey'));
 	}
 
 	public function updateLokasiTanam(Request $request, $id)
