@@ -41,7 +41,7 @@
 												<td class="text-center">{{ date('d-m-Y', strtotime($completed->published_date)) }}</td>
 												<td class="text-center">{{ date('d-m-Y', strtotime($completed->created_at)) }}</td>
 												<td class="text-center d-flex justify-content-center">
-													@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat' || Auth::user()->roles[0]->title == 'Verifikator')
+													@if (Auth::user()->roles[0]->title == 'Admin' ||  Auth::user()->roles[0]->title == 'Verifikator')
 													<a href="{{route('verification.skl.verifSklShow', $completed->skl->pengajuan_id)}}" class="btn btn-icon btn-info btn-xs mr-1" title="Lihat Hasil Verifikasi">
 														<i class="fal fa-file-search"></i>
 													</a>
