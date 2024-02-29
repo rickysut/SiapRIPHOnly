@@ -209,8 +209,8 @@ class VerifTanamController extends Controller
 		$verifikasi = AjuVerifTanam::findOrFail($id);
 		abort_if(
 			Gate::denies('online_access') ||
-				($verifikasi->no_ijin != $request->input('no_ijin') &&
-					$verifikasi->npwp != $request->input('npwp')),
+			($verifikasi->no_ijin != $request->input('no_ijin') &&
+				$verifikasi->npwp != $request->input('npwp')),
 			Response::HTTP_FORBIDDEN,
 			'403 Forbidden'
 		);
@@ -232,6 +232,12 @@ class VerifTanamController extends Controller
 			// Periksa apakah ada berkas batanam yang diunggah
 			if ($request->hasFile('batanam')) {
 				$file = $request->file('batanam');
+
+				// Validasi tipe berkas (PDF)
+				$request->validate([
+					'batanam' => 'file|mimes:pdf|max:2048', // Hanya izinkan file PDF
+				]);
+
 				$filenameBatanam = 'batanam_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $filenameBatanam, 'public');
 			}
@@ -239,6 +245,12 @@ class VerifTanamController extends Controller
 			// Periksa apakah ada berkas ndhprt yang diunggah
 			if ($request->hasFile('ndhprt')) {
 				$file = $request->file('ndhprt');
+
+				// Validasi tipe berkas (PDF)
+				$request->validate([
+					'ndhprt' => 'file|mimes:pdf|max:2048', // Hanya izinkan file PDF
+				]);
+
 				$filenameNdhprt = 'notdintanam_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $filenameNdhprt, 'public');
 			}
@@ -268,6 +280,7 @@ class VerifTanamController extends Controller
 			return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
 		}
 	}
+
 
 	//view hasil pemeriksaan
 	public function show($id)
