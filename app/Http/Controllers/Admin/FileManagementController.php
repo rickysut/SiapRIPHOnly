@@ -48,11 +48,10 @@ class FileManagementController extends Controller
 		$filename = preg_replace('/[^\w\s]/', '_', $template->berkas);
 
 		if ($request->hasFile('lampiran')) {
-			$file = $request->file('lampiran');
-
 			// Validasi tipe berkas (PDF)
+			$file = $request->file('lampiran');
 			$request->validate([
-				'lampiran' => Rule::in(['pdf']), // Hanya izinkan file PDF
+				'lampiran' => 'mimes:pdf', // Hanya izinkan file PDF
 			]);
 
 			$filename = 'template_' . $filename . '.' . $file->getClientOriginalExtension();
@@ -64,6 +63,7 @@ class FileManagementController extends Controller
 
 		return redirect()->route('admin.template.index')->with('success', 'Template berhasil diunggah.');
 	}
+
 
 	public function download($id)
 	{

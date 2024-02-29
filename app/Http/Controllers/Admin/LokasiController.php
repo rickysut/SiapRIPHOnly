@@ -11,6 +11,7 @@ use App\Models\PullRiph;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class LokasiController extends Controller
 {
@@ -89,7 +90,7 @@ class LokasiController extends Controller
 		$npwp_company = Auth::user()->data_user->npwp_company;
 		$filenpwp = str_replace(['.', '-'], '', $npwp_company);
 		$anggota = Lokasi::where('npwp', $npwp_company)
-			->where('anggota_id', $anggotaId) // Use anggota_id instead of id
+			->where('anggota_id', $anggotaId)
 			->firstOrFail();
 
 		$commitment = PullRiph::where('no_ijin', $anggota->no_ijin)
@@ -98,20 +99,39 @@ class LokasiController extends Controller
 		$anggota->tgl_tanam = $request->input('tgl_tanam');
 		$anggota->luas_tanam = $request->input('luas_tanam');
 
+		$request->validate([
+			'tanam_doc' => 'nullable|mimes:pdf',
+			'tanam_pict' => 'nullable|image|mimes:jpg,png|max:2048',
+		]);
+
 		if ($request->hasFile('tanam_doc')) {
-			$attch = $request->file('tanam_doc');
-			$attchname = 'tanam_doc_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $attch->getClientOriginalExtension();
-			$attch->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $attchname, 'public');
-			$anggota->tanam_doc = $attchname;
+			$file = $request->file('tanam_doc');
+			$filename = 'tanam_doc_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->getClientOriginalExtension();
+
+			// Validasi tipe berkas (PDF)
+			$request->validate([
+				'tanam_doc' => 'mimes:pdf',
+			]);
+
+			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
+			$anggota->tanam_doc = $filename;
 		}
+
 		if ($request->hasFile('tanam_pict')) {
-			$attch = $request->file('tanam_pict');
-			$attchname = 'tanam_pict_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $attch->getClientOriginalExtension();
-			$attch->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $attchname, 'public');
-			$anggota->tanam_pict = $attchname;
+			$file = $request->file('tanam_pict');
+			$filename = 'tanam_pict_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->getClientOriginalExtension();
+
+			// Validasi tipe berkas (JPG/PNG)
+			$request->validate([
+				'tanam_pict' => 'mimes:jpg,png|max:2048',
+			]);
+
+			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
+			$anggota->tanam_pict = $filename;
 		}
-		// dd($anggota);
+
 		$anggota->save();
+
 		return redirect()->back()->with('success', 'Data Realisasi Tanam berhasil diperbarui');
 	}
 
@@ -119,30 +139,50 @@ class LokasiController extends Controller
 	{
 		$npwp_company = Auth::user()->data_user->npwp_company;
 		$filenpwp = str_replace(['.', '-'], '', $npwp_company);
-		$anggota = Lokasi::where('anggota_id', $anggotaId) // Use anggota_id instead of id
+		$anggota = Lokasi::where('anggota_id', $anggotaId)
 			->firstOrFail();
+
 		$commitment = PullRiph::where('no_ijin', $anggota->no_ijin)
 			->first();
+
 		$anggota->volume = $request->input('volume');
 		$anggota->tgl_panen = $request->input('tgl_panen');
 
+		$request->validate([
+			'panen_doc' => 'nullable|mimes:pdf',
+			'panen_pict' => 'nullable|image|mimes:jpg,png|max:2048',
+		]);
+
 		if ($request->hasFile('panen_doc')) {
-			$attch = $request->file('panen_doc');
-			$attchname = 'panen_doc_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $attch->getClientOriginalExtension();
-			$attch->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $attchname, 'public');
-			$anggota->panen_doc = $attchname;
+			$file = $request->file('panen_doc');
+			$filename = 'panen_doc_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->getClientOriginalExtension();
+
+			// Validasi tipe berkas (PDF)
+			$request->validate([
+				'panen_doc' => 'mimes:pdf',
+			]);
+
+			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
+			$anggota->panen_doc = $filename;
 		}
+
 		if ($request->hasFile('panen_pict')) {
-			$attch = $request->file('panen_pict');
-			$attchname = 'panen_pict_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $attch->getClientOriginalExtension();
-			$attch->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $attchname, 'public');
-			$anggota->panen_pict = $attchname;
+			$file = $request->file('panen_pict');
+			$filename = 'panen_pict_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->getClientOriginalExtension();
+
+			// Validasi tipe berkas (JPG/PNG)
+			$request->validate([
+				'panen_pict' => 'mimes:jpg,png|max:2048',
+			]);
+
+			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
+			$anggota->panen_pict = $filename;
 		}
-		// dd($anggota);
+
 		$anggota->save();
+
 		return redirect()->back()->with('success', 'Data Realisasi Produksi berhasil diperbarui');
 	}
-
 
 	public function destroy($id)
 	{
