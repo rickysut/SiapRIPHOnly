@@ -33,23 +33,37 @@ class FileManagementController extends Controller
 	}
 
 	public function store(Request $request)
-	{
-		$template = new FileManagement();
-		$template->berkas = $request->input('berkas');
-		$template->nama_berkas = $request->input('nama_berkas');
-		$template->deskripsi = $request->input('deskripsi');
-		$filename = preg_replace('/[^\w\s]/', '_', $template->berkas);
+{
+    $request->validate([
+        'berkas' => 'required',
+        'nama_berkas' => 'required',
+        'deskripsi' => 'required',
+        'lampiran' => 'required|file|mimes:pdf|max:2048', // Hanya izinkan file PDF dengan ukuran maksimal 2 MB
+    ]);
 
-		if ($request->hasFile('lampiran')) {
-			$file = $request->file('lampiran');
-			$filename = 'template_' . $filename . '.' . $file->getClientOriginalExtension();
-			$file->storeAs('uploads/master/', $filename, 'public');
-			$template->lampiran = $filename;
-		}
-		// dd($filename);
-		$template->save();
-		return redirect()->route('admin.template.index')->with('success', 'Template berhasil diunggah.');
-	}
+    $template = new FileManagement();
+    $template->berkas = $request->input('berkas');
+    $template->nama_berkas = $request->input('nama_berkas');
+    $template->deskripsi = $request->input('deskripsi');
+    $filename = preg_replace('/[^\w\s]/', '_', $template->berkas);
+
+    if ($request->hasFile('lampiran')) {
+        $file = $request->file('lampiran');
+
+        // Validasi tipe berkas (PDF)
+        $request->validate([
+            'lampiran' => Rule::in(['pdf']), // Hanya izinkan file PDF
+        ]);
+
+        $filename = 'template_' . $filename . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('uploads/master/', $filename, 'public');
+        $template->lampiran = $filename;
+    }
+
+    $template->save();
+
+    return redirect()->route('admin.template.index')->with('success', 'Template berhasil diunggah.');
+}
 
 	public function download($id)
 	{
