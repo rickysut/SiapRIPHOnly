@@ -154,9 +154,8 @@ class PksController extends Controller
 	{
 		$npwp_company = Auth::user()->data_user->npwp_company;
 		$pks = Pks::findOrFail($id);
-		$commitment = PullRiph::where('no_ijin', $pks->no_ijin)
-			->first();
-		// dd($commitment);
+		$commitment = PullRiph::where('no_ijin', $pks->no_ijin)->first();
+
 		$filenpwp = str_replace(['.', '-'], '', $npwp_company);
 		$pks->no_perjanjian = $request->input('no_perjanjian');
 		$pks->tgl_perjanjian_start = $request->input('tgl_perjanjian_start');
@@ -164,18 +163,27 @@ class PksController extends Controller
 		$pks->luas_rencana = $request->input('luas_rencana');
 		$pks->varietas_tanam = $request->input('varietas_tanam');
 		$pks->periode_tanam = $request->input('periode_tanam');
+
+		$request->validate([
+			'berkas_pks' => 'nullable|file|mimes:pdf|max:2048',
+		]);
+
 		if ($request->hasFile('berkas_pks')) {
 			$file = $request->file('berkas_pks');
-			if ($file->getClientOriginalExtension() === 'pdf') {
-				//baru
-				$filename = 'pks_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
-				//end baru
-				$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
-				$pks->berkas_pks = $filename;
-			} else {
-				return redirect()->back()->with('error', 'Berkas harus memiliki ekstensi .pdf.');
-			}
+
+			// Validasi tipe berkas (PDF)
+			$request->validate([
+				'berkas_pks' => 'mimes:pdf',
+			]);
+
+			// baru
+			$filename = 'pks_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
+			// end baru
+
+			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
+			$pks->berkas_pks = $filename;
 		}
+
 		$pks->save();
 
 		return redirect()->route('admin.task.commitment.realisasi', $commitment->id)->with('message', "Data berhasil disimpan.");
@@ -446,8 +454,12 @@ class PksController extends Controller
 		$filenpwp = str_replace(['.', '-'], '', $npwpCompany);
 		$uploadedFiles = [];
 
+		$request->validate([
+			'file' => 'required|image|mimes:jpg,png|max:2048',
+		]);
+
 		$image = $request->file('file');
-		if ($request->file('file')) {
+		if ($image) {
 			$newFileName = 'foto_tanam_' . $realisasiId . '_' . time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
 			$filePath = 'uploads/' . $filenpwp . '/' . $periode . '/';
 			$image->storeAs($filePath, $newFileName, 'public');
@@ -473,8 +485,12 @@ class PksController extends Controller
 		$filenpwp = str_replace(['.', '-'], '', $npwpCompany);
 		$uploadedFiles = [];
 
+		$request->validate([
+			'file' => 'required|image|mimes:jpg,png|max:2048',
+		]);
+
 		$image = $request->file('file');
-		if ($request->file('file')) {
+		if ($image) {
 			$newFileName = 'foto_produksi_' . $realisasiId . '_' . time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
 			$filePath = 'uploads/' . $filenpwp . '/' . $periode . '/';
 			$image->storeAs($filePath, $newFileName, 'public');
