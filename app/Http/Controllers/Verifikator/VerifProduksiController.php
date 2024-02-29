@@ -230,11 +230,14 @@ class VerifProduksiController extends Controller
 
 	public function storeCheck(Request $request, $id)
 	{
-
-		//verifikator
+		$request->validate([
+			'note' => 'required',
+			'metode' => 'required',
+			'status' => 'required',
+			'ndhprp' => 'nullable|file|mimes:pdf|max:2048', // Aturan validasi untuk berkas NDHPRP (PDF)
+			'baproduksi' => 'nullable|file|mimes:pdf|max:2048', // Aturan validasi untuk berkas Baproduksi (PDF)
+		]);
 		$user = Auth::user();
-
-		//tabel pengajuan
 		$verifikasi = AjuVerifProduksi::find($id);
 		abort_if(
 			Gate::denies('online_access') ||
@@ -253,26 +256,29 @@ class VerifProduksiController extends Controller
 
 		try {
 			DB::beginTransaction();
-
-			// Inisialisasi variabel untuk berkas ndhprp dan baproduksi
 			$ndhprpFile = $verifikasi->ndhprp;
 			$baproduksiFile = $verifikasi->baproduksi;
 
-			// Periksa apakah ada berkas ndhprp yang diunggah
 			if ($request->hasFile('ndhprp')) {
 				$file = $request->file('ndhprp');
+				// Validasi tipe berkas (PDF)
+				$request->validate([
+					'ndhprp' => 'file|mimes:pdf|max:2048',
+				]);
 				$ndhprpFile = 'notdinprod_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $ndhprpFile, 'public');
 			}
 
-			// Periksa apakah ada berkas baproduksi yang diunggah
 			if ($request->hasFile('baproduksi')) {
 				$file = $request->file('baproduksi');
+				// Validasi tipe berkas (PDF)
+				$request->validate([
+					'baproduksi' => 'file|mimes:pdf|max:2048',
+				]);
 				$baproduksiFile = 'baproduksi_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $baproduksiFile, 'public');
 			}
 
-			// Use updateOrCreate to create or update the record based on the identifiers
 			AjuVerifProduksi::updateOrCreate(
 				[
 					'npwp' => $npwp,
@@ -285,8 +291,8 @@ class VerifProduksiController extends Controller
 					'status' => $request->input('status'),
 					'check_by' => $user->id,
 					'verif_at' => Carbon::now(),
-					'baproduksi' => $baproduksiFile, // the filename
-					'ndhprp' => $ndhprpFile, // the file name
+					'baproduksi' => $baproduksiFile,
+					'ndhprp' => $ndhprpFile,
 				]
 			);
 
@@ -331,7 +337,6 @@ class VerifProduksiController extends Controller
 
 		return view('admin.verifikasi.produksi.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkss', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'userDocs', 'noIjin', 'hasGeoloc', 'countAnggota'));
 	}
-
 
 
 	// ke bawa ini kemungkinan dihapus

@@ -326,11 +326,13 @@ class VerifSklController extends Controller
 
 	public function storeCheck(Request $request, $id)
 	{
-
-		//verifikator
+		$request->validate([
+			'note' => 'required',
+			'status' => 'required',
+			'ndhpskl' => 'nullable|file|mimes:pdf|max:2048', // Aturan validasi untuk berkas NDHPSKL (PDF)
+			'baskls' => 'nullable|file|mimes:pdf|max:2048', // Aturan validasi untuk berkas BASKLS (PDF)
+		]);
 		$user = Auth::user();
-
-		//tabel pengajuan
 		$verifikasi = AjuVerifSkl::find($id);
 		abort_if(
 			Gate::denies('online_access') ||
@@ -349,26 +351,29 @@ class VerifSklController extends Controller
 
 		try {
 			DB::beginTransaction();
-
-			// Inisialisasi variabel untuk berkas ndhprp dan baproduksi
 			$ndhpsklFile = $verifikasi->ndhpskl;
 			$basklFile = $verifikasi->baskls;
 
-			// Periksa apakah ada berkas ndhpskl yang diunggah
 			if ($request->hasFile('ndhpskl')) {
 				$file = $request->file('ndhpskl');
+				// Validasi tipe berkas (PDF)
+				$request->validate([
+					'ndhpskl' => 'file|mimes:pdf|max:2048',
+				]);
 				$ndhpsklFile = 'notdinskl_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $ndhpsklFile, 'public');
 			}
 
-			// Periksa apakah ada berkas baskls yang diunggah
 			if ($request->hasFile('baskls')) {
 				$file = $request->file('baskls');
+				// Validasi tipe berkas (PDF)
+				$request->validate([
+					'baskls' => 'file|mimes:pdf|max:2048',
+				]);
 				$basklFile = 'baskls_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $basklFile, 'public');
 			}
 
-			// Use updateOrCreate to create or update the record based on the identifiers
 			AjuVerifSkl::updateOrCreate(
 				[
 					'npwp' => $npwp,
@@ -377,12 +382,9 @@ class VerifSklController extends Controller
 				],
 				[
 					'note' => $request->input('note'),
-					// 'metode' => $request->input('metode'),
 					'status' => $request->input('status'),
 					'check_by' => $user->id,
 					'verif_at' => Carbon::now(),
-					// 'baskls' => $basklFile, // the filename
-					// 'ndhpskl' => $ndhpsklFile, // the file name
 				]
 			);
 
@@ -398,6 +400,7 @@ class VerifSklController extends Controller
 					'submit_by' => $user->id,
 				]
 			);
+
 			$verifikasi->status = 2;
 			$verifikasi->save();
 
@@ -649,7 +652,6 @@ class VerifSklController extends Controller
 		// return Storage::disk('public').url($path);
 	}
 
-	//fungsi unggah skl oleh admin jika sudah di setujui terbit oleh pejabat.
 	public function Upload(Request $request, $id)
 	{
 		if (Auth::user()->roles[0]->title !== 'Admin') {
@@ -678,6 +680,10 @@ class VerifSklController extends Controller
 			'volume' => $total_volume,
 			'status' => 'Lunas',
 		];
+
+		$request->validate([
+			'skl_upload' => 'required|file|mimes:pdf|max:2048', // Aturan validasi untuk berkas SKL (PDF)
+		]);
 
 		if ($request->hasFile('skl_upload')) {
 			$file = $request->file('skl_upload');

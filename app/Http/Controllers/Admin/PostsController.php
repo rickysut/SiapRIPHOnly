@@ -159,73 +159,107 @@ class PostsController extends Controller
     }
 
     public function store(Request $request)
-    {
-        //dd($request->all());
-        $detail = $request->summernoteInput;
+	{
+		$request->validate([
+			'title' => 'required',
+			'summernoteInput' => 'required',
+			'category' => 'required',
+			'author' => 'required',
+			'priority' => 'required',
+			'is_active' => 'required',
+			'visibility' => 'required',
+			'exerpt' => 'required',
+			'tags' => 'required',
+			'img_cover' => 'nullable|image|mimes:jpg,png|max:2048', // Aturan validasi untuk gambar
+		]);
 
-        $post = new Post();
-        $post->title = $request->input('title');
-        $post->body = $detail;
-        $post->category_id = $request->input('category');
-        $post->user_id = $request->input('author');
-        $post->priority = $request->input('priority');
-        $post->is_active = $request->input('is_active');
-        $post->visibility = $request->input('visibility');
-        $post->exerpt = $request->input('exerpt');
-        $post->tags = $request->input('tags');
-        $author = User::find($request->input('author'));
+		$detail = $request->summernoteInput;
 
-        if ($request->hasFile('img_cover')) {
-            $image = $request->file('img_cover');
-            $image_name = ($author->id) . '_' . $post->id . '_' . time() . '.' . $image->getClientOriginalExtension();
-            Storage::disk('public')->putFileAs('img/post_img', $image, $image_name);
-            $post->img_cover = $image_name;
-        }
+		$post = new Post();
+		$post->title = $request->input('title');
+		$post->body = $detail;
+		$post->category_id = $request->input('category');
+		$post->user_id = $request->input('author');
+		$post->priority = $request->input('priority');
+		$post->is_active = $request->input('is_active');
+		$post->visibility = $request->input('visibility');
+		$post->exerpt = $request->input('exerpt');
+		$post->tags = $request->input('tags');
+		$author = User::find($request->input('author'));
 
-        $draft = $request->input('draft');
-        if ($draft == 'on') {
-            $post->published_at = Carbon::now();
-        }
-        // dd($post);
-        $post->save();
-        return redirect()->route('admin.posts.index')
-            ->with('success', 'Post created');
-    }
+		if ($request->hasFile('img_cover')) {
+			// Validasi tipe berkas (JPG atau PNG)
+			$request->validate([
+				'img_cover' => 'image|mimes:jpg,png|max:2048',
+			]);
 
-    public function update(Request $request, Post $post)
-    {
-        $detail = $request->summernoteInput;
+			$image = $request->file('img_cover');
+			$image_name = ($author->id) . '_' . $post->id . '_' . time() . '.' . $image->getClientOriginalExtension();
+			Storage::disk('public')->putFileAs('img/post_img', $image, $image_name);
+			$post->img_cover = $image_name;
+		}
 
-        $post->title = $request->input('title');
-        // dd($request->input('title'));
-        $post->body = $detail;
-        $post->exerpt = $request->input('exerpt');
-        $post->tags = $request->input('tags');
-        $post->category_id = $request->input('category');
-        $post->user_id = $request->input('author');
-        $post->priority = $request->input('priority');
-        $post->is_active = $request->input('is_active');
-        $post->visibility = $request->input('visibility');
-        $author = User::find($request->input('author'));
+		$draft = $request->input('draft');
+		if ($draft == 'on') {
+			$post->published_at = Carbon::now();
+		}
 
-        if ($request->hasFile('img_cover')) {
-            $image = $request->file('img_cover');
-            $image_name = ($author->id) . '_' . $post->id . '_' . time() . '.' . $image->getClientOriginalExtension();
-            Storage::disk('public')->putFileAs('img/post_img', $image, $image_name);
-            $post->img_cover = $image_name;
-        }
+		$post->save();
 
-        $draft = $request->input('draft');
-        if ($draft == 'on') {
-            $post->published_at = Carbon::now();
-        } else {
-            $post->published_at = null;
-        }
+		return redirect()->route('admin.posts.index')->with('success', 'Post created');
+	}
 
-        $post->update();
+	public function update(Request $request, Post $post)
+	{
+		$request->validate([
+			'title' => 'required',
+			'summernoteInput' => 'required',
+			'exerpt' => 'required',
+			'tags' => 'required',
+			'category' => 'required',
+			'author' => 'required',
+			'priority' => 'required',
+			'is_active' => 'required',
+			'visibility' => 'required',
+			'img_cover' => 'nullable|image|mimes:jpg,png|max:2048', // Aturan validasi untuk gambar
+		]);
 
-        return redirect()->route('admin.posts.index')->with('success', 'Post updated successfully');
-    }
+		$detail = $request->summernoteInput;
+
+		$post->title = $request->input('title');
+		$post->body = $detail;
+		$post->exerpt = $request->input('exerpt');
+		$post->tags = $request->input('tags');
+		$post->category_id = $request->input('category');
+		$post->user_id = $request->input('author');
+		$post->priority = $request->input('priority');
+		$post->is_active = $request->input('is_active');
+		$post->visibility = $request->input('visibility');
+		$author = User::find($request->input('author'));
+
+		if ($request->hasFile('img_cover')) {
+			// Validasi tipe berkas (JPG atau PNG)
+			$request->validate([
+				'img_cover' => 'image|mimes:jpg,png|max:2048',
+			]);
+
+			$image = $request->file('img_cover');
+			$image_name = ($author->id) . '_' . $post->id . '_' . time() . '.' . $image->getClientOriginalExtension();
+			Storage::disk('public')->putFileAs('img/post_img', $image, $image_name);
+			$post->img_cover = $image_name;
+		}
+
+		$draft = $request->input('draft');
+		if ($draft == 'on') {
+			$post->published_at = Carbon::now();
+		} else {
+			$post->published_at = null;
+		}
+
+		$post->update();
+
+		return redirect()->route('admin.posts.index')->with('success', 'Post updated successfully');
+	}
 
     public function star(Post $post)
     {

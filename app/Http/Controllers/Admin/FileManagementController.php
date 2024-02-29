@@ -34,6 +34,13 @@ class FileManagementController extends Controller
 
 	public function store(Request $request)
 	{
+		$request->validate([
+			'berkas' => 'required',
+			'nama_berkas' => 'required',
+			'deskripsi' => 'required',
+			'lampiran' => 'required|file|mimes:pdf|max:2048',
+		]);
+
 		$template = new FileManagement();
 		$template->berkas = $request->input('berkas');
 		$template->nama_berkas = $request->input('nama_berkas');
@@ -41,15 +48,22 @@ class FileManagementController extends Controller
 		$filename = preg_replace('/[^\w\s]/', '_', $template->berkas);
 
 		if ($request->hasFile('lampiran')) {
+			// Validasi tipe berkas (PDF)
 			$file = $request->file('lampiran');
+			$request->validate([
+				'lampiran' => 'mimes:pdf', // Hanya izinkan file PDF
+			]);
+
 			$filename = 'template_' . $filename . '.' . $file->getClientOriginalExtension();
 			$file->storeAs('uploads/master/', $filename, 'public');
 			$template->lampiran = $filename;
 		}
-		// dd($filename);
+
 		$template->save();
+
 		return redirect()->route('admin.template.index')->with('success', 'Template berhasil diunggah.');
 	}
+
 
 	public function download($id)
 	{

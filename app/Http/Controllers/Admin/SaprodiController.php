@@ -48,10 +48,19 @@ class SaprodiController extends Controller
 	 */
 	public function store(Request $request, $id)
 	{
+		$request->validate([
+			'tanggal_saprodi' => 'required',
+			'kategori' => 'required',
+			'jenis' => 'required',
+			'volume' => 'required',
+			'satuan' => 'required',
+			'harga' => 'required',
+			'file' => 'nullable|file|mimes:pdf|max:2048', // Aturan validasi untuk berkas (PDF)
+		]);
+
 		$npwpCompany = Auth::user()->data_user->npwp_company;
 		$filenpwp = str_replace(['.', '-'], '', $npwpCompany);
-		$pks = Pks::where('npwp', $npwpCompany)
-			->findOrFail($id);
+		$pks = Pks::where('npwp', $npwpCompany)->findOrFail($id);
 		$commitment = PullRiph::where('no_ijin', $pks->no_ijin)->first();
 		$saprodi = new Saprodi();
 		$saprodi->pks_id = $pks->id;
@@ -63,14 +72,21 @@ class SaprodiController extends Controller
 		$saprodi->volume = $request->input('volume');
 		$saprodi->satuan = $request->input('satuan');
 		$saprodi->harga = $request->input('harga');
+
 		if ($request->hasFile('file')) {
+			// Validasi tipe berkas (PDF)
+			$request->validate([
+				'file' => 'file|mimes:pdf|max:2048',
+			]);
+
 			$file = $request->file('file');
-			$filename = 'saprodi_' . $file->getClientOriginalExtension();
-			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun . '/pks/saprodi/' . $filename, 'public');
+			$filename = 'saprodi_' . time() . '.' . $file->getClientOriginalExtension();
+			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun . '/pks/saprodi/', $filename, 'public');
 			$saprodi->file = $filename;
 		}
-		// dd($saprodi);
+
 		$saprodi->save();
+
 		return redirect()->route('admin.task.pks.saprodi', $pks->id)->with('message', "Data berhasil disimpan.");
 	}
 
