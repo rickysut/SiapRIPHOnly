@@ -698,10 +698,10 @@ class VerifSklController extends Controller
 			}
 
 			// Mencari atau membuat data Completed berdasarkan nomor SKL
-			Completed::updateOrCreate(
-				['no_skl' => $skl->no_skl],
-				$completedData
-			);
+			// Completed::updateOrCreate(
+			// 	['no_skl' => $skl->no_skl],
+			// 	$completedData
+			// );
 
 			// Simpan perubahan pada model-model terkait
 			// $skl->save();
