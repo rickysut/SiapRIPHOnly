@@ -30,7 +30,12 @@
 									@foreach ($verifikasis as $verifikasi)
 										<tr>
 											<td class="text-center">{{$verifikasi->commitment->periodetahun}}</td>
-											<td>{{$verifikasi->datauser->company_name}}</td>
+											<td>
+												{{$verifikasi->datauser->company_name}} <br>
+												<ul>
+													<li>{{$verifikasi->id}}</li>
+												</ul>
+											</td>
 											<td>{{$verifikasi->commitment->no_ijin}}</td>
 											<td class="text-center">{{ date('d F Y', strtotime($verifikasi->created_at)) }}</td>
 											<td class="text-center">
@@ -118,12 +123,13 @@
 														<a href="{{route('skl.print', $verifikasi->skl->pengajuan_id)}}" class="btn btn-xs btn-icon btn-danger" data-toggle="tooltip" data-original-title="Telah Disetujui. Segera cetak SKL">
 															<i class="fal fa-print"></i>
 														</a>
-														<button class="btn btn-xs btn-icon btn-warning" type="button" title="Unggah SKL yang telah ditandatangani Pejabat" data-toggle="modal" data-target="#modalUploadSkl{{$verifikasi->skl->pengajuan_id}}">
+														<button class="btn btn-xs btn-icon btn-warning" type="button" title="Unggah SKL yang telah ditandatangani Pejabat" data-toggle="modal" data-target="#modalUploadSkl{{$verifikasi->skl->id}}">
 															<i class="fas fa-upload text-align-center"></i>
+															{{$verifikasi->skl->id}}
 														</button>
 
 														{{-- modal upload skl --}}
-														<div class="modal fade" id="modalUploadSkl{{$verifikasi->skl->pengajuan_id}}"
+														<div class="modal fade" id="modalUploadSkl{{$verifikasi->skl->id}}"
 															tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 															<div class="modal-dialog modal-dialog-center" role="document">
 																<div class="modal-content">
@@ -131,7 +137,7 @@
 																		<div>
 																			<h5 class="modal-title" id="myModalLabel">
 																				Unggah Berkas SKL
-																				id Pengajuan: {{$verifikasi->skl->pengajuan_id}}
+																				id AVSKL: {{$verifikasi->skl->pengajuan_id}}
 																			</h5>
 																			<small id="helpId" class="text-muted">Unggah berkas SKL yang telah ditandatangani oleh Pejabat.</small>
 																		</div>
@@ -140,7 +146,7 @@
 																		</button>
 																	</div>
 																	{{-- {{route('verification.skl.sklUpload', $recomend->skl->id)}} --}}
-																	<form action="{{route('skl.upload', $verifikasi->skl->pengajuan_id)}}" method="post" enctype="multipart/form-data">
+																	<form action="{{route('skl.upload', $verifikasi->skl->id)}}" method="post" enctype="multipart/form-data">
 																		@csrf
 																		@method('put')
 																		<div class="modal-body">
