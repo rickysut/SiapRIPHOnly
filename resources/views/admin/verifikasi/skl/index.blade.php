@@ -124,7 +124,10 @@
 																<div class="modal-content">
 																	<div class="modal-header">
 																		<div>
-																			<h5 class="modal-title" id="myModalLabel">Unggah Berkas SKL: {{$verifikasi->skl->pengajuan_id}}</h5>
+																			<h5 class="modal-title" id="myModalLabel">
+																				Unggah Berkas SKL
+																				id Pengajuan: {{$verifikasi->skl->pengajuan_id}}
+																			</h5>
 																			<small id="helpId" class="text-muted">Unggah berkas SKL yang telah ditandatangani oleh Pejabat.</small>
 																		</div>
 																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
