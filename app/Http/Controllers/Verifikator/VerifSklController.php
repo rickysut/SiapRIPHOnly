@@ -703,11 +703,13 @@ class VerifSklController extends Controller
 				$completedData
 			);
 
+			dd($skl->id, $pengajuan->id, $commitment->id);
+
 			// Simpan perubahan pada model-model terkait
-			$skl->save();
-			$pengajuan->status = 4;
-			$pengajuan->save();
-			$commitment->save();
+			// $skl->save();
+			// $pengajuan->status = 4;
+			// $pengajuan->save();
+			// $commitment->save();
 
 			return redirect()->route('skl.recomended.list')
 				->with('success', 'Surat Keterangan Lunas (SKL) berhasil diunggah dan Status Komitmen Wajib Tanam-Produksi telah dinyatakan sebagai LUNAS');
