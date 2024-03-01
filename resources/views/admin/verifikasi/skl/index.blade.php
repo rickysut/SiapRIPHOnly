@@ -145,8 +145,15 @@
 																					<input type="file" accept=".pdf" class="custom-file-input" name="skl_upload" id="skl_upload">
 																					<label class="custom-file-label" for="">Pilih berkas...</label>
 																				</div>
-																				<span class="help-block">Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.</span>
+																				<span class="help-block">Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 2mb.</span>
 																			</div>
+																			<span>
+																				<ul>
+																					<li>verifikasi id: {{$verifikasi->id}}</li>
+																					<li>skl id: {{$verifikasi->skl->id}}</li>
+																					<li>pengajuan id: {{$verifikasi->skl->pengajuan_id}}</li>
+																				</ul>
+																			</span>
 																		</div>
 																		<div class="modal-footer">
 																			<button type="button" class="btn btn-warning btn-sm"
