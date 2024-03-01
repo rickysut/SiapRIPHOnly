@@ -655,62 +655,62 @@ class VerifSklController extends Controller
 	public function Upload(Request $request, $id)
 	{
 		try {
-		if (Auth::user()->roles[0]->title !== 'Admin') {
-			abort(403, 'Unauthorized');
-		}
+			if (Auth::user()->roles[0]->title !== 'Admin') {
+				abort(403, 'Unauthorized');
+			}
 
-		$this->sklid = $id;
-		$skl = Skl::find($this->sklid);
-		$pengajuan = AjuVerifSkl::find($skl->pengajuan_id);
-		$commitment = PullRiph::find($pengajuan->commitment_id);
+			$this->sklid = $id;
+			$skl = Skl::find($this->sklid);
+			$pengajuan = AjuVerifSkl::find($skl->pengajuan_id);
+			$commitment = PullRiph::find($pengajuan->commitment_id);
 
-		$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
-		$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
-		$noIjin = str_replace(['.', '/', '-'], '', $skl->no_ijin);
-		$thn = $commitment->periodetahun;
-		$total_luastanam = $commitment->datarealisasi->sum('luas_lahan');
-		$total_volume = $commitment->datarealisasi->sum('volume');
+			$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
+			$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
+			$noIjin = str_replace(['.', '/', '-'], '', $skl->no_ijin);
+			$thn = $commitment->periodetahun;
+			$total_luastanam = $commitment->datarealisasi->sum('luas_lahan');
+			$total_volume = $commitment->datarealisasi->sum('volume');
 
-		$completedData = [
-			'no_skl' => $skl->no_skl,
-			'npwp' => $skl->npwp,
-			'no_ijin' => $skl->no_ijin,
-			'periodetahun' => $thn,
-			'published_date' => $skl->published_date,
-			'luas_tanam' => $total_luastanam,
-			'volume' => $total_volume,
-			'status' => 'Lunas',
-		];
+			$completedData = [
+				'no_skl' => $skl->no_skl,
+				'npwp' => $skl->npwp,
+				'no_ijin' => $skl->no_ijin,
+				'periodetahun' => $thn,
+				'published_date' => $skl->published_date,
+				'luas_tanam' => $total_luastanam,
+				'volume' => $total_volume,
+				'status' => 'Lunas',
+			];
 
-		$request->validate([
-			'skl_upload' => 'required|file|mimes:pdf|max:2048', // Aturan validasi untuk berkas SKL (PDF)
-		]);
+			$request->validate([
+				'skl_upload' => 'required|file|mimes:pdf|max:2048', // Aturan validasi untuk berkas SKL (PDF)
+			]);
 
-		if ($request->hasFile('skl_upload')) {
-			$file = $request->file('skl_upload');
-			$filename = 'skl_' . $noIjin . '_' . time() . '.' . $file->getClientOriginalExtension();
-			$filePath = $this->uploadFile($file, $filenpwp, $thn, $filename);
-			$skl->skl_upload = $filename;
-			// $skl->published_date = Carbon::now();
-			$commitment->skl = $filename;
-			$completedData['skl_upload'] = $filename;
-			$completedData['url'] = $filePath;
-		}
+			if ($request->hasFile('skl_upload')) {
+				$file = $request->file('skl_upload');
+				$filename = 'skl_' . $noIjin . '_' . time() . '.' . $file->getClientOriginalExtension();
+				$filePath = $this->uploadFile($file, $filenpwp, $thn, $filename);
+				$skl->skl_upload = $filename;
+				// $skl->published_date = Carbon::now();
+				$commitment->skl = $filename;
+				$completedData['skl_upload'] = $filename;
+				$completedData['url'] = $filePath;
+			}
 
-		// Mencari atau membuat data Completed berdasarkan nomor SKL
-		Completed::updateOrCreate(
-			['no_skl' => $skl->no_skl],
-			$completedData
-		);
+			// Mencari atau membuat data Completed berdasarkan nomor SKL
+			Completed::updateOrCreate(
+				['no_skl' => $skl->no_skl],
+				$completedData
+			);
 
-		// Simpan perubahan pada model-model terkait
-		$skl->save();
-		$pengajuan->status = 4;
-		$pengajuan->save();
-		$commitment->save();
+			// Simpan perubahan pada model-model terkait
+			$skl->save();
+			$pengajuan->status = 4;
+			$pengajuan->save();
+			$commitment->save();
 
-		return redirect()->route('skl.recomended.list')
-			->with('success', 'Surat Keterangan Lunas (SKL) berhasil diunggah dan Status Komitmen Wajib Tanam-Produksi telah dinyatakan sebagai LUNAS');
+			return redirect()->route('skl.recomended.list')
+				->with('success', 'Surat Keterangan Lunas (SKL) berhasil diunggah dan Status Komitmen Wajib Tanam-Produksi telah dinyatakan sebagai LUNAS');
 		} catch (\Exception $e) {
 			return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
 		}
