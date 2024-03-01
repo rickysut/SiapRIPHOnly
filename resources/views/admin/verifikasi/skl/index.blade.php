@@ -149,9 +149,9 @@
 																			</div>
 																			<span>
 																				<ul>
-																					<li>{{$verifikasi->id}}</li>
-																					<li>{{$verifikasi->skl->id}}</li>
-																					<li>{{$verifikasi->skl->pengajuan_id}}</li>
+																					<li>verifikasi id: {{$verifikasi->id}}</li>
+																					<li>skl id: {{$verifikasi->skl->id}}</li>
+																					<li>pengajuan id: {{$verifikasi->skl->pengajuan_id}}</li>
 																				</ul>
 																			</span>
 																		</div>
