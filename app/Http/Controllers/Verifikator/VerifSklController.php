@@ -712,7 +712,7 @@ class VerifSklController extends Controller
 			return redirect()->route('skl.recomended.list')
 				->with('success', 'Surat Keterangan Lunas (SKL) berhasil diunggah dan Status Komitmen Wajib Tanam-Produksi telah dinyatakan sebagai LUNAS');
 		} catch (\Exception $e) {
-			return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage(). $pengajuan->id);
+			return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
 		}
 	}
 
