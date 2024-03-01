@@ -6,7 +6,7 @@
 		@include('partials.sysalert')
 		<div class="alert alert-danger" role="alert">
 		  <h4 class="alert-heading">PERBAIKAN</h4>
-		  <p>halaman ini sedang dalam perbaikan, mohon bersabar.</p>
+		  <p>Silahkan di coba kembali.</p>
 		  <p class="mb-0"></p>
 		</div>
 		<div class="row">
