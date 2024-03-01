@@ -654,6 +654,7 @@ class VerifSklController extends Controller
 
 	public function Upload(Request $request, $id)
 	{
+		try {
 		if (Auth::user()->roles[0]->title !== 'Admin') {
 			abort(403, 'Unauthorized');
 		}
@@ -710,6 +711,9 @@ class VerifSklController extends Controller
 
 		return redirect()->route('skl.recomended.list')
 			->with('success', 'Surat Keterangan Lunas (SKL) berhasil diunggah dan Status Komitmen Wajib Tanam-Produksi telah dinyatakan sebagai LUNAS');
+		} catch (\Exception $e) {
+			return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+		}
 	}
 
 	public function arsip()
