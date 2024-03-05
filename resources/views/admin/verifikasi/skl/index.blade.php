@@ -4,11 +4,11 @@
 	@include('partials.subheader')
 	@can('onfarm_access')
 		@include('partials.sysalert')
-		<div class="alert alert-danger" role="alert">
+		{{-- <div class="alert alert-danger" role="alert">
 		  <h4 class="alert-heading">PERBAIKAN</h4>
 		  <p>Silahkan di coba kembali.</p>
 		  <p class="mb-0"></p>
-		</div>
+		</div> --}}
 		<div class="row">
 			<div class="col-12">
 				<div class="panel" id="panel-1">
