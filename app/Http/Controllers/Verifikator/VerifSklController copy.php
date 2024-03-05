@@ -328,7 +328,7 @@ class VerifSklController extends Controller
 	{
 		$request->validate([
 			'note' => 'required',
-			'status' => 'nullable',
+			'status' => 'required',
 			'ndhpskl' => 'nullable|file|mimes:pdf|max:2048', // Aturan validasi untuk berkas NDHPSKL (PDF)
 			'baskls' => 'nullable|file|mimes:pdf|max:2048', // Aturan validasi untuk berkas BASKLS (PDF)
 		]);
@@ -402,7 +402,6 @@ class VerifSklController extends Controller
 			);
 
 			$verifikasi->status = 2;
-			// dd($verifikasi);
 			$verifikasi->save();
 
 			DB::commit();
