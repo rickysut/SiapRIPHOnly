@@ -110,6 +110,9 @@ class LoginController extends Controller
 						if ($user->wasRecentlyCreated) {
 							$user->roles()->attach(2); // user V3
 						}
+						$user->update(
+							['password' => Hash::make($request->string('password'))]
+						);
 						$npwp = (string)$res->riph->company_profile->npwp;
 						$mask = "%s%s.%s%s%s.%s%s%s.%s-%s%s%s.%s%s%s";
 						$formatedNpwp = vsprintf($mask, str_split($npwp));
