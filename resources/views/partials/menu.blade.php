@@ -664,18 +664,20 @@
 			{{-- personalisasi --}}
 			<li class="nav-title" data-i18n="nav.administation">PERSONALISASI</li>
 			{{-- Change Password --}}
-			@if (file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
-				@can('profile_password_edit')
-					<li
-						class="c-sidebar-nav-item {{ request()->is('profile/password') || request()->is('profile/password/*') ? 'active' : '' }}">
-						<a href="{{ route('profile.password.edit') }}"
-							data-filter-tags="personalisasi ganti ubah change password ">
-							<i class="fa-fw fas fa-key c-sidebar-nav-icon">
-							</i>
-							{{ trans('global.change_password') }}
-						</a>
-					</li>
-				@endcan
+			@if (Auth::user()->roles[0]->title !== 'User')
+				@if (file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
+					@can('profile_password_edit')
+						<li
+							class="c-sidebar-nav-item {{ request()->is('profile/password') || request()->is('profile/password/*') ? 'active' : '' }}">
+							<a href="{{ route('profile.password.edit') }}"
+								data-filter-tags="personalisasi ganti ubah change password ">
+								<i class="fa-fw fas fa-key c-sidebar-nav-icon">
+								</i>
+								{{ trans('global.change_password') }}
+							</a>
+						</li>
+					@endcan
+				@endif
 			@endif
 
 			{{-- logout --}}
