@@ -179,7 +179,7 @@ class PksController extends Controller
 					'berkas_pks' => 'mimes:pdf',
 				]);
 				$filename = 'pks_' . $filenpwp . '_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
-				$path = 'uploads/' . $filenpwp . '/' . $commitment->periodetahun . '/pks';
+				$path = 'uploads/' . $filenpwp . '/' . $commitment->periodetahun;
 				$file->storeAs($path, $filename, 'public');
 				if (Storage::disk('public')->exists($path . '/' . $filename)) {
 					$pks->berkas_pks = $filename;
