@@ -194,7 +194,8 @@ class PksController extends Controller
 					$pks->berkas_pks = $filename;
 				} else {
 					// Gagal diunggah
-					return redirect()->back()->with('error', "Gagal mengunggah berkas.");
+					return redirect()->back()->with('error', "Gagal mengunggah berkas. Error: " . $e->getMessage());
+
 				}
 			}
 
