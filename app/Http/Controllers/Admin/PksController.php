@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+
 use Illuminate\Validation\ValidationException;
 use Exception;
 use Illuminate\Support\Facades\Storage;
@@ -152,41 +153,55 @@ class PksController extends Controller
 
 	public function update(Request $request, $id)
 	{
-		$npwp_company = Auth::user()->data_user->npwp_company;
-		$pks = Pks::findOrFail($id);
-		$commitment = PullRiph::where('no_ijin', $pks->no_ijin)->first();
+		try {
+			// Begin transaction
+			DB::beginTransaction();
 
-		$filenpwp = str_replace(['.', '-'], '', $npwp_company);
-		$pks->no_perjanjian = $request->input('no_perjanjian');
-		$pks->tgl_perjanjian_start = $request->input('tgl_perjanjian_start');
-		$pks->tgl_perjanjian_end = $request->input('tgl_perjanjian_end');
-		$pks->luas_rencana = $request->input('luas_rencana');
-		$pks->varietas_tanam = $request->input('varietas_tanam');
-		$pks->periode_tanam = $request->input('periode_tanam');
+			$npwp_company = Auth::user()->data_user->npwp_company;
+			$pks = Pks::findOrFail($id);
+			$commitment = PullRiph::where('no_ijin', $pks->no_ijin)->first();
 
-		$request->validate([
-			'berkas_pks' => 'nullable|file|mimes:pdf|max:2048',
-		]);
+			$filenpwp = str_replace(['.', '-'], '', $npwp_company);
+			$pks->no_perjanjian = $request->input('no_perjanjian');
+			$pks->tgl_perjanjian_start = $request->input('tgl_perjanjian_start');
+			$pks->tgl_perjanjian_end = $request->input('tgl_perjanjian_end');
+			$pks->luas_rencana = $request->input('luas_rencana');
+			$pks->varietas_tanam = $request->input('varietas_tanam');
+			$pks->periode_tanam = $request->input('periode_tanam');
 
-		if ($request->hasFile('berkas_pks')) {
-			$file = $request->file('berkas_pks');
-
-			// Validasi tipe berkas (PDF)
 			$request->validate([
-				'berkas_pks' => 'mimes:pdf',
+				'berkas_pks' => 'nullable|file|mimes:pdf|max:2048',
 			]);
 
-			// baru
-			$filename = 'pks_'. $filenpwp . '_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
-			// end baru
+			if ($request->hasFile('berkas_pks')) {
+				$file = $request->file('berkas_pks');
 
-			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
-			$pks->berkas_pks = $filename;
+				// Validasi tipe berkas (PDF)
+				$request->validate([
+					'berkas_pks' => 'mimes:pdf',
+				]);
+
+				// baru
+				$filename = 'pks_'. $filenpwp . '_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
+				// end baru
+
+				$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
+				$pks->berkas_pks = $filename;
+			}
+
+			$pks->save();
+
+			// Commit the transaction
+			DB::commit();
+
+			return redirect()->route('admin.task.commitment.realisasi', $commitment->id)->with('message', "Data berhasil disimpan.");
+		} catch (\Exception $e) {
+			// An error occurred, rollback the transaction
+			DB::rollback();
+
+			// Handle the exception or log it
+			return redirect()->back()->with('error', "Error: " . $e->getMessage());
 		}
-
-		$pks->save();
-
-		return redirect()->route('admin.task.commitment.realisasi', $commitment->id)->with('message', "Data berhasil disimpan.");
 	}
 
 	public function anggotas($id)
