@@ -20,6 +20,48 @@
 				</div>
 			</div>
 		</div>
+		<div class="panel" id="panel-1">
+			<div class="panel-container show">
+				<div class="panel-content">
+					<table id="datatable" class="table table-bordered table-hover table-striped w-100">
+						<thead>
+							<th>Form Template</th>
+							<th>Nama Template</th>
+							<th>Created at</th>
+							<th>Updated at</th>
+							<th>Tindakan</th>
+						</thead>
+						<tbody>
+							@foreach ($templates as $file)
+							<tr>
+								<td>{{$file->berkas}}</td>
+								<td>{{$file->nama_berkas}}</td>
+								<td>{{$file->created_at}}</td>
+								<td>{{$file->updated_at}}</td>
+								<td class="d-flex">
+										<form action="{{route('admin.template.delete', $file->id)}}" enctype="multipart/form-data">
+											@csrf
+											@method('DELETE')
+											<a href="{{route('admin.template.download', $file->id)}}" class="btn btn-icon btn-xs btn-warning" data-toggle="tooltip" data-original-title="Unduh Berkas">
+												<i class="fal fa-download"></i>
+											</a>
+											@can('administrator_access')
+												<a href="" class="btn btn-icon btn-xs btn-warning" data-toggle="tooltip" data-original-title="Perbarui Berkas">
+													<i class="fal fa-file-edit"></i>
+												</a>
+												<button type="submit" class="btn btn-icon btn-xs btn-danger" data-toggle="tooltip" data-original-title="Hapus Berkas">
+													<i class="fal fa-trash"></i>
+												</button>
+											@endcan
+										</form>
+								</td>
+							</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 {{-- modal view doc --}}
