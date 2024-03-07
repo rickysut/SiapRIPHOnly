@@ -116,13 +116,12 @@
 														<i class="fal fa-file-certificate"></i>
 													</a>
 													{{-- {{dd($verifikasi->status)}} --}}
-													{{-- @if ($verifikasi->status == 3) --}}
+													@if ($verifikasi->status == 3)
 														<a href="{{route('skl.print', $verifikasi->skl->pengajuan_id)}}" class="btn btn-xs btn-icon btn-danger" data-toggle="tooltip" data-original-title="Telah Disetujui. Segera cetak SKL">
 															<i class="fal fa-print"></i>
 														</a>
 														<button class="btn btn-xs btn-icon btn-warning" type="button" title="Unggah SKL yang telah ditandatangani Pejabat" data-toggle="modal" data-target="#modalUploadSkl{{$verifikasi->skl->id}}">
 															<i class="fas fa-upload text-align-center"></i>
-															{{$verifikasi->skl->id}}
 														</button>
 
 														{{-- modal upload skl --}}
@@ -169,7 +168,7 @@
 																</div>
 															</div>
 														</div>
-													{{-- @endif --}}
+													@endif
 												@endif
 											</td>
 										</tr>
