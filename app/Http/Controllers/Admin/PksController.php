@@ -177,7 +177,7 @@ class PksController extends Controller
 			]);
 
 			// baru
-			$filename = 'pks_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
+			$filename = 'pks_'. $filenpwp . '_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
 			// end baru
 
 			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
