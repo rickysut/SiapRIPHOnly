@@ -175,42 +175,24 @@ class PksController extends Controller
 
 			if ($request->hasFile('berkas_pks')) {
 				$file = $request->file('berkas_pks');
-
-				// Validasi tipe berkas (PDF)
 				$request->validate([
 					'berkas_pks' => 'mimes:pdf',
 				]);
-
-				// Generate nama baru untuk berkas
-				$filename = 'new_pks_' . $filenpwp . '_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
-
-				// Menyimpan berkas
-				$path = 'uploads/' . $filenpwp . '/' . $commitment->periodetahun;
+				$filename = 'pks_' . $filenpwp . '_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
+				$path = 'uploads/' . $filenpwp . '/' . $commitment->periodetahun . '/pks';
 				$file->storeAs($path, $filename, 'public');
-
-				// Memeriksa apakah berkas berhasil diunggah
 				if (Storage::disk('public')->exists($path . '/' . $filename)) {
-					// Berhasil diunggah
 					$pks->berkas_pks = $filename;
 				} else {
-					// Gagal diunggah
 					return redirect()->back()->with('error', "Gagal mengunggah berkas. Error: " . $e->getMessage());
-
 				}
 			}
-
-			// Menyimpan perubahan pada entitas PKS
 			$pks->save();
-
-			// Commit the transaction
 			DB::commit();
 
 			return redirect()->route('admin.task.commitment.realisasi', $commitment->id)->with('message', "Data berhasil disimpan.");
 		} catch (\Exception $e) {
-			// An error occurred, rollback the transaction
 			DB::rollback();
-
-			// Handle the exception or log it
 			return redirect()->back()->with('error', "Error: " . $e->getMessage());
 		}
 	}
