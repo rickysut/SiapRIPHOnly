@@ -181,14 +181,24 @@ class PksController extends Controller
 					'berkas_pks' => 'mimes:pdf',
 				]);
 
-				// baru
-				$filename = 'new_pks_'. $filenpwp . '_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
-				// end baru
+				// Generate nama baru untuk berkas
+				$filename = 'new_pks_' . $filenpwp . '_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
 
-				$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
-				$pks->berkas_pks = $filename;
+				// Menyimpan berkas
+				$path = 'uploads/' . $filenpwp . '/' . $commitment->periodetahun;
+				$file->storeAs($path, $filename, 'public');
+
+				// Memeriksa apakah berkas berhasil diunggah
+				if (Storage::disk('public')->exists($path . '/' . $filename)) {
+					// Berhasil diunggah
+					$pks->berkas_pks = $filename;
+				} else {
+					// Gagal diunggah
+					return redirect()->back()->with('error', "Gagal mengunggah berkas.");
+				}
 			}
 
+			// Menyimpan perubahan pada entitas PKS
 			$pks->save();
 
 			// Commit the transaction
@@ -203,6 +213,7 @@ class PksController extends Controller
 			return redirect()->back()->with('error', "Error: " . $e->getMessage());
 		}
 	}
+
 
 	public function anggotas($id)
 	{
