@@ -49,7 +49,7 @@ class VerifSklController extends Controller
 
 		//table pengajuan. jika sudah mengajukan SKL, maka pengajuan terkait tidak muncul
 		$verifikasis = AjuVerifSkl::orderBy('created_at', 'desc')
-			->where('status', '!=', '4')
+			// ->where('status', '!=', '4')
 			->get();
 
 		// dd($verifikasis);

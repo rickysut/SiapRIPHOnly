@@ -31,10 +31,7 @@
 										<tr>
 											<td class="text-center">{{$verifikasi->commitment->periodetahun}}</td>
 											<td>
-												{{$verifikasi->datauser->company_name}} <br>
-												<ul>
-													<li>{{$verifikasi->id}}</li>
-												</ul>
+												{{$verifikasi->datauser->company_name}}
 											</td>
 											<td>{{$verifikasi->commitment->no_ijin}}</td>
 											<td class="text-center">{{ date('d F Y', strtotime($verifikasi->created_at)) }}</td>
@@ -119,7 +116,7 @@
 														<i class="fal fa-file-certificate"></i>
 													</a>
 													{{-- {{dd($verifikasi->status)}} --}}
-													@if ($verifikasi->status == 3)
+													{{-- @if ($verifikasi->status == 3) --}}
 														<a href="{{route('skl.print', $verifikasi->skl->pengajuan_id)}}" class="btn btn-xs btn-icon btn-danger" data-toggle="tooltip" data-original-title="Telah Disetujui. Segera cetak SKL">
 															<i class="fal fa-print"></i>
 														</a>
@@ -172,7 +169,7 @@
 																</div>
 															</div>
 														</div>
-													@endif
+													{{-- @endif --}}
 												@endif
 											</td>
 										</tr>
