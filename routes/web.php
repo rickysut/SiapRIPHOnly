@@ -390,5 +390,5 @@ Route::group(['prefix' => 'support', 'as' => 'support.', 'middleware' => ['auth'
 Route::group(['prefix' => 'test', 'as' => 'test.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 	Route::get('sample/{id}', 'TestController@index')->name('sample');
 	Route::get('files', 'ListFileController@index')->name('files');
-	Route::delete('files', 'ListFileController@index')->name('files.delete');
+	Route::delete('files', 'ListFileController@destroy')->name('files.delete');
 });
