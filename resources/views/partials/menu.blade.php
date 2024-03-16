@@ -56,7 +56,7 @@
 				</li>
 			</ul>
 		</div>
-		<ul id="js-nav-menu" class="nav-menu">
+		<ul id="js-nav-menu" class="nav-menu" hidden>
 			{{-- landing / beranda --}}
 			@can('landing_access')
 				<li class="c-sidebar-nav-item {{ request()->is('admin') ? 'active' : '' }}">
