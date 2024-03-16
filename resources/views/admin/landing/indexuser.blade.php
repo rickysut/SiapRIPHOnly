@@ -46,7 +46,7 @@
 			</div>
 		</div>
 
-		@if (Auth::user()->roles[0]->title == 'User')
+		{{-- @if (Auth::user()->roles[0]->title == 'User') --}}
 			<div class="row mb-5">
 				<div class="col-12">
 					<div class="alert alert-danger fade show" role="alert">
@@ -59,19 +59,19 @@
 								</span>
 							</div>
 							<div class="flex-1">
-								<span class="h3">PENTING!!</span>
+								<span class="h3">PENGUMUMAN!!</span>
 								<br>
-								Untuk alasan keamanan. Disarankan agar selalu memperbarui PASSWORD Anda di aplikasi SIAP RIPH. Silahkan konsultasikan hal ini dengan Administrator SIAP RIPH.
+									Sehubungan adanya pemeliharaan, sementara Menu tidak dapat digunakan. Mohon maaf atas ketidaknyamanannya.
 								<br><br>
 								Terima Kasih.
 								<br><br>
-								<strong>Administrator.</strong> at <span class="nav-link-text js-get-date"></span>
+								<strong>Administrator.</strong> at <span class="nav-link-text {{js-get-date}}"></span>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		@endif
+		{{-- @endif --}}
 
 		@if (Auth::user()->roles[0]->title == 'Pejabat')
 			@if (!$profile || (!$profile->jabatan || !$profile->nip))
