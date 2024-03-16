@@ -26,6 +26,237 @@ Auth::routes(['register' => true]); // menghidupkan registration
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 	// landing
 	Route::get('/', 'HomeController@index')->name('home');
+	// Dashboard
+	Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+	Route::get('/dashboard/monitoring', 'DashboardController@monitoring')->name('dashboard.monitoring');
+	Route::get('/dashboard/map', 'DashboardController@map')->name('dashboard.map');
+
+	Route::get('/dashboard/monitoringrealisasi/{periodetahun}', 'DashboardController@monitoringrealisasi')->name('dashboard.monitoringrealisasi');
+	Route::get('/monitoringDataRealisasi/{periodetahun}', 'DashboardDataController@monitoringDataRealisasi')->name('monitoringDataRealisasi');
+
+	Route::get('mapDataAll', 'UserMapDashboard@index')->name('mapDataAll');
+	Route::get('mapDataByYear/{periodeTahun}', 'UserMapDashboard@ByYears')->name('mapDataByYear');
+	Route::get('mapDataById/{id}', 'UserMapDashboard@show')->name('mapDataById');
+
+	//data pemetaan
+	Route::group(['prefix' => 'map', 'as' => 'map.'], function () {
+		Route::get('getAllMap', 'AdminMapController@index')->name('getAllMap');
+		Route::get('getAllMapByYears/{periodeTahun}', 'AdminMapController@ByYears')->name('getAllMapByYears');
+		Route::get('getLocationData/{id}', 'AdminMapController@index')->name('getLocationData');
+	});
+
+	//dashboard data for admin
+	Route::get('monitoringDataByYear/{periodetahun}', 'DashboardDataController@monitoringDataByYear')->name('monitoringDataByYear');
+
+	//dashboard data for verifikator
+	Route::get('verifikatorMonitoringDataByYear/{periodetahun}', 'DashboardDataController@verifikatorMonitoringDataByYear')->name('verifikatormonitoringDataByYear');
+
+	//dashboard data for user
+	Route::get('usermonitoringDataByYear/{periodeTahun}', 'DashboardDataController@userMonitoringDataByYear')->name('userMonitoringDataByYear');
+	Route::get('rekapRiphData', 'DashboardDataController@rekapRiphData')->name('get.rekap.riph');
+
+	//sklReads
+	Route::post('sklReads', 'SklReadsController@sklReads')->name('sklReads');
+
+	// Permissions
+	Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
+	Route::resource('permissions', 'PermissionsController');
+
+	// Roles
+	Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
+	Route::resource('roles', 'RolesController');
+
+	// Users
+	Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
+	Route::resource('users', 'UsersController');
+
+	// Audit Logs
+	Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
+	Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');
+
+	Route::get('profile', 'ProfileController@index')->name('profile.show');
+	Route::post('profile', 'ProfileController@store')->name('profile.store');
+	Route::post('profile/{id}', 'ProfileController@update')->name('profile.update');
+	Route::get('profile/pejabat', 'AdminProfileController@index')->name('profile.pejabat');
+	Route::post('profile/pejabat/store', 'AdminProfileController@store')->name('profile.pejabat.store');
+
+	//google map api
+	Route::get('gmapapi', 'ForeignApiController@edit')->name('gmapapi.edit');
+	Route::put('gmapapi/update', 'ForeignApiController@update')->name('gmapapi.update');
+
+	//posts
+	Route::put('posts/{post}/restore', 'PostsController@restore')->name('posts.restore');
+	Route::resource('posts', 'PostsController');
+	Route::get('allblogs', 'PostsController@allblogs')->name('allblogs');
+	Route::post('posts/{post}/star', 'StarredPostController@star')->name('posts.star');
+	Route::delete('posts/{post}/unstar', 'StarredPostController@unstar')->name('posts.unstar');
+
+	//posts categories
+	Route::resource('categories', 'CategoryController');
+
+	//messenger
+	Route::get('messenger', 'MessengerController@index')->name('messenger.index');
+	Route::get('messenger/create', 'MessengerController@createTopic')->name('messenger.createTopic');
+	Route::post('messenger', 'MessengerController@storeTopic')->name('messenger.storeTopic');
+	Route::get('messenger/inbox', 'MessengerController@showInbox')->name('messenger.showInbox');
+	Route::get('messenger/outbox', 'MessengerController@showOutbox')->name('messenger.showOutbox');
+	Route::post('messenger/{topic}/update', 'MessengerController@updateTopic')->name('messenger.updateTopic');
+	Route::get('messenger/{topic}', 'MessengerController@showMessages')->name('messenger.showMessages');
+	Route::delete('messenger/{topic}', 'MessengerController@destroyTopic')->name('messenger.destroyTopic');
+	Route::post('messenger/{topic}/reply', 'MessengerController@replyToTopic')->name('messenger.reply');
+	Route::get('messenger/{topic}/reply', 'MessengerController@showReply')->name('messenger.showReply');
+
+	//verifikasi
+	Route::get('dir_check_b', 'MessengerController@showReply')->name('verifikasi.dir_check_b');
+	Route::get('dir_check_c', 'MessengerController@showReply')->name('verifikasi.dir_check_c');
+
+	Route::get('riphAdmin', 'RiphAdminController@index')->name('riphAdmin.index');
+	Route::get('riphAdmin/create', 'RiphAdminController@create')->name('riphAdmin.create');
+	Route::post('riphAdmin/storefetched', 'RiphAdminController@storefetched')->name('riphAdmin.storefetched');
+	Route::post('riphAdmin', 'RiphAdminController@store')->name('riphAdmin.store');
+	Route::get('riphAdmin/{riphAdmin}/edit', 'RiphAdminController@edit')->name('riphAdmin.edit');
+	Route::put('riphAdmin/{riphAdmin}', 'RiphAdminController@update')->name('riphAdmin.update');
+	Route::delete('riphAdmin/{riphAdmin}', 'RiphAdminController@destroy')->name('riphAdmin.destroy');
+
+	//daftar pejabat penandatangan SKL
+	Route::get('daftarpejabats', 'PejabatController@index')->name('pejabats');
+	Route::get('pejabat/create', 'PejabatController@create')->name('pejabat.create');
+	Route::post('pejabat/store', 'PejabatController@store')->name('pejabat.store');
+	Route::get('pejabat/{id}/show', 'PejabatController@show')->name('pejabat.show');
+	Route::get('pejabat/{id}/edit', 'PejabatController@edit')->name('pejabat.edit');
+	Route::put('pejabat/{id}/update', 'PejabatController@update')->name('pejabat.update');
+	Route::delete('pejabat/{id}/delete', 'PejabatController@destroy')->name('pejabat.delete');
+	Route::put('pejabat/{id}/activate', 'PejabatController@activate')->name('pejabat.activate');
+
+	//daftar varietas
+	Route::get('varietas', 'VarietasController@index')->name('varietas');
+	Route::get('varietas/create', 'VarietasController@create')->name('varietas.create');
+	Route::get('varietas/{id}/edit', 'VarietasController@edit')->name('varietas.edit');
+	Route::get('varietas/{id}/show', 'VarietasController@show')->name('varietas.show');
+	Route::post('varietas/store', 'VarietasController@store')->name('varietas.store');
+	Route::put('varietas/{id}/update', 'VarietasController@update')->name('varietas.update');
+	Route::delete('varietas/{id}/delete', 'VarietasController@destroy')->name('varietas.delete');
+	Route::patch('varietas/{id}/restore', 'VarietasController@restore')->name('varietas.restore');
+
+	//user task
+	Route::group(['prefix' => 'task', 'as' => 'task.'], function () {
+
+		Route::get('pull', 'PullRiphController@index')->name('pull');
+		Route::get('getriph', 'PullRiphController@pull')->name('pull.getriph');
+		Route::post('pull', 'PullRiphController@store')->name('pull.store');
+
+
+		Route::get('commitment', 'CommitmentController@index')->name('commitment');
+		Route::group(['prefix' => 'commitment', 'as' => 'commitment.'], function () {
+			Route::get('{id}/show', 'CommitmentController@show')->name('show');
+			Route::delete('{pullriph}', 'CommitmentController@destroy')->name('destroy');
+
+			//pengisian data realisasi
+			Route::get('{id}/realisasi', 'CommitmentController@realisasi')->name('realisasi');
+			Route::post('{id}/realisasi/storeUserDocs', 'CommitmentController@storeUserDocs')->name('realisasi.storeUserDocs');
+			Route::get('{id}/penangkar', 'PenangkarRiphController@mitra')->name('penangkar');
+			Route::post('{id}/penangkar/store', 'PenangkarRiphController@store')->name('penangkar.store');
+		});
+		Route::delete('commitmentmd', 'CommitmentController@massDestroy')->name('commitment.massDestroy');
+
+		//master penangkar
+		Route::get('penangkar', 'MasterPenangkarController@index')->name('penangkar');
+		Route::group(['prefix' => 'penangkar', 'as' => 'penangkar.'], function () {
+			Route::get('create', 'MasterPenangkarController@create')->name('create');
+			Route::post('store', 'MasterPenangkarController@store')->name('store');
+			Route::get('{id}/edit', 'MasterPenangkarController@edit')->name('edit');
+			Route::put('{id}/update', 'MasterPenangkarController@update')->name('update');
+			Route::delete('{id}/delete', 'MasterPenangkarController@destroy')->name('delete');
+		});
+
+		Route::delete('mitra/{id}/delete', 'PenangkarRiphController@destroy')->name('mitra.delete');
+
+		// daftar pks
+
+		Route::get('pks/{id}/edit', 'PksController@edit')->name('pks.edit');
+		Route::put('pks/{id}/update', 'PksController@update')->name('pks.update');
+
+		//daftar anggota
+		Route::get('pks/{id}/daftaranggota', 'PksController@anggotas')->name('pks.anggotas');
+		// daftar lokasi tanam per anggota
+		Route::get('pks/{pksId}/anggota/{anggotaId}/list_lokasi', 'PksController@listLokasi')->name('pks.anggota.listLokasi');
+		//page tambah lokasi tanam
+		Route::get('pks/{pksId}/anggota/{anggotaId}/add_lokasi', 'PksController@addLokasiTanam')->name('pks.anggota.addLokasiTanam');
+		//edit lokasi tanam
+		Route::get('pks/{pksId}/anggota/{anggotaId}/lokasi/{id}/edit', 'PksController@editLokasiTanam')->name('pks.anggota.editLokasiTanam');
+		Route::get('pks/{pksId}/anggota/{anggotaId}/lokasi/{id}/foto', 'PksController@fotoLokasi')->name('pks.anggota.fotoLokasi');
+		Route::delete('deleteFotoTanam/{id}', 'PksController@deleteFotoTanam')->name('deleteFotoTanam');
+		Route::delete('deleteFotoProduksi/{id}', 'PksController@deleteFotoProduksi')->name('deleteFotoProduksi');
+		Route::delete('deleteLokasiTanam/{id}', 'PksController@deleteLokasiTanam')->name('deleteLokasiTanam');
+
+		Route::post('storeLokasiTanam', 'PksController@storeLokasiTanam')->name('storeLokasiTanam');
+		Route::put('updateLokasiTanam/{id}/update', 'PksController@updateLokasiTanam')->name('updateLokasiTanam');
+		Route::put('storeRealisasiProduksi/{id}', 'PksController@storeRealisasiProduksi')->name('storeRealisasiProduksi');
+
+		Route::post('upload/dropZoneTanam', 'PksController@dropZoneTanam')->name('dropZoneTanam');
+		Route::post('upload/dropZoneProduksi', 'PksController@dropZoneProduksi')->name('dropZoneProduksi');
+
+		//saprodi
+		Route::get('pks/{id}/saprodi', 'PksController@saprodi')->name('pks.saprodi');
+		Route::post('pks/{id}/saprodi', 'SaprodiController@store')->name('saprodi.store');
+		route::get('pks/{pksId}/saprodi/{id}/edit', 'SaprodiController@edit')->name('saprodi.edit');
+		route::put('pks/{pksId}/saprodi/{id}', 'SaprodiController@update')->name('saprodi.update');
+		route::delete('saprodi/{id}', 'SaprodiController@destroy')->name('saprodi.delete');
+		Route::get('saprodi', 'SaprodiController@index')->name('saprodi.index');
+
+		// Route::get('pks/create/{noriph}/{poktan}', 'PksController@create')->name('pks.create');
+		// Route::delete('pksmd', 'PksController@massDestroy')->name('pks.massDestroy');
+
+		//realisasi lokasi tanam & produksi
+		Route::get('realisasi/lokasi/{lokasiId}', 'LokasiController@show')->name('lokasi.tanam');
+		Route::post('realisasi/lokasi/{id}/update', 'LokasiController@update')->name('lokasi.tanam.update');
+		Route::put('realisasi/lokasi/{id}/storeTanam', 'LokasiController@storeTanam')->name('lokasi.tanam.store');
+		Route::put('realisasi/lokasi/{id}/storeProduksi', 'LokasiController@storeProduksi')->name('lokasi.produksi.store');
+
+		Route::get('pengajuan', 'PengajuanController@index')->name('pengajuan.index');
+
+		//new pengajuan tanam
+		Route::get('commitment/{id}/formavt', 'PengajuanController@ajuVerifTanam')->name('commitment.avt');
+		Route::get('commitment/{id}/formavt/lokasi', 'PengajuanController@ajuVerifTanam')->name('commitment.avt.lokasi');
+		Route::post('commitment/{id}/formavt/store', 'PengajuanController@ajuVerifTanamStore')->name('commitment.avt.store');
+		Route::get('commitment/{id}/pengajuan/tanam/show', 'PengajuanController@showAjuTanam')->name('pengajuan.tanam.show');
+
+		//new pengajuan produksi
+		Route::get('commitment/{id}/formavp', 'PengajuanController@ajuVerifProduksi')->name('commitment.avp');
+		Route::get('commitment/{id}/formavp/lokasi', 'PengajuanController@ajuVerifProduksi')->name('commitment.avp.lokasi');
+		Route::post('commitment/{id}/formavp/store', 'PengajuanController@ajuVerifProduksiStore')->name('commitment.avp.store');
+		Route::get('commitment/{id}/pengajuan/produksi/show', 'PengajuanController@showAjuProduksi')->name('pengajuan.produksi.show');
+
+		//new pengajuan skl
+		Route::get('commitment/{id}/formavskl', 'PengajuanController@ajuVerifSkl')->name('commitment.avskl');
+		Route::post('commitment/{id}/formavskl/store', 'PengajuanController@ajuVerifSklStore')->name('commitment.avskl.store');
+		Route::get('commitment/{id}/formavskl/lokasi', 'PengajuanController@ajuVerifSkl')->name('commitment.avskl.lokasi');
+		Route::get('commitment/{id}/pengajuan/skl/show', 'PengajuanController@showAjuSkl')->name('pengajuan.skl.show');
+
+
+		Route::get('submission/{id}/show', 'PengajuanController@show')->name('submission.show');
+		Route::delete('pengajuan/destroy', 'PengajuanController@massDestroy')->name('pengajuan.massDestroy');
+
+		//daftar seluruh skl yang telah terbit (lama & baru)
+		Route::get('skl/arsip', function () {
+			return redirect()->route('skl.arsip');
+		})->name('skl.arsip');
+	});
+
+	//template
+	Route::group(['prefix' => 'template', 'as' => 'template.'], function () {
+		Route::get('index', 'FileManagementController@index')->name('index');
+		Route::get('create', 'FileManagementController@create')->name('create');
+		Route::post('store', 'FileManagementController@store')->name('store');
+		Route::post('{id}/edit', 'FileManagementController@edit')->name('edit');
+		Route::put('{id}/update', 'FileManagementController@update')->name('update');
+		Route::get('{id}/download', 'FileManagementController@download')->name('download');
+		Route::delete('{id}/delete', 'FileManagementController@destroy')->name('delete');
+	});
+
+	Route::get('lokasiTanamByCommitment/{id}', 'DataLokasiTanamController@lokasiTanamByCommitment')->name('lokasiTanamByCommitment');
+	Route::get('listLokasi/{id}', 'DataLokasiTanamController@listLokasi')->name('ajutanam.listlokasi');
+	Route::get('produksi/listLokasi/{id}', 'DataLokasiTanamController@listLokasiTanamProduksi')->name('ajuproduksi.listlokasi');
 });
 
 //route untuk Pelaku usaha
