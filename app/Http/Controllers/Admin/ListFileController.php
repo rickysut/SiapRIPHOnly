@@ -16,7 +16,7 @@ class ListFileController extends Controller
      */
     public function index()
     {
-        $files = Storage::disk('local')->allFiles('public/uploads/017715038631000');
+        $files = Storage::disk('local')->allFiles('public');
 		// dd($files);
 
         return view('admin.filemanagement.index', compact('files'));
