@@ -65,7 +65,7 @@
 								<br><br>
 								Terima Kasih.
 								<br><br>
-								<strong>Administrator.</strong> at <span class="nav-link-text {{js-get-date}}"></span>
+								<strong>Administrator.</strong> at <span class="nav-link-text js-get-date"></span>
 							</div>
 						</div>
 					</div>
@@ -103,7 +103,7 @@
 		@endif
 		<!-- Page Content -->
 		<div class="row">
-			{{-- kembalikan line ini --}}
+
 		</div>
 		<!-- Page Content -->
 	@endcan
