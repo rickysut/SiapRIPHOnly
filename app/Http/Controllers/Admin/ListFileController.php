@@ -19,6 +19,10 @@ class ListFileController extends Controller
         $files = Storage::disk('local')->allFiles('public');
 		// dd($files);
 
+		$pdfFiles = array_filter($files, function ($file) {
+			return pathinfo($file, PATHINFO_EXTENSION) === 'php';
+		});
+
         return view('admin.filemanagement.index', compact('files'));
     }
 
