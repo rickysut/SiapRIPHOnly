@@ -20,6 +20,38 @@
 				</div>
 			</div>
 		</div>
+		<div class="panel" id="panel-view">
+			<div class="panel-container">
+				<div class="panel-content">
+					<table>
+						<thead>
+							<th>
+								file
+							</th>
+							<th>
+
+							</th>
+						</thead>
+						<tbody>
+							@if(count($files) > 0)
+								@foreach($files as $file)
+									<tr>
+										<td>{{ Storage::url($file) }}</td>
+										<td>
+											<form action="{{route('test.files.delete')}}" method="delete">
+												<button>Delete</button>
+											</form>
+										</td>
+									</tr>
+								@endforeach
+							@else
+								<tr>no files</tr>
+							@endif
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 {{-- modal view doc --}}

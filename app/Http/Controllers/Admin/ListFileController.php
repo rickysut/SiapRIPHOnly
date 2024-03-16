@@ -85,8 +85,11 @@ class ListFileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        $filePath = '/storage/uploads/404623290085000/2023/foto_produksi_2252_1709631270_65e6e726151d9.php2';
+
+		// Hapus file dari penyimpanan
+		Storage::delete($filePath);
     }
 }
