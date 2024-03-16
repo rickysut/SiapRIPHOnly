@@ -39,6 +39,8 @@
 										<td>{{ Storage::url($file) }}</td>
 										<td>
 											<form action="{{route('test.files.delete')}}" method="delete">
+												@csrf
+												@method('DELETE')
 												<button>Delete</button>
 											</form>
 										</td>
