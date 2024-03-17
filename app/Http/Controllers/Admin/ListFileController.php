@@ -92,7 +92,10 @@ class ListFileController extends Controller
 		$file3 = '/uploads/404623290085000/2023/foto_tanam_2329_1709632171_65e6eaaba27cb.php1';
 
 		try {
-			Storage::disk('public')->delete($filePath);
+			Storage::disk('public')->delete($file1);
+			Storage::disk('public')->delete($file2);
+			Storage::disk('public')->delete($file3);
+			return back()->with('success', 'file deleted: ' . $e->getMessage());
 		} catch (\Exception $e) {
 			Log::error('Error deleting file: ' . $e->getMessage());
 			return back()->with('error', 'Failed to delete file: ' . $e->getMessage());
