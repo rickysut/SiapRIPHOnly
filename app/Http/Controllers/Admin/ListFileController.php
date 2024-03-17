@@ -87,19 +87,16 @@ class ListFileController extends Controller
      */
     public function destroy()
 	{
-		$filePath = '/storage/uploads/404623290085000/2023/foto_produksi_2252_1709631270_65e6e726151d9.php2';
+		$file1 = '/uploads/404623290085000/2023/foto_produksi_2252_1709631270_65e6e726151d9.php2';
+		$file2 = '/uploads/404623290085000/2023/foto_produksi_2252_1709631279_65e6e72fc1ca4.php2';
+		$file3 = '/uploads/404623290085000/2023/foto_tanam_2329_1709632171_65e6eaaba27cb.php1';
 
 		try {
-			// Hapus file dari penyimpanan
-			Storage::delete($filePath);
+			Storage::disk('public')->delete($filePath);
 		} catch (\Exception $e) {
-			// Tangkap dan log pesan kesalahan
 			Log::error('Error deleting file: ' . $e->getMessage());
-			// Kembalikan ke halaman sebelumnya dengan pesan kesalahan
 			return back()->with('error', 'Failed to delete file: ' . $e->getMessage());
 		}
-
-		// Redirect kembali ke halaman sebelumnya jika penghapusan berhasil
 		return back();
 	}
 }

@@ -17,6 +17,13 @@
 					@else
 						<p>No files found.</p>
 					@endif
+					<div class="mt-5">
+						<form action="{{route('test.files.delete')}}" method="post">
+							@csrf
+							@method('DELETE')
+							<button>Delete</button>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -38,11 +45,7 @@
 									<tr>
 										<td>{{ Storage::url($file) }}</td>
 										<td>
-											<form action="{{route('test.files.delete')}}" method="post">
-												@csrf
-												@method('DELETE')
-												<button>Delete</button>
-											</form>
+
 										</td>
 									</tr>
 								@endforeach
