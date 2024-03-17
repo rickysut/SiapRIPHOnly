@@ -80,7 +80,231 @@
 			</a>
 		</div> --}}
 
-
+		<div>
+			<a href="#" class="header-icon" data-toggle="dropdown"
+				title="{{ $unreadmsg }} pesan @if (Auth::user()->roles[0]->title == 'Admin'), {{ $cntpengajuan}} Pengajuan Baru, 0 SKL Baru diterbitkan @elseif (Auth::user()->roles[0]->title == 'Pejabat'), {{$cntRecomendations}} Rekomendasi SKL diajukan @elseif (Auth::user()->roles[0]->title == 'Verifikator'), {{$cntpengajuan}} Pengajuan Baru @endif">
+				<i class="fal fa-envelope"></i>
+				@if (Auth::user()->roles[0]->title == 'Admin')
+				<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan }} </span>
+				@elseif (Auth::user()->roles[0]->title == 'Pejabat')
+					<span class="badge badge-icon">{{ $unreadmsg  +  $cntRecomendations}} </span>
+				@elseif (Auth::user()->roles[0]->title == 'Verifikator')
+					<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan}} </span>
+				@endif
+				@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Verifikator')
+					<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan }} </span>
+				@elseif (Auth::user()->roles[0]->title == 'Pejabat')
+					<span class="badge badge-icon">{{ $unreadmsg  +  $cntRecomendations}} </span>
+				@endif
+			</a>
+			<div class="dropdown-menu dropdown-menu-animated dropdown-xl">
+				<div
+					class="dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center rounded-top mb-2">
+					<h4 class="m-0 text-center color-white">
+						<small class="mb-0 opacity-80">{{ $unreadmsg }} Pesan baru</small>
+						@if (Auth::user()->roles[0]->title == 'Admin')
+							<small class="mb-0 opacity-80">{{ $cntpengajuan }} Pengajuan baru</small>
+						@elseif (Auth::user()->roles[0]->title == 'Pejabat')
+							<small class="mb-0 opacity-80">{{ $cntRecomendations }} Rekomendasi Baru</small>
+						@elseif (Auth::user()->roles[0]->title == 'Verifikator')
+							<small class="mb-0 opacity-80">{{ $cntpengajuan }} Pengajuan baru</small>
+						@endif
+					</h4>
+				</div>
+				<ul class="nav nav-tabs nav-tabs-clean" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-messages"
+							data-i18n="drpdwn.messages">Pesan</a>
+					</li>
+					@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Verifikator')
+						<li class="nav-item">
+							<a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-feeds"
+								data-i18n="drpdwn.feeds">Pengajuan</a>
+						</li>
+						@if (Auth::user()->roles[0]->title == 'Admin')
+							<li class="nav-item">
+								<a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-new-skl" data-i18n="drpdwn.feeds">SKL Baru</a>
+							</li>
+						@endif
+					@elseif (Auth::user()->roles[0]->title == 'Pejabat')
+						<li class="nav-item">
+							<a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-feeds"
+								data-i18n="drpdwn.feeds">Rekomendasi SKL</a>
+						</li>
+					@endif
+				</ul>
+				<div class="tab-content tab-notification">
+					<div class="tab-pane" id="tab-messages" role="tabpanel">
+						<div class="custom-scroll h-100">
+							<ul class="notification">
+								@foreach ($msgs as $item)
+									<li class="unread">
+										<a href="{{ route('admin.messenger.showMessages', $item['id']) }}"
+											class="d-flex align-items-center">
+											<span class="mr-2">
+												@php($user = \App\Models\User::getUserById($item['sender']))
+												@if (!empty($user[0]->data_user->logo))
+													<img src="{{ Storage::disk('public')->url($user[0]->data_user->logo) }}"
+														class="profile-image rounded-circle" alt="">
+												@else
+													<img src="{{ asset('/img/favicon.png') }}"
+														class="profile-image rounded-circle" alt="">
+												@endif
+											</span>
+											<span class="d-flex flex-column flex-1 ml-1">
+												<span class="name">{{ $user[0]->name }}<span
+														class="badge badge-primary fw-n position-absolute pos-top pos-right mt-1">INBOX</span></span>
+												<span class="msg-a fs-sm">{{ $item['subject'] }}</span>
+												<span class="msg-b fs-xs">{{ $item['content'] }}</span>
+												<span
+													class="fs-nano text-muted mt-1">{{ $item['create_at']->diffForHumans() }}</span>
+											</span>
+										</a>
+									</li>
+								@endforeach
+							</ul>
+						</div>
+					</div>
+					@if (Auth::user()->roleaccess == '1')
+						<div class="tab-pane" id="tab-feeds" role="tabpanel">
+							<div class="custom-scroll h-100">
+								<ul class="notification notification-1">
+									@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Verifikator')
+										@foreach ($getAjuVerifTanam as $item)
+											<li>
+												<a href="{{ route('verification.tanam.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+													<span class="mr-2">
+														@if (!empty($item->data_user->logo))
+															<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
+																class="profile-image rounded-circle" alt="">
+														@else
+															<img src="{{ asset('/img/avatars/farmer.png') }}"
+																class="profile-image rounded-circle" alt="">
+														@endif
+													</span>
+													<span class="d-flex flex-column flex-1">
+														<span class="name">{{ $item->datauser->company_name }} <span
+															class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+														<span class="msg-a fs-sm">
+															<span class="badge badge-success">Verifikasi Tanam</span>
+														</span>
+														<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
+													</span>
+												</a>
+											</li>
+										@endforeach
+										@foreach ($getAjuVerifProduksi as $item)
+											<li>
+												<a href="{{ route('verification.produksi.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+													<span class="mr-2">
+														@if (!empty($item->data_user->logo))
+															<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
+																class="profile-image rounded-circle" alt="">
+														@else
+															<img src="{{ asset('/img/avatars/farmer.png') }}"
+																class="profile-image rounded-circle" alt="">
+														@endif
+													</span>
+													<span class="d-flex flex-column flex-1">
+														<span class="name">{{ $item->datauser->company_name }} <span
+															class="badge badge-warning fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+														<span class="msg-a fs-sm ">
+															<span class="badge badge-warning">Verifikasi Produksi</span>
+														</span>
+														<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
+													</span>
+												</a>
+											</li>
+										@endforeach
+									@endif
+									@if (Auth::user()->roles[0]->title == 'Admin')
+										@foreach ($getAjuVerifSkl as $item)
+											<li>
+												<a href="{{ route('verification.skl.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+													<span class="mr-2">
+														@if (!empty($item->data_user->logo))
+															<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
+																class="profile-image rounded-circle" alt="">
+														@else
+															<img src="{{ asset('/img/avatars/farmer.png') }}"
+																class="profile-image rounded-circle" alt="">
+														@endif
+													</span>
+													<span class="d-flex flex-column flex-1">
+														<span class="name">{{ $item->datauser->company_name }} <span
+															class="badge badge-danger fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+														<span class="msg-a fs-sm">
+															<span class="badge badge-danger">Penerbitan SKL</span>
+														</span>
+														<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
+													</span>
+												</a>
+											</li>
+										@endforeach
+									@endif
+									@if (Auth::user()->roles[0]->title == 'Pejabat')
+										@foreach ($getRecomendations as $item)
+											<li>
+												<a href="{{ route('verification.skl.recomendation.show', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+													<span class="mr-2">
+														@if (!empty($item->data_user->logo))
+															<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
+																class="profile-image rounded-circle" alt="">
+														@else
+															<img src="{{ asset('/img/avatars/farmer.png') }}"
+																class="profile-image rounded-circle" alt="">
+														@endif
+													</span>
+													<span class="d-flex flex-column flex-1">
+														<span class="name">{{ $item->datauser->company_name }} <span
+															class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+														<span class="msg-a fs-sm">
+															<span class="badge badge-success">Direkomendasikan</span>
+														</span>
+														<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
+													</span>
+												</a>
+											</li>
+										@endforeach
+									@endif
+								</ul>
+							</div>
+						</div>
+						@if (Auth::user()->roles[0]->title == 'Pejabat')
+							<div class="tab-pane" id="tab-new-skl" role="tabpanel">
+								<div class="custom-scroll h-100">
+									<ul class="notification notification-1">
+										{{-- @if($cntNewSkl > 0)
+											@foreach ($getNewSkl as $item)
+												<li>
+													<a href="{{$item->url}}" onClick="markAsRead({{ $item->id }})" class="d-flex align-items-center show-child-on-hover">
+														<span class="mr-2">
+															<i class="fal fa-award fa-4x text-success"></i>
+														</span>
+														<span class="d-flex flex-column flex-1">
+															<span class="msg-a fs-sm">
+																<span class="badge badge-success">
+																	SKL Diterbitkan
+																	<span class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span>
+																</span>
+															</span>
+															<span class="name">
+																No: {{ $item->no_skl }}
+															</span>
+															<span class="fs-nano text-muted mt-1">{{ $item->published_date->format('d F Y') }} ({{ $item->published_date->diffForHumans() }})</span>
+														</span>
+													</a>
+												</li>
+											@endforeach
+										@endif --}}
+									</ul>
+								</div>
+							</div>
+						@endif
+					@endif
+				</div>
+			</div>
+		</div>
 		<!-- app user menu -->
 		<div>
 			<a href="#" data-toggle="dropdown" title="{{ Auth::user()->name }}"
