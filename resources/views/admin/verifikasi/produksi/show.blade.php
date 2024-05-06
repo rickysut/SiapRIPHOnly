@@ -519,6 +519,9 @@
 	@parent
 	<script>
 		$(document).ready(function() {
+			var companyName = "{{ $verifikasi->commitment->datauser->company_name }}";
+			var riphNumber = "{{ $verifikasi->no_ijin }}";
+			var riphYear = riphNumber.slice(-4);
 			$('#viewDocs').on('shown.bs.modal', function (e) {
 				var docUrl = $(e.relatedTarget).data('doc');
 				$('iframe').attr('src', docUrl);
@@ -536,12 +539,14 @@
 				buttons: [
 					{
 						extend: 'excelHtml5',
+						title: 'ringkasan_verifikasi_produksi_' + companyName.replace(/ /g, '_') + '_' + riphYear,
 						text: '<i class="fa fa-file-excel"></i>',
 						titleAttr: 'Ekspor data ke MS. Excel',
 						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
 					},
 					{
 						extend: 'print',
+						title: 'Ringkasan Verifikasi Produksi ' + companyName.replace(/ /g, ' ') + ' ' + riphYear,
 						text: '<i class="fa fa-print"></i>',
 						titleAttr: 'Cetak halaman data.',
 						className: 'btn-outline-primary btn-xs btn-icon mr-1'
