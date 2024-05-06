@@ -95,7 +95,7 @@
                 </div>
 
                 <div class="position-absolute pos-bottom pos-left pos-right p-3 text-center text-white">
-                    2022 © Transniaga Sukses Madiri&nbsp;<a href='rebrandz.xyz' class='text-white opacity-40 fw-500' title='web application developer' target='_blank'>rebrandz</a>
+                    2024 © Direktorat Jenderal Hortikultura - Kementerian Pertainan RI&nbsp;<a href='' class='text-white opacity-40 fw-500' title='web application developer' target='_blank'></a>
                 </div>
             </div>
         </div>
