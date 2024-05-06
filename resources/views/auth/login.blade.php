@@ -33,8 +33,8 @@
             <div class="d-sm-block d-md-none text-center mt-0 mb-1">
                 <img src="{{ asset('img/logo-icon.png') }}" alt="simethris" aria-roledescription="logo" style="width:150px; height:auto;">
             </div>
-			<button type="button" class="btn btn-sm btn-primary waves-effect waves-themed mb-2" data-toggle="modal" data-target="#login1" onclick="loginClick(1)"><i class="fal fa-plane-departure mr-1"></i>Masuk Admin</button>
-			<button type="button" class="btn btn-sm btn-warning waves-effect waves-themed" data-toggle="modal" data-target="#login1" onclick="loginClick(2)"><i class="fal fa-plane-departure mr-1"></i>Masuk</button>
+			<button type="button" class="btn btn-sm btn-primary waves-effect waves-themed mb-2" data-toggle="modal" data-target="#login1" onclick="loginClick(1)"><i class="fal fa-plane-departure mr-1"></i>Administrator/Verifikator</button>
+			<button type="button" class="btn btn-sm btn-warning waves-effect waves-themed" data-toggle="modal" data-target="#login1" onclick="loginClick(2)"><i class="fal fa-plane-departure mr-1"></i>Pelaku Usaha</button>
             @if ($errors->any())
                 {{ $errors->first('roleaccess') }}
             @endif
