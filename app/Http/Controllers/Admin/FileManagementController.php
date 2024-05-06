@@ -83,7 +83,7 @@ class FileManagementController extends Controller
 
 	public function destroy($id)
 	{
-		$template = FileManagement::findOrFail($id);
+		$template = FileManagement::find($id);
 		$template->delete();
 		return redirect()->route('admin.template.index')->with('success', 'tempplate berhasil dihapus.');
 	}
