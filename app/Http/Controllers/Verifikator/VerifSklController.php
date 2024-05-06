@@ -360,7 +360,7 @@ class VerifSklController extends Controller
 				$request->validate([
 					'ndhpskl' => 'file|mimes:pdf|max:2048',
 				]);
-				$ndhpsklFile = 'notdinskl_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
+				$ndhpsklFile = 'notdinskl_' . $fileNoIjin . '.' . $file->extension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $ndhpsklFile, 'public');
 			}
 
@@ -370,7 +370,7 @@ class VerifSklController extends Controller
 				$request->validate([
 					'baskls' => 'file|mimes:pdf|max:2048',
 				]);
-				$basklFile = 'baskls_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
+				$basklFile = 'baskls_' . $fileNoIjin . '.' . $file->extension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $basklFile, 'public');
 			}
 
@@ -689,7 +689,7 @@ class VerifSklController extends Controller
 
 			if ($request->hasFile('skl_upload')) {
 				$file = $request->file('skl_upload');
-				$filename = 'skl_' . $noIjin . '_' . time() . '.' . $file->getClientOriginalExtension();
+				$filename = 'skl_' . $noIjin . '_' . time() . '.' . $file->extension();
 				$filePath = $this->uploadFile($file, $filenpwp, $thn, $filename);
 				$skl->skl_upload = $filename;
 				// $skl->published_date = Carbon::now();

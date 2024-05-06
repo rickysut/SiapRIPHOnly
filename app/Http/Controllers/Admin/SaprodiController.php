@@ -80,7 +80,7 @@ class SaprodiController extends Controller
 			]);
 
 			$file = $request->file('file');
-			$filename = 'saprodi_' . time() . '.' . $file->getClientOriginalExtension();
+			$filename = 'saprodi_' . time() . '.' . $file->extension();
 			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun . '/pks/saprodi/', $filename, 'public');
 			$saprodi->file = $filename;
 		}
@@ -148,7 +148,7 @@ class SaprodiController extends Controller
 		$saprodi->harga = $request->input('harga');
 		if ($request->hasFile('file')) {
 			$attch = $request->file('file');
-			$attchname = 'saprodi_' . $saprodi->id . '.' . $attch->getClientOriginalExtension();
+			$attchname = 'saprodi_' . $saprodi->id . '.' . $attch->extension();
 			$attch->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun . '/pks/saprodi/', $attchname, 'public');
 			$saprodi->file = $attchname;
 		}

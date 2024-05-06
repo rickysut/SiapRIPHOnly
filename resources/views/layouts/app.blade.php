@@ -48,7 +48,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
 </head>
 
-<body class="mod-skin-dark">
+<body class="">
     <div class="page-wrapper">
         <div class="page-inner bg-brand-gradient">
             <div class="page-content-wrapper bg-transparent m-0">
@@ -78,10 +78,10 @@
 
                                 @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link btn-link text-white" href="{{ route('register') }}">{{ __('Daftar') }}</a>
+                                    <a class="nav-link btn-link text-white" href="https://riph.pertanian.go.id/">{{ __('Daftar') }}</a>
                                 </li>
                                 @endif
-                                
+
                                 @endguest
                             </ol>
                         </div>

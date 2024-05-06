@@ -178,7 +178,7 @@ class PksController extends Controller
 				$request->validate([
 					'berkas_pks' => 'mimes:pdf',
 				]);
-				$filename = 'pks_' . $filenpwp . '_' . $pks->poktan_id . '_' . time() . '.' . $file->getClientOriginalExtension();
+				$filename = 'pks_' . $filenpwp . '_' . $pks->poktan_id . '_' . time() . '.' . $file->extension();
 				$path = 'uploads/' . $filenpwp . '/' . $commitment->periodetahun;
 				$file->storeAs($path, $filename, 'public');
 				if (Storage::disk('public')->exists($path . '/' . $filename)) {
@@ -469,7 +469,7 @@ class PksController extends Controller
 
 		$image = $request->file('file');
 		if ($image) {
-			$newFileName = 'foto_tanam_' . $realisasiId . '_' . time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+			$newFileName = 'foto_tanam_' . $realisasiId . '_' . time() . '_' . uniqid() . '.' . $image->extension();
 			$filePath = 'uploads/' . $filenpwp . '/' . $periode . '/';
 			$image->storeAs($filePath, $newFileName, 'public');
 
@@ -500,7 +500,7 @@ class PksController extends Controller
 
 		$image = $request->file('file');
 		if ($image) {
-			$newFileName = 'foto_produksi_' . $realisasiId . '_' . time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+			$newFileName = 'foto_produksi_' . $realisasiId . '_' . time() . '_' . uniqid() . '.' . $image->extension();
 			$filePath = 'uploads/' . $filenpwp . '/' . $periode . '/';
 			$image->storeAs($filePath, $newFileName, 'public');
 		}
