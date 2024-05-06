@@ -123,7 +123,7 @@ class ProfileController extends Controller
 		$npwp = str_replace('-', '', $npwp);
 		if (array_key_exists('avatar', $data)) {
 			if ($data['avatar'] != null) {
-				$file_name = $npwp . '_' . 'avatar.' . $data['avatar']->getClientOriginalExtension();
+				$file_name = $npwp . '_' . 'avatar.' . $data['avatar']->extension();
 				$file_path = $data['avatar']->storeAs('uploads/' . $npwp, $file_name, 'public');
 				$avatar_path = $file_path;
 				$regdata += array('avatar' => $avatar_path);
@@ -132,7 +132,7 @@ class ProfileController extends Controller
 		$logo_path = '';
 		if (array_key_exists('logo', $data)) {
 			if ($data['logo'] != null) {
-				$file_name = $npwp . '_' . 'logo.' . $data['logo']->getClientOriginalExtension();
+				$file_name = $npwp . '_' . 'logo.' . $data['logo']->extension();
 				$file_path = $data['logo']->storeAs('uploads/' . $npwp, $file_name, 'public');
 				$logo_path = $file_path;
 				$regdata += array('logo' => $logo_path);
@@ -141,7 +141,7 @@ class ProfileController extends Controller
 		$ktp_path = '';
 		if (array_key_exists('imagektp', $data)) {
 			if ($data['imagektp'] != null) {
-				$file_name = $npwp . '_' . 'ktp.' . $data['imagektp']->getClientOriginalExtension();
+				$file_name = $npwp . '_' . 'ktp.' . $data['imagektp']->extension();
 				$file_path = $data['imagektp']->storeAs('uploads/' . $npwp, $file_name, 'public');
 				$ktp_path = $file_path;
 				$regdata += array('ktp_image' => $ktp_path);
@@ -150,7 +150,7 @@ class ProfileController extends Controller
 		$assign_path = '';
 		if (array_key_exists('assignment', $data)) {
 			if ($data['assignment'] != null) {
-				$file_name = $npwp . '_' . 'assignment.' . $data['assignment']->getClientOriginalExtension();
+				$file_name = $npwp . '_' . 'assignment.' . $data['assignment']->extension();
 				$file_path = $data['assignment']->storeAs('uploads/' . $npwp, $file_name, 'public');
 				$assign_path = $file_path;
 				$regdata += array('assignment' => $assign_path);

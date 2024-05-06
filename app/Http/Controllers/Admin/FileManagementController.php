@@ -18,6 +18,7 @@ class FileManagementController extends Controller
 		$heading_class = 'fab fa-stack-overflow';
 
 		$templates = FileManagement::all();
+		// dd($templates);
 
 		return view('admin.filemanagement.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'templates'));
 	}
@@ -54,7 +55,7 @@ class FileManagementController extends Controller
 				'lampiran' => 'mimes:pdf', // Hanya izinkan file PDF
 			]);
 
-			$filename = 'template_' . $filename . '.' . $file->getClientOriginalExtension();
+			$filename = 'template_' . $filename . '.' . $file->extension();
 			$file->storeAs('uploads/master/', $filename, 'public');
 			$template->lampiran = $filename;
 		}

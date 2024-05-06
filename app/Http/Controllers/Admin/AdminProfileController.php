@@ -47,6 +47,14 @@ class AdminProfileController extends Controller
 	public function store(Request $request)
 	{
 		$user = Auth::user();
+
+		$request->validate([
+			'nip' => 'required|string',
+			'jabatan' => 'required|string',
+			'digital_sign' => 'required|string',
+			'sign_img' => 'nullable|file|mimetypes:image/jpeg,image/png', // Validasi tipe MIME
+		]);
+
 		$data = [
 			'nama' => $user->name,
 			'nip' => $request->input('nip'),
@@ -62,21 +70,13 @@ class AdminProfileController extends Controller
 		if ($request->hasFile('sign_img')) {
 			$file = $request->file('sign_img');
 
-			// Validasi ekstensi file
-			$allowedExtensions = ['jpg', 'png']; // Ekstensi yang diperbolehkan
-			$fileExtension = $file->getClientOriginalExtension();
-
-			if (in_array($fileExtension, $allowedExtensions)) {
-				$filename = 'ttd_' . $user->id . '.' . $fileExtension;
-				$file->storeAs('uploads/dataadmin/', $filename, 'public');
-				$dataadmin->sign_img = $filename;
-			} else {
-				return redirect()->back()->with('error', 'Berkas yang diunggah harus memiliki ekstensi .jpg atau .png.');
-			}
+			$filename = 'ttd_' . $user->id . '.' . $file->extension();
+			$file->storeAs('uploads/dataadmin/', $filename, 'public');
+			$dataadmin->sign_img = $filename;
 		}
 
-		// dd($dataadmin);
 		$dataadmin->save();
 		return redirect()->back()->with('success', 'Berhasil menyimpan data Profile Anda.');
 	}
+
 }

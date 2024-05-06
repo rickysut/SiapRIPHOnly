@@ -106,7 +106,7 @@ class LokasiController extends Controller
 
 		if ($request->hasFile('tanam_doc')) {
 			$file = $request->file('tanam_doc');
-			$filename = 'tanam_doc_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->getClientOriginalExtension();
+			$filename = 'tanam_doc_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->extension();
 
 			// Validasi tipe berkas (PDF)
 			$request->validate([
@@ -119,7 +119,7 @@ class LokasiController extends Controller
 
 		if ($request->hasFile('tanam_pict')) {
 			$file = $request->file('tanam_pict');
-			$filename = 'tanam_pict_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->getClientOriginalExtension();
+			$filename = 'tanam_pict_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->extension();
 
 			// Validasi tipe berkas (JPG/PNG)
 			$request->validate([
@@ -155,7 +155,7 @@ class LokasiController extends Controller
 
 		if ($request->hasFile('panen_doc')) {
 			$file = $request->file('panen_doc');
-			$filename = 'panen_doc_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->getClientOriginalExtension();
+			$filename = 'panen_doc_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->extension();
 
 			// Validasi tipe berkas (PDF)
 			$request->validate([
@@ -168,7 +168,7 @@ class LokasiController extends Controller
 
 		if ($request->hasFile('panen_pict')) {
 			$file = $request->file('panen_pict');
-			$filename = 'panen_pict_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->getClientOriginalExtension();
+			$filename = 'panen_pict_' . $anggota->anggota_id . '_' . $anggota->poktan_id . '.' . $file->extension();
 
 			// Validasi tipe berkas (JPG/PNG)
 			$request->validate([

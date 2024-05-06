@@ -494,6 +494,7 @@
 			var map;
 			var markers = [];
 			var polygons = [];
+			var infoWindow = new google.maps.InfoWindow();
 
 			// Initialize the map
 
@@ -562,6 +563,24 @@
 					map: map,
 					// Set other properties of the marker here
 				});
+
+				var contentString = '<div id="content" style="max-height: 300px; overflow-y: auto;">' +
+					'<h1 id="firstHeading" class="firstHeading">' + dataRealisasi.nama_lokasi + '</h1>' +
+					'<ul class="list-group">' +
+					'<li class="list-group-item"><b>Perusahaan: </b>' + dataRealisasi.company + '</li>' +
+					'<li class="list-group-item"><b>Petani: </b>' + dataRealisasi.nama_petani + '</li>' +
+					'<li class="list-group-item"><b>Kelompok Tani: </b>' + dataRealisasi.nama_kelompok + '</li>' +
+					'<li class="list-group-item"><b>Luas Tanam: </b>' + dataRealisasi.luas_tanam + ' ha</li>' +
+					'<li class="list-group-item"><b>Volume Produksi: </b>' + dataRealisasi.volume + ' ton</li>' +
+					'</ul>' +
+					'</div>';
+
+				marker.addListener('click', function() {
+					infoWindow.close();
+					infoWindow.setContent(contentString);
+					infoWindow.open(map, marker);
+				});
+
 				// Assign the id property from dataRealisasi to the marker object
 				marker.id = dataRealisasi.id;
 				marker.npwp = dataRealisasi.npwp;

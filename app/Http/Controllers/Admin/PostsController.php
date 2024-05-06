@@ -194,7 +194,7 @@ class PostsController extends Controller
 			]);
 
 			$image = $request->file('img_cover');
-			$image_name = ($author->id) . '_' . $post->id . '_' . time() . '.' . $image->getClientOriginalExtension();
+			$image_name = ($author->id) . '_' . $post->id . '_' . time() . '.' . $image->extension();
 			Storage::disk('public')->putFileAs('img/post_img', $image, $image_name);
 			$post->img_cover = $image_name;
 		}
@@ -244,7 +244,7 @@ class PostsController extends Controller
 			]);
 
 			$image = $request->file('img_cover');
-			$image_name = ($author->id) . '_' . $post->id . '_' . time() . '.' . $image->getClientOriginalExtension();
+			$image_name = ($author->id) . '_' . $post->id . '_' . time() . '.' . $image->extension();
 			Storage::disk('public')->putFileAs('img/post_img', $image, $image_name);
 			$post->img_cover = $image_name;
 		}

@@ -258,7 +258,7 @@ class VerifOnfarmController extends Controller
 		$commitment->status = $request->input('onfarmstatus');
 		if ($request->hasFile('baonfarm')) {
 			$file = $request->file('baonfarm');
-			$filename = 'baonfarm_' . $noIjin . '.' . $file->getClientOriginalExtension();
+			$filename = 'baonfarm_' . $noIjin . '.' . $file->extension();
 			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
 			$verifikasi->baonfarm = $filename;
 		}

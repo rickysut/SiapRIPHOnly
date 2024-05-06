@@ -265,7 +265,7 @@ class VerifProduksiController extends Controller
 				$request->validate([
 					'ndhprp' => 'file|mimes:pdf|max:2048',
 				]);
-				$ndhprpFile = 'notdinprod_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
+				$ndhprpFile = 'notdinprod_' . $fileNoIjin . '.' . $file->extension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $ndhprpFile, 'public');
 			}
 
@@ -275,7 +275,7 @@ class VerifProduksiController extends Controller
 				$request->validate([
 					'baproduksi' => 'file|mimes:pdf|max:2048',
 				]);
-				$baproduksiFile = 'baproduksi_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
+				$baproduksiFile = 'baproduksi_' . $fileNoIjin . '.' . $file->extension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $baproduksiFile, 'public');
 			}
 
@@ -454,7 +454,7 @@ class VerifProduksiController extends Controller
 		$commitment->status = $request->input('onfarmstatus');
 		if ($request->hasFile('baonfarm')) {
 			$file = $request->file('baonfarm');
-			$filename = 'baonfarm_' . $noIjin . '.' . $file->getClientOriginalExtension();
+			$filename = 'baonfarm_' . $noIjin . '.' . $file->extension();
 			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
 			$verifikasi->baonfarm = $filename;
 		}

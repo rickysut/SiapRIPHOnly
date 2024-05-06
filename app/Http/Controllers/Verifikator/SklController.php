@@ -139,7 +139,7 @@ class SklController extends Controller
 	// 	$this->sklid = $id;
 	// 	// if ($request->hasFile('sklfile')) {
 	// 	// 	$file = $request->file('sklfile');
-	// 	// 	$filename = 'skl_' . $noIjin . '.' . $file->getClientOriginalExtension();
+	// 	// 	$filename = 'skl_' . $noIjin . '.' . $file->extension();
 	// 	// 	$filePath = $this->uploadFile($file, $filenpwp, $request->input('periodetahun'), $filename);
 	// 	// 	$oldskl->sklfile = $filename;
 	// 	// 	$completed->url = $filePath;
