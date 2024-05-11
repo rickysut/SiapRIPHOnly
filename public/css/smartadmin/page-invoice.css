@@ -70,7 +70,10 @@ div[data-size="A4"] {
           box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
   background: url(../img/svg/pattern-1.svg) no-repeat center bottom;
   background-size: cover;
-  padding: 4rem;
+  /* padding-top: 0rem; */
+  /* padding-bottom: 4rem; */
+  padding-left: 4rem;
+  padding-right: 4rem;
   position: relative; }
 
 @media only screen and (max-width: 992px) {

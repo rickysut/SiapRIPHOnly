@@ -19,7 +19,10 @@
 		<link id="mytheme" rel="stylesheet" media="screen, print" href="#">
 		<link id="myskin" rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/skins/skin-master.css') }}">
 		<link rel="stylesheet" media="screen, print" href="{{asset('/css/smartadmin/page-invoice.css')}}">
+		<link href="https://fonts.googleapis.com/css2?family=Tahoma&display=swap" rel="stylesheet">
+
 		<!-- Place favicon.ico in the root directory -->
+
 		<link href="{{ asset('css/fontawesome.min.css') }}" rel="stylesheet">
 		<link href="{{ asset('img/favicon.png') }}" rel="icon" />
 		<link href="{{ asset('img/logo-icon.png') }}" rel="apple-touch-icon" sizes="180x180" />
@@ -56,7 +59,12 @@
 		<link href="{{ asset('css/toastr.css') }}" rel="stylesheet" />
 
 
-		<meta name="csrf-token" content="{{ csrf_token() }}">
+		<meta name="csrf-token" contenst="{{ csrf_token() }}">
+		<style>
+			body {
+				font-family: 'Tahoma', sans-serif;
+			}
+		</style>
 		@yield('styles')
 	</head>
 

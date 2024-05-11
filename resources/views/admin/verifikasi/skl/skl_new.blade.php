@@ -30,7 +30,7 @@
 				<img src="{{asset('/img/kopsto.png')}}" width="100%">
 			</div>
 		</div>
-		<div class="row mb-5">
+		<div class="row mb-5 fs-xl keep-print-font">
 			<div class="col-sm-6 d-flex">
 				<div class="table-responsive">
 					<table class="table table-clean table-sm align-self-end">
@@ -39,24 +39,27 @@
 								<td>
 									<strong>Nomor</strong>
 								</td>
+								<td>:</td>
 								<td>
-									<span class="mr-1">: {{$skl->no_skl}}</span>
+									<span class="mr-1">{{$skl->no_skl}}</span>
 								</td>
 							</tr>
 							<tr>
 								<td>
 									<strong>Lampiran</strong>
 								</td>
+								<td>:</td>
 								<td>
-									: -
+									-
 								</td>
 							</tr>
 							<tr>
 								<td>
 									<strong>Hal</strong>
 								</td>
+								<td>:</td>
 								<td>
-									: Keterangan Telah Melaksanakan Wajib Tanam dan Wajib Produksi
+									Keterangan Telah Melaksanakan Wajib Tanam dan Wajib Produksi
 								</td>
 							</tr>
 						</tbody>
@@ -142,7 +145,7 @@
 			</div>
 			<div class="col-12">
 				<div class="row">
-					<p class="justify-align-stretch">Telah melaksanakan kewajiban pengembangan bawang putih di dalam negeri sebagaimana ketentuan dalam Permentan 39 tahun 2019 dan perubahannya.</p>
+					<p class="justify-align-stretch">Telah melaksanakan kewajiban pengembangan bawang putih di dalam negeri sebagaimana ketentuan dalam Permentan 39 tahun 2019 dan perubahannya serta Permentan 46 tahun 2019.</p>
 					<p class="justify-align-stretch mt-3">Atas perhatian dan kerjasama Saudara disampaikan terima kasih.</p>
 				</div>
 			</div>
