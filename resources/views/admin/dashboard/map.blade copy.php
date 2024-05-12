@@ -433,13 +433,12 @@
 
 			function createMarker(dataRealisasi) {
 
-				var marker = new google.maps.Marker({
+				var marker = new google.maps.marker.AdvancedMarkerElement ({
 					position: {
 						lat: parseFloat(dataRealisasi.latitude),
 						lng: parseFloat(dataRealisasi.longitude),
 					},
 					map: map,
-					// Set other properties of the marker here
 				});
 				markerId = parseFloat(dataRealisasi.id);
 
@@ -447,7 +446,6 @@
 					showMarkerDetails(marker, markerId);
 				});
 			}
-
 			function createPolygon(dataRealisasi) {
 				var polygon = new google.maps.Polygon({
 					paths: JSON.parse(dataRealisasi.polygon),
@@ -466,7 +464,7 @@
 
 			function showMarkerDetails(marker, markerId) {
 				var geocoder = new google.maps.Geocoder();
-				var latlng = marker.getPosition(); // Perhatikan penggunaan getPosition() untuk mendapatkan posisi marker
+				var latlng = marker.position; // Perhatikan penggunaan getPosition() untuk mendapatkan posisi marker
 				var infoWindow = new google.maps.InfoWindow();
 
 				geocoder.geocode({ 'location': latlng }, function(results, status) {
