@@ -389,20 +389,20 @@
 	</script>
 @else
 	<script>
-		$(document).ready(function() {
-			var map;
-			var markers = [];
-			var polygons = [];
-			var infoWindow = new google.maps.InfoWindow();
+		var map;
+		var markers = [];
+		var polygons = [];
+		var infoWindow = new google.maps.InfoWindow();
 
-			function initMap() {
-				map = new google.maps.Map(document.getElementById("allMap"), {
-					center: { lat: -2.548926, lng: 118.014863 },
-					zoom: 5,
-					mapTypeId: google.maps.MapTypeId.HYBRID,
-					mapId: 'allMap',
-				});
-			}
+		function initMap() {
+			map = new google.maps.Map(document.getElementById("allMap"), {
+				center: { lat: -2.548926, lng: 118.014863 },
+				zoom: 5,
+				mapTypeId: google.maps.MapTypeId.HYBRID,
+				mapId: 'allMap',
+			});
+		}
+		$(document).ready(function() {
 			$("#periodetahun").on("change", handlePeriodetahunChange);
 
 			function handlePeriodetahunChange() {
