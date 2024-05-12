@@ -62,6 +62,7 @@ class AdminMapController extends Controller
 		} else {
 			$commitment = PullRiph::where('periodetahun', $periodeTahun)->get();
 		}
+
 		$dataRealisasis = DataRealisasi::whereIn('no_ijin', $commitment->pluck('no_ijin'))
 			->with(['fototanam', 'fotoproduksi'])->get();
 
@@ -105,6 +106,66 @@ class AdminMapController extends Controller
 	{
 		$dataRealisasi = DataRealisasi::find($id);
 
+		$result[] = [
+			'id' => $id,
+			'npwp' => str_replace(['.', '-'], '', $dataRealisasi->npwp_company),
+			'company' => $dataRealisasi->commitment->datauser->company_name,
+			'noIjin' => str_replace(['.', '/'], '', $dataRealisasi->no_ijin),
+			'no_ijin' => $dataRealisasi->no_ijin,
+			'perioderiph' => $dataRealisasi->commitment->periodetahun,
+			'pks_mitra_id' => $dataRealisasi->poktan_id,
+			'no_perjanjian' => $dataRealisasi->pks->no_perjanjian,
+			'nama_kelompok' => $dataRealisasi->masterkelompok->nama_kelompok,
+			'nama_petani' => $dataRealisasi->masteranggota->nama_petani,
+
+			'nama_lokasi' => $dataRealisasi->nama_lokasi,
+			'varietas' => $dataRealisasi->pks->varietas->nama_varietas,
+			'latitude' => $dataRealisasi->latitude,
+			'longitude' => $dataRealisasi->longitude,
+			'polygon'	=> $dataRealisasi->polygon,
+			'altitude' => $dataRealisasi->altitude,
+
+			'mulaitanam' => $dataRealisasi->mulai_tanam,
+			'akhirtanam' => $dataRealisasi->akhir_tanam,
+			'luas_tanam' => $dataRealisasi->luas_lahan,
+			'fotoTanam' => $dataRealisasi->fototanam,
+
+			'mulaipanen' => $dataRealisasi->mulai_panen,
+			'akhirpanen' => $dataRealisasi->akhir_panen,
+			'volume' => $dataRealisasi->volume,
+			'fotoProduksi' => $dataRealisasi->fotoproduksi,
+		];
+		return response()->json($result);
+	}
+
+	public function getMapByYears($periodeTahun)
+	{
+		if ($periodeTahun === 'all') {
+			$commitment = PullRiph::select(['id', 'periodetahun', 'no_ijin'])->get();
+		} else {
+			$commitment = PullRiph::select(['id', 'periodetahun', 'no_ijin'])->where('periodetahun', $periodeTahun)->get();
+		}
+
+		$dataRealisasis = DataRealisasi::whereIn('no_ijin', $commitment->pluck('no_ijin'))
+			->with(['fototanam', 'fotoproduksi'])->get();
+
+		$result = [];
+		foreach ($dataRealisasis as $dataRealisasi) {
+			$result[] = [
+				'id' => $dataRealisasi->id,
+				'noIjin' => str_replace(['.', '/'], '', $dataRealisasi->no_ijin),
+				'no_ijin' => $dataRealisasi->no_ijin,
+				'latitude' => $dataRealisasi->latitude,
+				'longitude' => $dataRealisasi->longitude,
+				'polygon' => $dataRealisasi->polygon,
+			];
+		}
+		return response()->json($result);
+	}
+
+	public function singleMarker($id)
+	{
+		$dataRealisasi = DataRealisasi::find($id);
 		$result[] = [
 			'id' => $id,
 			'npwp' => str_replace(['.', '-'], '', $dataRealisasi->npwp_company),

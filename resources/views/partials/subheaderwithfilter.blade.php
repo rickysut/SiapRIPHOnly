@@ -11,7 +11,7 @@
 			<div class="input-group">
 				<select class="form-control custom-select select2-tahun"
 				name="periodetahun" id="periodetahun" required>
-					<option value="" hidden>--pilih tahun</option>
+					<option value="all" hidden>--pilih tahun</option>
 					<option value="all">Semua Tahun</option>
 					@foreach($periodeTahuns as $periodetahun)
 						<option value="{{ $periodetahun }}">Tahun {{ $periodetahun }}</option>

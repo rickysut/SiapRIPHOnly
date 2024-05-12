@@ -43,6 +43,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('getAllMap', 'AdminMapController@index')->name('getAllMap');
 		Route::get('getAllMapByYears/{periodeTahun}', 'AdminMapController@ByYears')->name('getAllMapByYears');
 		Route::get('getLocationData/{id}', 'AdminMapController@index')->name('getLocationData');
+		Route::get('getAllMapData/{periodeTahun}', 'AdminMapController@getMapByYears')->name('getAllMapData');
+		Route::get('getSingleMarker/{id}', 'AdminMapController@singleMarker')->name('getSingleMarker');
 	});
 
 	//dashboard data for admin
