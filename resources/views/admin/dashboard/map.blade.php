@@ -392,6 +392,7 @@
 		var map;
 		var markers = [];
 		var polygons = [];
+		var infoWindow = new google.maps.InfoWindow();
 
 		function initMap() {
 			map = new google.maps.Map(document.getElementById("allMap"), {
@@ -441,10 +442,27 @@
 					map: map,
 					// Set other properties of the marker here
 				});
-				markerId = parseFloat(dataRealisasi.id);
+				// markerId = parseFloat(dataRealisasi.id);
 
-				marker.addListener("click", function () {
-					showMarkerDetails(marker, markerId);
+				// marker.addListener("click", function () {
+				// 	showMarkerDetails(marker, markerId);
+				// });
+
+				var contentString = '<div id="content" style="max-height: 300px; overflow-y: auto;">' +
+					'<h1 id="firstHeading" class="firstHeading">' + dataRealisasi.nama_lokasi + '</h1>' +
+					'<ul class="list-group">' +
+					'<li class="list-group-item"><b>Perusahaan: </b>' + dataRealisasi.company + '</li>' +
+					'<li class="list-group-item"><b>Petani: </b>' + dataRealisasi.nama_petani + '</li>' +
+					'<li class="list-group-item"><b>Kelompok Tani: </b>' + dataRealisasi.nama_kelompok + '</li>' +
+					'<li class="list-group-item"><b>Luas Tanam: </b>' + dataRealisasi.luas_tanam + ' ha</li>' +
+					'<li class="list-group-item"><b>Volume Produksi: </b>' + dataRealisasi.volume + ' ton</li>' +
+					'</ul>' +
+					'</div>';
+
+				marker.addListener('click', function() {
+					infoWindow.close();
+					infoWindow.setContent(contentString);
+					infoWindow.open(map, marker);
 				});
 			}
 
@@ -467,7 +485,7 @@
 			function showMarkerDetails(marker, markerId) {
 				var geocoder = new google.maps.Geocoder();
 				var latlng = marker.getPosition(); // Perhatikan penggunaan getPosition() untuk mendapatkan posisi marker
-				var infoWindow = new google.maps.InfoWindow();
+
 
 				geocoder.geocode({ 'location': latlng }, function(results, status) {
 					if (status === 'OK') {
