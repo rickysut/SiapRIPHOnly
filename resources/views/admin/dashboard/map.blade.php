@@ -465,7 +465,7 @@
 
 			function showMarkerDetails(marker, markerId) {
 				var geocoder = new google.maps.Geocoder();
-				var latlng = marker.position; // Perhatikan penggunaan getPosition() untuk mendapatkan posisi marker
+				var latlng = marker.position;
 
 				geocoder.geocode({ 'location': latlng }, function(results, status) {
 					if (status === 'OK') {
