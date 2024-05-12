@@ -99,106 +99,6 @@
 			</div>
 		</div>
 	</div>
-	{{-- modal show data --}}
-	<!-- Modal -->
-	<!-- Modal -->
-<!-- Modal -->
-	<div class="modal fade" id="markerModal" tabindex="-1" role="dialog" aria-labelledby="markerModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-left" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title fw-700" id="nama_lokasi"></h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<div class="card no-shadow" id="card-1">
-						<div class="card-body">
-							<ul class="list-group mt-0">
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">Nama Lokasi</a>
-									<span class="fw-500" id="nama_lokasi"></span>
-								</li>
-								<li class="list-group-item p-2">
-									<a class="text-muted">Lokasi Tanam: </a><br>
-									<span class="fw-500" id="alamat"></span><br>
-									<span class="help-block">Alamat menurut data Peta Goggle berdasarkan titik kordinat yang diberikan.</span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">Perusahaan</a>
-									<span class="fw-500" id="company"></span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">RIPH</a>
-									<span class="fw-500" id="no_ijin"></span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">Periode RIPH</a>
-									<span class="fw-500" id="perioderiph"></span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">PKS</a>
-									<span class="fw-500" id="no_perjanjian"></span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">Kelompoktani</a>
-									<span class="fw-500" id="nama_kelompok"></span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">Petani</a>
-									<span class="fw-500" id="nama_petani"></span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">Varietas ditanam</a>
-									<span class="fw-500" id="varietas"></span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">Tanggal Tanam</a>
-									<span>
-										<span class="fw-500 mr-1" id="mulaitanam"></span>s.d
-										<span class="fw-500 ml-1" id="akhirtanam"></span>
-									</span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">Luas Tanam</a>
-									<span>
-										<span class="fw-500 mr-1" id="luas_tanam"></span>ha
-									</span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">Tanggal Panen</a>
-									<span>
-										<span class="fw-500 mr-1" id="mulaipanen"></span>s.d
-										<span class="fw-500 ml-1" id="akhirpanen"></span>
-									</span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a class="text-muted">Volume Produksi</a>
-									<span>
-										<span class="fw-500 mr-1" id="volume"></span>ton
-									</span>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="panel" id="panel-1">
-						<div class="panel-hdr">
-							<h2>Foto-foto</h2>
-						</div>
-						<div class="panel-container">
-							<div class="panel-content">
-								<div class="row row-cols-1 row-cols-md-2 js-lightgallery" id="galleryFotoTanam">
-								</div>
-								<div class="row row-cols-1 row-cols-md-2 js-lightgallery" id="galleryFotoProduksi">
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 
 {{-- @endcan --}}
 
@@ -489,24 +389,20 @@
 	</script>
 @else
 	<script>
-		$(document).ready(function() {
-			// Declare global variables
 			var map;
 			var markers = [];
 			var polygons = [];
 			var infoWindow = new google.maps.InfoWindow();
 
-			// Initialize the map
-
 			function initMap() {
 				map = new google.maps.Map(document.getElementById("allMap"), {
 					center: { lat: -2.548926, lng: 118.014863 },
 					zoom: 5,
-					mapTypeId: google.maps.MapTypeId.HYBRID,
+					// mapTypeId: google.maps.MapTypeId.HYBRID,
+					mapId: 'allMap',
 				});
 			}
-
-			// Menambahkan event listener untuk memanggil fungsi handlePeriodetahunChange saat terjadi perubahan pada elemen #periodetahun
+		$(document).ready(function() {
 			$("#periodetahun").on("change", handlePeriodetahunChange);
 
 			function handlePeriodetahunChange() {
@@ -514,9 +410,7 @@
 				$("#panelData1").addClass("collapse");
 				$("#panelData2").addClass("collapse");
 				var periodetahun = $(this).val();
-				var url = "/admin/map/getAllMapByYears/" + periodetahun;
-
-				// Make an AJAX request to retrieve marker data and polygons
+				var url = "/admin/map/getAllMapData/" + periodetahun;
 				$.ajax({
 					url: url,
 					type: "GET",
@@ -526,97 +420,33 @@
 					},
 				});
 			}
-
-			// Handle marker data and create markers and polygons
 			function handleMarkerData(data) {
-				// Remove existing markers and polygons from the map
 				removeMarkers();
 				removePolygons();
 
-				// Iterate over the data to create markers and polygons
 				$.each(data, function (index, dataRealisasi) {
 					if (dataRealisasi.latitude && dataRealisasi.longitude) {
 						createMarker(dataRealisasi);
-					}
-
-					if (dataRealisasi.polygon) {
 						createPolygon(dataRealisasi);
 					}
 				});
-
-				// Check for polygon intersections
-				// var intersections = map.findPolygonIntersections();
-				// if (intersections.length > 0) {
-				// 	console.log("There are intersections between polygons!");
-				// 	// Perform additional actions for intersecting polygons
-				// 	// You can access the intersecting polygons using intersections array
-				// }
 			}
 
-			// Create a marker on the map
 			function createMarker(dataRealisasi) {
-				var marker = new google.maps.Marker({
+
+				var marker = new google.maps.marker.AdvancedMarkerElement ({
 					position: {
 						lat: parseFloat(dataRealisasi.latitude),
 						lng: parseFloat(dataRealisasi.longitude),
 					},
 					map: map,
-					// Set other properties of the marker here
 				});
+				markerId = parseFloat(dataRealisasi.id);
 
-				var contentString = '<div id="content" style="max-height: 300px; overflow-y: auto;">' +
-					'<h1 id="firstHeading" class="firstHeading">' + dataRealisasi.nama_lokasi + '</h1>' +
-					'<ul class="list-group">' +
-					'<li class="list-group-item"><b>Perusahaan: </b>' + dataRealisasi.company + '</li>' +
-					'<li class="list-group-item"><b>Petani: </b>' + dataRealisasi.nama_petani + '</li>' +
-					'<li class="list-group-item"><b>Kelompok Tani: </b>' + dataRealisasi.nama_kelompok + '</li>' +
-					'<li class="list-group-item"><b>Luas Tanam: </b>' + dataRealisasi.luas_tanam + ' ha</li>' +
-					'<li class="list-group-item"><b>Volume Produksi: </b>' + dataRealisasi.volume + ' ton</li>' +
-					'</ul>' +
-					'</div>';
-
-				marker.addListener('click', function() {
-					infoWindow.close();
-					infoWindow.setContent(contentString);
-					infoWindow.open(map, marker);
-				});
-
-				// Assign the id property from dataRealisasi to the marker object
-				marker.id = dataRealisasi.id;
-				marker.npwp = dataRealisasi.npwp;
-				marker.perioderiph = dataRealisasi.perioderiph;
-				marker.latitude = dataRealisasi.latitude;
-				marker.longitude = dataRealisasi.longitude;
-				marker.no_ijin = dataRealisasi.no_ijin;
-				marker.no_perjanjian = dataRealisasi.no_perjanjian;
-				marker.nama_lokasi = dataRealisasi.nama_lokasi;
-
-				marker.nama_petani = dataRealisasi.nama_petani;
-				marker.nama_kelompok = dataRealisasi.nama_kelompok;
-				marker.nama_lokasi = dataRealisasi.nama_lokasi;
-
-				marker.altitude = dataRealisasi.altitude;
-				marker.luas_kira = dataRealisasi.luas_kira;
-				marker.mulaitanam = dataRealisasi.mulaitanam;
-				marker.akhirtanam = dataRealisasi.akhirtanam;
-				marker.luas_tanam = dataRealisasi.luas_tanam;
-				marker.varietas = dataRealisasi.varietas;
-				marker.mulaipanen = dataRealisasi.mulaipanen;
-				marker.akhirpanen = dataRealisasi.akhirpanen;
-				marker.volume = dataRealisasi.volume;
-
-				marker.dataFotoTanam = dataRealisasi.fotoTanam;
-				marker.dataFotoProduksi = dataRealisasi.fotoProduksi;
-
-				marker.company = dataRealisasi.company;
-
-				// Add a click event listener to the marker
 				marker.addListener("click", function () {
-					showMarkerDetails(marker);
+					showMarkerDetails(marker, markerId);
 				});
 			}
-
-			// Create a polygon on the map
 			function createPolygon(dataRealisasi) {
 				var polygon = new google.maps.Polygon({
 					paths: JSON.parse(dataRealisasi.polygon),
@@ -628,123 +458,150 @@
 					map: map,
 				});
 
-				// Add a click event listener to the polygon
 				polygon.addListener("click", function () {
 					zoomToPolygon(polygon);
 				});
 			}
 
-			// Show marker details in a modal
-			function showMarkerDetails(marker) {
+			function showMarkerDetails(marker, markerId) {
 				var geocoder = new google.maps.Geocoder();
-				var latlng = marker.getPosition();
-				geocoder.geocode({ location: latlng }, function (results, status) {
-					if (status === "OK") {
+				var latlng = marker.position; // Perhatikan penggunaan getPosition() untuk mendapatkan posisi marker
+
+				geocoder.geocode({ 'location': latlng }, function(results, status) {
+					if (status === 'OK') {
 						if (results[0]) {
 							var address = results[0].formatted_address;
-							marker.alamat = address;
-							console.log("Alamat: " + address);
-							// Send an AJAX request to get the marker data
+							console.log("Alamat:", address);
 							$.ajax({
-								url: "/admin/map/getLocationData/" + marker.id,
+								url: "/admin/map/getSingleMarker/" + markerId,
 								type: "GET",
 								dataType: "json",
 								success: function (data) {
-									var alamat = marker.alamat;
-									// Set the modal content with the marker details
-									var markerId = marker.id;
-									var npwp = marker.npwp;
-									var no_ijin = marker.no_ijin;
-									var perioderiph = marker.perioderiph;
-									var no_perjanjian = marker.no_perjanjian;
-									var nama_lokasi = marker.nama_lokasi;
+									if (data.length > 0) {
+										var markerData = data[0];
+										var options = { year: 'numeric', month: 'long', day: 'numeric' };
+										var startDate = new Date(markerData.mulaitanam);
+										var endDate = new Date(markerData.akhirtanam);
+										var awalPanen = new Date(markerData.mulaipanen);
+										var akhirPanen = new Date(markerData.akhirpanen);
 
-									var nama_petani = marker.nama_petani;
-									var nama_kelompok = marker.nama_kelompok;
-									var altitude = marker.altitude;
-									var luas_kira = marker.luas_kira;
-									var mulaitanam = marker.mulaitanam;
-									var akhirtanam = marker.akhirtanam;
-									var luas_tanam = marker.luas_tanam;
-									var varietas = marker.varietas;
-									var mulaipanen = marker.mulaipanen;
-									var akhirpanen = marker.akhirpanen;
-									var volume = marker.volume;
-									var fotoTanam = marker.dataFotoTanam;
-									var fotoTanamHtml = "";
-									var fotoProduksi = marker.dataFotoProduksi;
-									var fotoProduksiHtml = "";
+										var formattedStartDate = new Date(markerData.mulaitanam).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+										var formattedEndDate = new Date(markerData.akhirtanam).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+										var formattedAwalPanen = new Date(markerData.mulaipanen).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+										var formattedAkhirPanen = new Date(markerData.akhirpanen).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
 
-									var company = marker.company;
+										var content =
+											'<div id="content">' +
+												'<div id="siteNotice">' +
+												"</div>" +
+												'<h1 id="" class="subheader-title mb-3">'+ markerData.nama_lokasi + '</h1>' +
+												'<div id="bodyContent">' +
+													'<ul class="list-group">' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Perusahaan</span>' +
+															'<span class="fw-500" id="company">' + markerData.company + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Nomor RIPH</span>' +
+															'<span class="fw-500" id="no_ijin">' + markerData.no_ijin + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Periode RIPH</span>' +
+															'<span class="fw-500" id="perioderiph">' + markerData.perioderiph + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Nomor Perjanjian</span>' +
+															'<span class="fw-500" id="pks">' + markerData.no_perjanjian + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Kelompok Tani</span>' +
+															'<span class="fw-500" id="kelompok">' + markerData.nama_kelompok + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Petani</span>' +
+															'<span class="fw-500" id="petani">' + markerData.nama_petani + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Mulai Tanam</span>' +
+															'<span class="fw-500" id="mulaitanam">' + formattedStartDate + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Akhir Tanam</span>' +
+															'<span class="fw-500" id="akhirtanam">' + formattedEndDate + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Luas Tanam (ha)</span>' +
+															'<span class="fw-500" id="luas_tanam">' + markerData.luas_tanam + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Nama Lokasi</span>' +
+															'<span class="fw-500" id="lokasi">' + markerData.nama_lokasi + '</span>' +
+														'</li>' +
+														'<li class="list-group-item">' +
+															'<a class="text-muted">Lokasi Tanam: </a><br>' +
+															'<span class="fw-500" id="alamat">' + address + '</span><br>' +
+															'<span class="help-block">Alamat menurut data Peta Google berdasarkan titik kordinat yang diberikan.</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Varietas ditanam</span>' +
+															'<span class="fw-500" id="varietas">' + markerData.varietas + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Mulai Panen</span>' +
+															'<span class="fw-500" id="mulaipanen">' + formattedAwalPanen + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Akhir Panen</span>' +
+															'<span class="fw-500" id="akhirpanen">' + formattedAkhirPanen + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Volume (ton)</span>' +
+															'<span class="fw-500" id="volume">' + markerData.volume + '</span>' +
+														'</li>' +
+													'</ul>'
+												"</div>" +
+										    "</div>";
 
-									// Update the modal elements with the marker data
-									$("#company").text(company);
-									$("#no_ijin").text(no_ijin);
-									$("#perioderiph").text(perioderiph);
-									$("#pks").text(no_perjanjian);
-									$("#kelompok").text(nama_kelompok);
-									$("#petani").text(nama_petani);
-									$("#lokasi").text(nama_lokasi);
-									$("#alamat").text(alamat);
-									$("#varietas").text(varietas);
-									$("#mulaitanam").text(mulaitanam);
-									$("#akhirtanam").text(akhirtanam);
-									$("#luas_tanam").text(luas_tanam);
-									$("#mulaipanen").text(mulaipanen);
-									$("#akhirpanen").text(akhirpanen);
-									$("#volume").text(volume);
-									fotoTanam.forEach(function (foto) {
-										fotoTanamHtml += `
-											<div class="col mb-4">
-												<div class="card shadow-2" style="width: 100%; padding-top: 100%; position: relative; overflow: hidden;">
-													<div class="card-image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('/storage/uploads/${npwp}/${perioderiph}/${foto.filename}'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
-													<a href="/storage/uploads/${npwp}/${perioderiph}/${foto.filename}" style="position: absolute; top: 10px; right: 10px; target="blank" class="mr-1 btn btn-warning btn-xs btn-icon waves-effect waves-themed" data-toggle="tooltip" data-original-title="Layar Penuh">
-														<i class="fal fa-expand"></i>
-													</a>
-												</div>
-											</div>`;
-									});
+											if (markerData.fotoTanam.length > 0 || markerData.fotoProduksi.length > 0) {
+												content += "<div class='panel-hdr'>" +
+															"<h2>Foto-foto</h2>" +
+														"</div>" +
+														"<div class='panel-container'><div class='panel-content'>";
 
-									fotoProduksi.forEach(function (foto) {
-										fotoProduksiHtml += `
-											<div class="col mb-4">
-												<div class="card shadow-2" style="width: 100%; padding-top: 100%; position: relative; overflow: hidden;">
-													<div class="card-image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('/storage/uploads/${npwp}/${perioderiph}/${foto.filename}'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
-													<a href="/storage/uploads/${npwp}/${perioderiph}/${foto.filename}" style="position: absolute; top: 10px; right: 10px; target="blank" class="mr-1 btn btn-warning btn-xs btn-icon waves-effect waves-themed" data-toggle="tooltip" data-original-title="Layar Penuh">
-														<i class="fal fa-expand"></i>
-													</a>
-												</div>
-											</div>`;
-									});
+												$.each(markerData.fotoTanam, function(index, foto) {
+													content += "<img class='js-lightgallery' src='" + foto.url + "' alt='Foto Tanam " + index + "'><br>";
+												});
 
-									$("#galleryFotoTanam").html(
-										fotoTanamHtml + fotoProduksiHtml
-									);
+												$.each(markerData.fotoProduksi, function(index, foto) {
+													content += "<img class='js-lightgallery' src='" + foto.url + "' alt='Foto Produksi " + index + "'><br>";
+												});
 
-									console.log(fotoTanam);
-									// Show the modal
-									// $("#markerModal").modal("show");
-									$("#panelData1").removeClass("collapse");
-									$("#panelData2").removeClass("collapse");
+												content += "</div></div>";
+											}
+
+										infoWindow.close();
+										infoWindow.setContent(content);
+										infoWindow.open(map, marker);
+									} else {
+										console.log("Data marker tidak ditemukan");
+									}
 									zoomToMarker(marker);
 								},
 							});
 						} else {
-							console.log("Tidak ada hasil ditemukan");
+							console.log('Alamat tidak ditemukan');
 						}
 					} else {
-						console.log("Geocoder gagal dengan status: " + status);
+						console.log('Geocoder gagal dengan kode: ' + status);
 					}
 				});
 			}
 
-			// Zoom the map to fit the marker
 			function zoomToMarker(marker) {
 				map.setZoom(18);
-				map.setCenter(marker.getPosition());
+				map.setCenter(marker.position);
 			}
 
-			// Zoom the map to fit the polygon bounds
 			function zoomToPolygon(polygon) {
 				var bounds = new google.maps.LatLngBounds();
 				polygon.getPath().forEach(function (latLng) {
@@ -753,21 +610,18 @@
 				map.fitBounds(bounds);
 			}
 
-			// Remove all markers from the map
 			function removeMarkers() {
 				map.getMarkers().forEach(function (marker) {
 					marker.setMap(null);
 				});
 			}
 
-			// Remove all polygons from the map
 			function removePolygons() {
 				map.getPolygons().forEach(function (polygon) {
 					polygon.setMap(null);
 				});
 			}
 
-			// Extend the Map object to add a getMarkers() method
 			google.maps.Map.prototype.getMarkers = function () {
 				var markers = [];
 				for (var i = 0; i < this.overlayMapTypes.length; i++) {
@@ -785,7 +639,6 @@
 				return markers;
 			};
 
-			// Extend the Map object to add a getPolygons() method
 			google.maps.Map.prototype.getPolygons = function () {
 				var polygons = [];
 				for (var i = 0; i < this.overlayMapTypes.length; i++) {
@@ -797,7 +650,6 @@
 				return polygons;
 			};
 
-			// Call the initMap function to initialize the map
 			initMap();
 		});
 	</script>
