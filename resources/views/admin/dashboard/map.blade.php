@@ -121,7 +121,7 @@
 		// Add an event listener to the periodetahun select element
 			//
 
-		var $initScope = $('.js-lightgallery');
+		var $initScope = $('#js-lightgallery');
 		if ($initScope.length)
 		{
 			$initScope.justifiedGallery(
