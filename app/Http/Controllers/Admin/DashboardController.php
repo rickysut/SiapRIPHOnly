@@ -224,6 +224,12 @@ class DashboardController extends Controller
 		return view('admin.dashboard.map', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'page_desc', 'periodeTahuns', 'users', 'mapkey'));
 	}
 
+	public function newMap()
+	{
+		$mapkey = ForeignApi::find(1);
+		return view('admin.dashboard.newmap', compact('mapkey'));
+	}
+
 	public function monitoring(Request $request)
 	{
 		$module_name = 'Dashboard';
