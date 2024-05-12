@@ -516,7 +516,7 @@
 				var periodetahun = $(this).val();
 				var url = "/admin/map/getAllMapByYears/" + periodetahun;
 
-				// Make an AJAX request to retrieve marker data and polygons
+
 				$.ajax({
 					url: url,
 					type: "GET",
