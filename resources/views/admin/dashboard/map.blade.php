@@ -392,7 +392,6 @@
 		var map;
 		var markers = [];
 		var polygons = [];
-		var infoWindow = new google.maps.InfoWindow();
 
 		function initMap() {
 			map = new google.maps.Map(document.getElementById("allMap"), {
@@ -466,6 +465,7 @@
 			function showMarkerDetails(marker, markerId) {
 				var geocoder = new google.maps.Geocoder();
 				var latlng = marker.position; // Perhatikan penggunaan getPosition() untuk mendapatkan posisi marker
+				var infoWindow = new google.maps.InfoWindow();
 
 				geocoder.geocode({ 'location': latlng }, function(results, status) {
 					if (status === 'OK') {
