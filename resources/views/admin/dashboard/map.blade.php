@@ -473,7 +473,7 @@
 				return markers;
 			};
 
-
+			// Extend the Map object to add a getPolygons() method
 			google.maps.Map.prototype.getPolygons = function () {
 				var polygons = [];
 				for (var i = 0; i < this.overlayMapTypes.length; i++) {
@@ -516,7 +516,7 @@
 				var periodetahun = $(this).val();
 				var url = "/admin/map/getAllMapByYears/" + periodetahun;
 
-				// Make an AJAX request to retrieve marker data and polygons
+
 				$.ajax({
 					url: url,
 					type: "GET",
@@ -564,7 +564,23 @@
 					// Set other properties of the marker here
 				});
 
-				// Assign the id property from dataRealisasi to the marker object
+				var contentString = '<div id="content" style="max-height: 300px; overflow-y: auto;">' +
+					'<h1 id="firstHeading" class="firstHeading">' + dataRealisasi.nama_lokasi + '</h1>' +
+					'<ul class="list-group">' +
+					'<li class="list-group-item"><b>Perusahaan: </b>' + dataRealisasi.company + '</li>' +
+					'<li class="list-group-item"><b>Petani: </b>' + dataRealisasi.nama_petani + '</li>' +
+					'<li class="list-group-item"><b>Kelompok Tani: </b>' + dataRealisasi.nama_kelompok + '</li>' +
+					'<li class="list-group-item"><b>Luas Tanam: </b>' + dataRealisasi.luas_tanam + ' ha</li>' +
+					'<li class="list-group-item"><b>Volume Produksi: </b>' + dataRealisasi.volume + ' ton</li>' +
+					'</ul>' +
+					'</div>';
+
+				marker.addListener('click', function() {
+					infoWindow.close();
+					infoWindow.setContent(contentString);
+					infoWindow.open(map, marker);
+				});
+
 				marker.id = dataRealisasi.id;
 				marker.npwp = dataRealisasi.npwp;
 				marker.perioderiph = dataRealisasi.perioderiph;
