@@ -503,7 +503,7 @@
 					center: { lat: -2.548926, lng: 118.014863 },
 					zoom: 5,
 					mapTypeId: google.maps.MapTypeId.HYBRID,
-					mapId: 'allMap',
+					map: 'allMap',
 				});
 			}
 
@@ -546,7 +546,7 @@
 			}
 
 			function createMarker(dataRealisasi) {
-				var marker = new google.maps.marker.AdvancedMarkerElement ({
+				var marker = new google.maps.Marker ({
 					position: {
 						lat: parseFloat(dataRealisasi.latitude),
 						lng: parseFloat(dataRealisasi.longitude),
