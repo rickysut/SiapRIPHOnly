@@ -306,7 +306,7 @@
 			myMap = new google.maps.Map(document.getElementById("myMap"), {
 				center: { lat: -2.5489, lng: 118.0149 },
 				zoom: 5,
-				mapTypeId: google.maps.MapTypeId.HYBRID,
+				// mapTypeId: google.maps.MapTypeId.HYBRID,
 			});
 
 			setupDrawingManager();
@@ -374,7 +374,7 @@
 			const longitude = document.getElementById("longitude").value;
 			if (latitude !== "" && longitude !== "") {
 				const position = new google.maps.LatLng(latitude, longitude);
-				const marker = new google.maps.Marker({
+				const marker = new google.maps.AdvancedMarkerElement({
 					position: position,
 					map: myMap,
 					draggable: true,
