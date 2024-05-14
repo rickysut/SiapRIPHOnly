@@ -306,7 +306,7 @@
 			myMap = new google.maps.Map(document.getElementById("myMap"), {
 				center: { lat: -2.5489, lng: 118.0149 },
 				zoom: 5,
-				mapTypeId: google.maps.MapTypeId.SATELLITE,
+				mapTypeId: google.maps.MapTypeId.HYBRID,
 			});
 
 			setupDrawingManager();
