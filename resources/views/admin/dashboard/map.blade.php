@@ -556,6 +556,7 @@
 				markerId = parseFloat(dataRealisasi.id);
 
 				marker.addListener("click", function () {
+					zoomToMarker(marker);
 					showMarkerDetails(marker, markerId);
 				});
 			}
@@ -574,6 +575,21 @@
 				polygon.addListener("click", function () {
 					zoomToPolygon(polygon);
 				});
+			}
+
+			// Zoom the map to fit the marker
+			function zoomToMarker(marker) {
+				map.setZoom(18);
+				map.setCenter(marker.position);
+			}
+
+			// Zoom the map to fit the polygon bounds
+			function zoomToPolygon(polygon) {
+				var bounds = new google.maps.LatLngBounds();
+				polygon.getPath().forEach(function (latLng) {
+					bounds.extend(latLng);
+				});
+				map.fitBounds(bounds);
 			}
 
 			// Remove all markers from the map
@@ -621,7 +637,139 @@
 			};
 
 
+			function showMarkerDetails(marker, markerId) {
+				var geocoder = new google.maps.Geocoder();
+				var latlng = marker.position; // Perhatikan penggunaan getPosition() untuk mendapatkan posisi marker
+				var infoWindow = new google.maps.InfoWindow();
 
+				geocoder.geocode({ 'location': latlng }, function(results, status) {
+					if (status === 'OK') {
+						if (results[0]) {
+							var address = results[0].formatted_address;
+							console.log("Alamat:", address);
+							$.ajax({
+								url: "/admin/map/getSingleMarker/" + markerId,
+								type: "GET",
+								dataType: "json",
+								success: function (data) {
+									if (data.length > 0) {
+										var markerData = data[0];
+										var options = { year: 'numeric', month: 'long', day: 'numeric' };
+										var startDate = new Date(markerData.mulaitanam);
+										var endDate = new Date(markerData.akhirtanam);
+										var awalPanen = new Date(markerData.mulaipanen);
+										var akhirPanen = new Date(markerData.akhirpanen);
+
+										var formattedStartDate = new Date(markerData.mulaitanam).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+										var formattedEndDate = new Date(markerData.akhirtanam).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+										var formattedAwalPanen = new Date(markerData.mulaipanen).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+										var formattedAkhirPanen = new Date(markerData.akhirpanen).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+
+										var content =
+											'<div id="content">' +
+												'<div id="siteNotice">' +
+												"</div>" +
+												'<h1 id="" class="subheader-title mb-3">'+ markerData.nama_lokasi + '</h1>' +
+												'<div id="bodyContent">' +
+													'<ul class="list-group">' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Perusahaan</span>' +
+															'<span class="fw-500" id="company">' + markerData.company + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Nomor RIPH</span>' +
+															'<span class="fw-500" id="no_ijin">' + markerData.no_ijin + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Periode RIPH</span>' +
+															'<span class="fw-500" id="perioderiph">' + markerData.perioderiph + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Nomor Perjanjian</span>' +
+															'<span class="fw-500" id="pks">' + markerData.no_perjanjian + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Kelompok Tani</span>' +
+															'<span class="fw-500" id="kelompok">' + markerData.nama_kelompok + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Petani</span>' +
+															'<span class="fw-500" id="petani">' + markerData.nama_petani + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Mulai Tanam</span>' +
+															'<span class="fw-500" id="mulaitanam">' + formattedStartDate + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Akhir Tanam</span>' +
+															'<span class="fw-500" id="akhirtanam">' + formattedEndDate + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Luas Tanam (ha)</span>' +
+															'<span class="fw-500" id="luas_tanam">' + markerData.luas_tanam + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Nama Lokasi</span>' +
+															'<span class="fw-500" id="lokasi">' + markerData.nama_lokasi + '</span>' +
+														'</li>' +
+														'<li class="list-group-item">' +
+															'<a class="text-muted">Lokasi Tanam: </a><br>' +
+															'<span class="fw-500" id="alamat">' + address + '</span><br>' +
+															'<span class="help-block">Alamat menurut data Peta Google berdasarkan titik kordinat yang diberikan.</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Varietas ditanam</span>' +
+															'<span class="fw-500" id="varietas">' + markerData.varietas + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Mulai Panen</span>' +
+															'<span class="fw-500" id="mulaipanen">' + formattedAwalPanen + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Akhir Panen</span>' +
+															'<span class="fw-500" id="akhirpanen">' + formattedAkhirPanen + '</span>' +
+														'</li>' +
+														'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+															'<span class="text-muted">Volume (ton)</span>' +
+															'<span class="fw-500" id="volume">' + markerData.volume + '</span>' +
+														'</li>' +
+													'</ul>'
+												"</div>" +
+										    "</div>";
+
+											if (markerData.fotoTanam.length > 0 || markerData.fotoProduksi.length > 0) {
+												content += "<div class='panel-hdr'>" +
+															"<h2>Foto-foto</h2>" +
+														"</div>" +
+														"<div class='panel-container'><div class='panel-content'>";
+
+												$.each(markerData.fotoTanam, function(index, foto) {
+													content += "<img class='js-lightgallery' src='" + foto.url + "' alt='Foto Tanam " + index + "'><br>";
+												});
+
+												$.each(markerData.fotoProduksi, function(index, foto) {
+													content += "<img class='js-lightgallery' src='" + foto.url + "' alt='Foto Produksi " + index + "'><br>";
+												});
+
+												content += "</div></div>";
+											}
+
+										infoWindow.close();
+										infoWindow.setContent(content);
+										infoWindow.open(map, marker);
+									} else {
+										console.log("Data marker tidak ditemukan");
+									}
+								},
+							});
+						} else {
+							console.log('Alamat tidak ditemukan');
+						}
+					} else {
+						console.log('Geocoder gagal dengan kode: ' + status);
+					}
+				});
+			}
 
 			// Call the initMap function to initialize the map
 			initMap();
