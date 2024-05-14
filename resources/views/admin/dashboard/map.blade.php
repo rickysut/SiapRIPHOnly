@@ -502,6 +502,7 @@
 				map = new google.maps.Map(document.getElementById("allMap"), {
 					center: { lat: -2.548926, lng: 118.014863 },
 					zoom: 5,
+					mapTypeId: google.maps.MapTypeId.HYBRID,
 					mapId: 'allMap',
 				});
 			}
@@ -529,8 +530,8 @@
 			// Handle marker data and create markers and polygons
 			function handleMarkerData(data) {
 				// Remove existing markers and polygons from the map
-				// removeMarkers();
-				// removePolygons();
+				removeMarkers();
+				removePolygons();
 
 				// Iterate over the data to create markers and polygons
 				$.each(data, function (index, dataRealisasi) {
@@ -558,6 +559,69 @@
 					showMarkerDetails(marker, markerId);
 				});
 			}
+
+			function createPolygon(dataRealisasi) {
+				var polygon = new google.maps.Polygon({
+					paths: JSON.parse(dataRealisasi.polygon),
+					strokeColor: "#FF0000",
+					strokeOpacity: 0.8,
+					strokeWeight: 2,
+					fillColor: "#FF0000",
+					fillOpacity: 0.35,
+					map: map,
+				});
+
+				polygon.addListener("click", function () {
+					zoomToPolygon(polygon);
+				});
+			}
+
+			// Remove all markers from the map
+			function removeMarkers() {
+				map.getMarkers().forEach(function (marker) {
+					marker.setMap(null);
+				});
+			}
+
+			// Remove all polygons from the map
+			function removePolygons() {
+				map.getPolygons().forEach(function (polygon) {
+					polygon.setMap(null);
+				});
+			}
+
+			// Extend the Map object to add a getMarkers() method
+			google.maps.Map.prototype.getMarkers = function () {
+				var markers = [];
+				for (var i = 0; i < this.overlayMapTypes.length; i++) {
+					var overlay = this.overlayMapTypes.getAt(i);
+					if (overlay instanceof google.maps.Marker) {
+						markers.push(overlay);
+					} else if (overlay instanceof google.maps.Polygon) {
+						overlay.getPath().forEach(function (path) {
+							if (path instanceof google.maps.Marker) {
+								markers.push(path);
+							}
+						});
+					}
+				}
+				return markers;
+			};
+
+			// Extend the Map object to add a getPolygons() method
+			google.maps.Map.prototype.getPolygons = function () {
+				var polygons = [];
+				for (var i = 0; i < this.overlayMapTypes.length; i++) {
+					var overlay = this.overlayMapTypes.getAt(i);
+					if (overlay instanceof google.maps.Polygon) {
+						polygons.push(overlay);
+					}
+				}
+				return polygons;
+			};
+
+
+
 
 			// Call the initMap function to initialize the map
 			initMap();
