@@ -374,7 +374,7 @@
 			const longitude = document.getElementById("longitude").value;
 			if (latitude !== "" && longitude !== "") {
 				const position = new google.maps.LatLng(latitude, longitude);
-				const marker = new google.maps.AdvancedMarkerElement({
+				const marker = new google.maps.Marker({
 					position: position,
 					map: myMap,
 					draggable: true,
