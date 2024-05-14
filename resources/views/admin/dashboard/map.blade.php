@@ -513,7 +513,7 @@
 				$("#panelData1").addClass("collapse");
 				$("#panelData2").addClass("collapse");
 				var periodetahun = $(this).val();
-				var url = "/admin/map/mapDataByYear/" + periodetahun;
+				var url = "/admin/map/getAllMapData/" + periodetahun;
 
 
 				$.ajax({
@@ -529,8 +529,8 @@
 			// Handle marker data and create markers and polygons
 			function handleMarkerData(data) {
 				// Remove existing markers and polygons from the map
-				removeMarkers();
-				removePolygons();
+				// removeMarkers();
+				// removePolygons();
 
 				// Iterate over the data to create markers and polygons
 				$.each(data, function (index, dataRealisasi) {
@@ -541,6 +541,21 @@
 					if (dataRealisasi.polygon) {
 						createPolygon(dataRealisasi);
 					}
+				});
+			}
+
+			function createMarker(dataRealisasi) {
+				var marker = new google.maps.marker.AdvancedMarkerElement ({
+					position: {
+						lat: parseFloat(dataRealisasi.latitude),
+						lng: parseFloat(dataRealisasi.longitude),
+					},
+					map: map,
+				});
+				markerId = parseFloat(dataRealisasi.id);
+
+				marker.addListener("click", function () {
+					showMarkerDetails(marker, markerId);
 				});
 			}
 
