@@ -490,13 +490,10 @@
 @else
 	<script>
 		$(document).ready(function() {
-			// Declare global variables
 			var map;
 			var markers = [];
 			var polygons = [];
 			var infoWindow = new google.maps.InfoWindow();
-
-			// Initialize the map
 
 			function initMap() {
 				map = new google.maps.Map(document.getElementById("allMap"), {
@@ -527,13 +524,11 @@
 				});
 			}
 
-			// Handle marker data and create markers and polygons
 			function handleMarkerData(data) {
-				// Remove existing markers and polygons from the map
+
 				removeMarkers();
 				removePolygons();
 
-				// Iterate over the data to create markers and polygons
 				$.each(data, function (index, dataRealisasi) {
 					if (dataRealisasi.latitude && dataRealisasi.longitude) {
 						createMarker(dataRealisasi);
@@ -577,13 +572,12 @@
 				});
 			}
 
-			// Zoom the map to fit the marker
 			function zoomToMarker(marker) {
 				map.setZoom(18);
 				map.setCenter(marker.position);
 			}
 
-			// Zoom the map to fit the polygon bounds
+
 			function zoomToPolygon(polygon) {
 				var bounds = new google.maps.LatLngBounds();
 				polygon.getPath().forEach(function (latLng) {
@@ -592,21 +586,18 @@
 				map.fitBounds(bounds);
 			}
 
-			// Remove all markers from the map
 			function removeMarkers() {
 				map.getMarkers().forEach(function (marker) {
 					marker.setMap(null);
 				});
 			}
 
-			// Remove all polygons from the map
 			function removePolygons() {
 				map.getPolygons().forEach(function (polygon) {
 					polygon.setMap(null);
 				});
 			}
 
-			// Extend the Map object to add a getMarkers() method
 			google.maps.Map.prototype.getMarkers = function () {
 				var markers = [];
 				for (var i = 0; i < this.overlayMapTypes.length; i++) {
@@ -624,7 +615,6 @@
 				return markers;
 			};
 
-			// Extend the Map object to add a getPolygons() method
 			google.maps.Map.prototype.getPolygons = function () {
 				var polygons = [];
 				for (var i = 0; i < this.overlayMapTypes.length; i++) {
@@ -636,10 +626,9 @@
 				return polygons;
 			};
 
-
 			function showMarkerDetails(marker, markerId) {
 				var geocoder = new google.maps.Geocoder();
-				var latlng = marker.position; // Perhatikan penggunaan getPosition() untuk mendapatkan posisi marker
+				var latlng = marker.position;
 				var infoWindow = new google.maps.InfoWindow();
 
 				geocoder.geocode({ 'location': latlng }, function(results, status) {
@@ -771,7 +760,6 @@
 				});
 			}
 
-			// Call the initMap function to initialize the map
 			initMap();
 		});
 	</script>
