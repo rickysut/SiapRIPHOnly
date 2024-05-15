@@ -64,6 +64,6 @@ class UserDocs extends Model
 
 	public function commitment()
 	{
-		return $this->belongsTo(Commitment::class, 'commitment_id');
+		return $this->belongsTo(PullRiph::class, 'commitment_id');
 	}
 }

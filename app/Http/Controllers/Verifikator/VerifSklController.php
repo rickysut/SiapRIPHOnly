@@ -61,18 +61,19 @@ class VerifSklController extends Controller
 		$verifikasi = AjuVerifSkl::findOrFail($id);
 		$npwp = str_replace(['.', '-'], '', $verifikasi->npwp);
 
-		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
+		$commitment = $verifikasi->commitment;
 		$npwp_company = $verifikasi->npwp;
 
-		$verifTanam = AjuVerifTanam::where('no_ijin', $commitment->no_ijin)->firstOrNew([]);
-		$verifProduksi = AjuVerifProduksi::where('no_ijin', $commitment->no_ijin)->firstOrNew([]);
-		$userDocs = UserDocs::where('no_ijin', $commitment->no_ijin)->firstOrNew([]);
-		$pks = Pks::where('no_ijin', $commitment->no_ijin)->firstOrNew([]);
-		$lokasis = Lokasi::where('no_ijin', $commitment->no_ijin)->get();
+		// $verifTanam = AjuVerifTanam::where('no_ijin', $commitment->no_ijin)->firstOrNew([]);
+		$verifTanam = $verifikasi->commitment->ajutanam;
+		$verifProduksi = $verifikasi->commitment->ajuproduksi;
+		$userDocs = $verifikasi->commitment->userDocs;
+		$pks = $verifikasi->commitment->pks;
+		$lokasis = $verifikasi->commitment->lokasi;
 
 		$skl = Skl::where('pengajuan_id', $verifikasi->id)->first();
 
-		// dd($verifTanam->created_at);
+
 
 		$data = [
 			//ringkasan umum
