@@ -69,7 +69,7 @@ class PullRiph extends Model
 
 	public function userDocs()
 	{
-		return $this->belongsTo(UserDocs::class, 'commitment_id');
+		return $this->hasOne(UserDocs::class, 'commitment_id');
 	}
 
 	public function penangkar_riph()

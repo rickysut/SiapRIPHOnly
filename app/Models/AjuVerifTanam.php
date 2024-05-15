@@ -77,7 +77,7 @@ class AjuVerifTanam extends Model
 
 	public function commitment()
 	{
-		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
+		return $this->hasOne(PullRiph::class, 'no_ijin', 'no_ijin');
 	}
 
 	public function datauser()
