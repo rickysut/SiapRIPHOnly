@@ -564,36 +564,11 @@
 				});
 				// Assign the id property from dataRealisasi to the marker object
 				marker.id = dataRealisasi.id;
-				marker.npwp = dataRealisasi.npwp;
-				marker.perioderiph = dataRealisasi.perioderiph;
-				marker.latitude = dataRealisasi.latitude;
-				marker.longitude = dataRealisasi.longitude;
-				marker.no_ijin = dataRealisasi.no_ijin;
-				marker.no_perjanjian = dataRealisasi.no_perjanjian;
-				marker.nama_lokasi = dataRealisasi.nama_lokasi;
-
-				marker.nama_petani = dataRealisasi.nama_petani;
-				marker.nama_kelompok = dataRealisasi.nama_kelompok;
-				marker.nama_lokasi = dataRealisasi.nama_lokasi;
-
-				marker.altitude = dataRealisasi.altitude;
-				marker.luas_kira = dataRealisasi.luas_kira;
-				marker.mulaitanam = dataRealisasi.mulaitanam;
-				marker.akhirtanam = dataRealisasi.akhirtanam;
-				marker.luas_tanam = dataRealisasi.luas_tanam;
-				marker.varietas = dataRealisasi.varietas;
-				marker.mulaipanen = dataRealisasi.mulaipanen;
-				marker.akhirpanen = dataRealisasi.akhirpanen;
-				marker.volume = dataRealisasi.volume;
-
-				marker.dataFotoTanam = dataRealisasi.fotoTanam;
-				marker.dataFotoProduksi = dataRealisasi.fotoProduksi;
-
-				marker.company = dataRealisasi.company;
+				markerId = dataRealisasi.id;
 
 				// Add a click event listener to the marker
 				marker.addListener("click", function () {
-					showMarkerDetails(marker);
+					showMarkerDetails(marker, markerId);
 				});
 			}
 
@@ -616,7 +591,7 @@
 			}
 
 			// Show marker details in a modal
-			function showMarkerDetails(marker) {
+			function showMarkerDetails(marker, markerId) {
 				var geocoder = new google.maps.Geocoder();
 				var latlng = marker.getPosition();
 				geocoder.geocode({ location: latlng }, function (results, status) {
@@ -627,36 +602,37 @@
 							console.log("Alamat: " + address);
 							// Send an AJAX request to get the marker data
 							$.ajax({
-								url: "/admin/map/getLocationData/" + marker.id,
+								url: "/admin/map/getSingleMarker/" + markerId,
 								type: "GET",
 								dataType: "json",
 								success: function (data) {
-									var alamat = marker.alamat;
+									var markerData = data[0];
+									var alamat = address;
 									// Set the modal content with the marker details
-									var markerId = marker.id;
-									var npwp = marker.npwp;
-									var no_ijin = marker.no_ijin;
-									var perioderiph = marker.perioderiph;
-									var no_perjanjian = marker.no_perjanjian;
-									var nama_lokasi = marker.nama_lokasi;
+									var markerId = markerId;
+									var npwp = markerData.npwp;
+									var no_ijin = markerData.no_ijin;
+									var perioderiph = markerData.perioderiph;
+									var no_perjanjian = markerData.no_perjanjian;
+									var nama_lokasi = markerData.nama_lokasi;
 
-									var nama_petani = marker.nama_petani;
-									var nama_kelompok = marker.nama_kelompok;
-									var altitude = marker.altitude;
-									var luas_kira = marker.luas_kira;
-									var mulaitanam = marker.mulaitanam;
-									var akhirtanam = marker.akhirtanam;
-									var luas_tanam = marker.luas_tanam;
-									var varietas = marker.varietas;
-									var mulaipanen = marker.mulaipanen;
-									var akhirpanen = marker.akhirpanen;
-									var volume = marker.volume;
-									var fotoTanam = marker.dataFotoTanam;
+									var nama_petani = markerData.nama_petani;
+									var nama_kelompok = markerData.nama_kelompok;
+									var altitude = markerData.altitude;
+									var luas_kira = markerData.luas_kira;
+									var mulaitanam = markerData.mulaitanam;
+									var akhirtanam = markerData.akhirtanam;
+									var luas_tanam = markerData.luas_tanam;
+									var varietas = markerData.varietas;
+									var mulaipanen = markerData.mulaipanen;
+									// var akhirpanen = markerData.akhirpanen;
+									var volume = markerData.volume;
+									var fotoTanam = markerData.fotoTanam;
 									var fotoTanamHtml = "";
-									var fotoProduksi = marker.dataFotoProduksi;
+									var fotoProduksi = markerData.fotoProduksi;
 									var fotoProduksiHtml = "";
 
-									var company = marker.company;
+									var company = markerData.company;
 
 									// Update the modal elements with the marker data
 									$("#company").text(company);
@@ -672,7 +648,7 @@
 									$("#akhirtanam").text(akhirtanam);
 									$("#luas_tanam").text(luas_tanam);
 									$("#mulaipanen").text(mulaipanen);
-									$("#akhirpanen").text(akhirpanen);
+									// $("#akhirpanen").text(akhirpanen);
 									$("#volume").text(volume);
 									fotoTanam.forEach(function (foto) {
 										fotoTanamHtml += `
@@ -703,6 +679,8 @@
 									);
 
 									console.log(fotoTanam);
+
+									console.log("marker detail");
 									// Show the modal
 									// $("#markerModal").modal("show");
 									$("#panelData1").removeClass("collapse");
