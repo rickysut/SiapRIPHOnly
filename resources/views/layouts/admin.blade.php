@@ -55,7 +55,7 @@
 
 		<link href="{{ asset('css/toastr.css') }}" rel="stylesheet" />
 
-		<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ isset($mapkey) ? $mapkey->key : 'Default Key' }}&libraries=drawing,geometry&loading=async" ></script>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ isset($mapkey) ? $mapkey->key : 'Default Key' }}&libraries=drawing,geometry" ></script>
 
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		@yield('styles')
