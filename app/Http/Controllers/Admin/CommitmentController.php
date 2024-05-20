@@ -155,80 +155,158 @@ class CommitmentController extends Controller
 		return view('admin.commitment.realisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'pkss', 'penangkars', 'docs', 'npwp', 'varietass', 'disabled'));
 	}
 
+	// public function storeUserDocs(Request $request, $id)
+	// {
+	//     $commitment = PullRiph::find($id);
+	//     $realnpwp = $commitment->npwp;
+	//     $npwp = str_replace(['.', '-'], '', $commitment->npwp);
+	//     $realNoIjin = $commitment->no_ijin;
+	//     $noIjin = str_replace(['/', '.'], '', $realNoIjin);
+	//     $userFiles = [];
+	// 	dd($request->file());
+	//     try {
+	//         DB::beginTransaction();
+
+	//         $fileFields = [
+	//             'sptjmtanam',
+	//             'sptjmproduksi',
+	//             'spvt',
+	//             'rta',
+	//             'sphtanam',
+	//             'logbooktanam',
+	//             'spvp',
+	//             'rpo',
+	//             'formLa',
+	//             'sphproduksi',
+	//             'logbookproduksi',
+	//             'spskl'
+	//             // Tambahkan field-file lainnya di sini
+	//         ];
+
+	//         // Validasi MIME type
+	//         $rules = [];
+	//         foreach ($fileFields as $field) {
+	//             $rules[$field] = 'mimetypes:application/pdf'; // Hanya izinkan file PDF
+	//         }
+
+	//         // Pesan error kustom jika validasi gagal
+	//         $messages = [];
+	//         foreach ($fileFields as $field) {
+	//             $messages[$field . '.mimetypes'] = 'Berkas ' . $request->file($field)->getClientOriginalName() . ' harus memiliki tipe MIME application/pdf.';
+	//         }
+
+	//         // Lakukan validasi
+	//         $request->validate($rules, $messages);
+
+	//         // Jika validasi berhasil, lanjutkan dengan proses penyimpanan file
+	//         foreach ($fileFields as $field) {
+	//             if ($request->hasFile($field)) {
+	//                 $file = $request->file($field);
+
+	//                 $fileExtension = $file->extension();
+	//                 $file_name = $field . '_' . $noIjin . '_' . time() . '.' . $fileExtension;
+	//                 $file_path = $file->storeAs('uploads/' . $npwp . '/' . $commitment->periodetahun, $file_name, 'public');
+	//                 $userFiles[$field] = $file_name;
+	//             }
+	//         }
+
+	//         $data = UserDocs::updateOrCreate(
+	//             [
+	//                 'npwp' => $realnpwp,
+	//                 'commitment_id' => $id,
+	//                 'no_ijin' => $realNoIjin
+	//             ],
+	//             array_merge($request->all(), $userFiles) // Menggabungkan data form dan file dalam satu array
+	//         );
+	//         DB::commit();
+
+	//         // Flash message sukses
+	//         return redirect()->back()->with('success', 'Berkas berhasil diunggah.');
+	//     } catch (\Exception $e) {
+	//         // Rollback transaksi jika ada kesalahan
+	//         DB::rollBack();
+
+	//         // Flash message kesalahan
+	//         return redirect()->back()->with('error', 'Terjadi kesalahan saat mengunggah berkas: ' . $e->getMessage());
+	//     }
+	// }
+
 	public function storeUserDocs(Request $request, $id)
-    {
-        $commitment = PullRiph::find($id);
-        $realnpwp = $commitment->npwp;
-        $npwp = str_replace(['.', '-'], '', $commitment->npwp);
-        $realNoIjin = $commitment->no_ijin;
-        $noIjin = str_replace(['/', '.'], '', $realNoIjin);
-        $userFiles = [];
-        try {
-            DB::beginTransaction();
+	{
+		$commitment = PullRiph::find($id);
+		$realnpwp = $commitment->npwp;
+		$npwp = str_replace(['.', '-'], '', $commitment->npwp);
+		$realNoIjin = $commitment->no_ijin;
+		$noIjin = str_replace(['/', '.'], '', $realNoIjin);
+		$userFiles = [];
 
-            $fileFields = [
-                'sptjmtanam',
-                'sptjmproduksi',
-                'spvt',
-                'rta',
-                'sphtanam',
-                'logbooktanam',
-                'spvp',
-                'rpo',
-                'formLa',
-                'sphproduksi',
-                'logbookproduksi',
-                'spskl'
-                // Tambahkan field-file lainnya di sini
-            ];
+		try {
+			DB::beginTransaction();
 
-            // Validasi MIME type
-            $rules = [];
-            foreach ($fileFields as $field) {
-                $rules[$field] = 'mimetypes:application/pdf'; // Hanya izinkan file PDF
-            }
+			$fileFields = [
+				'sptjmtanam',
+				'sptjmproduksi',
+				'spvt',
+				'rta',
+				'sphtanam',
+				'logbooktanam',
+				'spvp',
+				'rpo',
+				'formLa',
+				'sphproduksi',
+				'logbookproduksi',
+				'spskl'
+				// Tambahkan field-file lainnya di sini
+			];
 
-            // Pesan error kustom jika validasi gagal
-            $messages = [];
-            foreach ($fileFields as $field) {
-                $messages[$field . '.mimetypes'] = 'Berkas ' . $request->file($field)->getClientOriginalName() . ' harus memiliki tipe MIME application/pdf.';
-            }
+			// Validasi MIME type
+			$rules = [];
+			$messages = [];
+			foreach ($fileFields as $field) {
+				$rules[$field] = 'mimetypes:application/pdf'; // Hanya izinkan file PDF
 
-            // Lakukan validasi
-            $request->validate($rules, $messages);
+				// Periksa apakah file ada dalam permintaan sebelum menambahkan pesan kustom
+				if ($request->hasFile($field)) {
+					$messages[$field . '.mimetypes'] = 'Berkas ' . $request->file($field)->getClientOriginalName() . ' harus memiliki tipe MIME application/pdf.';
+				}
+			}
 
-            // Jika validasi berhasil, lanjutkan dengan proses penyimpanan file
-            foreach ($fileFields as $field) {
-                if ($request->hasFile($field)) {
-                    $file = $request->file($field);
+			// Lakukan validasi
+			$request->validate($rules, $messages);
 
-                    $fileExtension = $file->extension();
-                    $file_name = $field . '_' . $noIjin . '_' . time() . '.' . $fileExtension;
-                    $file_path = $file->storeAs('uploads/' . $npwp . '/' . $commitment->periodetahun, $file_name, 'public');
-                    $userFiles[$field] = $file_name;
-                }
-            }
+			// Jika validasi berhasil, lanjutkan dengan proses penyimpanan file
+			foreach ($fileFields as $field) {
+				if ($request->hasFile($field)) {
+					$file = $request->file($field);
 
-            $data = UserDocs::updateOrCreate(
-                [
-                    'npwp' => $realnpwp,
-                    'commitment_id' => $id,
-                    'no_ijin' => $realNoIjin
-                ],
-                array_merge($request->all(), $userFiles) // Menggabungkan data form dan file dalam satu array
-            );
-            DB::commit();
+					$fileExtension = $file->extension();
+					$file_name = $field . '_' . $noIjin . '_' . time() . '.' . $fileExtension;
+					$file_path = $file->storeAs('uploads/' . $npwp . '/' . $commitment->periodetahun, $file_name, 'public');
+					$userFiles[$field] = $file_name;
+				}
+			}
 
-            // Flash message sukses
-            return redirect()->back()->with('success', 'Berkas berhasil diunggah.');
-        } catch (\Exception $e) {
-            // Rollback transaksi jika ada kesalahan
-            DB::rollBack();
+			$data = UserDocs::updateOrCreate(
+				[
+					'npwp' => $realnpwp,
+					'commitment_id' => $id,
+					'no_ijin' => $realNoIjin
+				],
+				array_merge($request->all(), $userFiles) // Menggabungkan data form dan file dalam satu array
+			);
+			DB::commit();
 
-            // Flash message kesalahan
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengunggah berkas: ' . $e->getMessage());
-        }
-    }
+			// Flash message sukses
+			return redirect()->back()->with('success', 'Berkas berhasil diunggah.');
+		} catch (\Exception $e) {
+			// Rollback transaksi jika ada kesalahan
+			DB::rollBack();
+
+			// Flash message kesalahan
+			return redirect()->back()->with('error', 'Terjadi kesalahan saat mengunggah berkas: ' . $e->getMessage());
+		}
+	}
+
 
 	public function submission($id)
 	{
