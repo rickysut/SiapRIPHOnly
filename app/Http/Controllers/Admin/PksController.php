@@ -401,15 +401,17 @@ class PksController extends Controller
 	{
 		DB::beginTransaction();
 		try {
-			$updateRealisasi = DataRealisasi::findOrFail($id);
+			$updateRealisasi = DataRealisasi::find($id);
 			$lokasiId = $updateRealisasi->lokasi_id;
-			$lokasi = Lokasi::findOrFail($lokasiId);
+			$lokasi = Lokasi::find($lokasiId);
 			$dataRealisasi = DataRealisasi::where('lokasi_id', $lokasiId)->get();
 			$firstTanam = $dataRealisasi->min('mulai_tanam');
 			$firstProduksi = $dataRealisasi->min('mulai_panen');
 			$sumLuas = $dataRealisasi->sum('luas_lahan');
 			$sumVolume = $dataRealisasi->sum('volume');
 			$countLokasi = $dataRealisasi->count();
+
+			// dd($request->input('volume'));
 
 			$updateRealisasi->update([
 				'mulai_panen' => $request->input('mulai_panen'),
