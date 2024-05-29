@@ -494,6 +494,7 @@
 			var map;
 			var markers = [];
 			var polygons = [];
+			let infoWindow;
 
 			// Initialize the map
 
@@ -503,6 +504,7 @@
 					zoom: 5,
 					mapTypeId: google.maps.MapTypeId.HYBRID,
 				});
+				infoWindow = new google.maps.InfoWindow();
 			}
 
 			// Menambahkan event listener untuk memanggil fungsi handlePeriodetahunChange saat terjadi perubahan pada elemen #periodetahun
@@ -552,43 +554,128 @@
 				// }
 			}
 
+			function handleMarkerData(data) {
+				// Remove existing markers and polygons from the map
+				removeMarkers();
+				removePolygons();
+
+				// Create a mapping between markers and their associated polygons
+				const markerPolygonMap = new Map();
+
+				// Iterate over the data to create markers and polygons
+				$.each(data, function (index, dataRealisasi) {
+					let marker, polygon;
+
+					if (dataRealisasi.latitude && dataRealisasi.longitude) {
+						marker = createMarker(dataRealisasi);
+					}
+
+					if (dataRealisasi.polygon) {
+						polygon = createPolygon(dataRealisasi);
+					}
+
+					// Associate the marker with the polygon
+					if (marker && polygon) {
+						markerPolygonMap.set(marker, polygon);
+					}
+				});
+
+				// Add click event listeners to all markers to update the associated polygon's color
+				markerPolygonMap.forEach((polygon, marker) => {
+					marker.addListener("click", function () {
+						resetPolygonColors();
+						updatePolygonColor(polygon, marker.dataRealisasi.status);
+						showMarkerDetails(marker, marker.id);
+						showInfoWindow(marker, marker.dataRealisasi);
+						zoomToPolygon(polygon); // Zoom to the polygon when the marker is clicked
+					});
+				});
+
+				// Add click event listeners to all polygons to update the polygon's color
+				polygons.forEach((item) => {
+					item.polygon.addListener("click", function () {
+						resetPolygonColors();
+						updatePolygonColor(item.polygon, item.status);
+						showMarkerDetails(marker, marker.id);
+						showInfoWindow(marker, marker.dataRealisasi);
+						zoomToPolygon(item.polygon); // Zoom to the polygon when it is clicked
+					});
+				});
+			}
+
 			// Create a marker on the map
 			function createMarker(dataRealisasi) {
+				var defaultIconUrl = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'; // Default marker
+				var lunasIconUrl = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'; // "Lunas" marker
+
+				var iconUrl = dataRealisasi.status === 'Lunas' ? lunasIconUrl : defaultIconUrl;
+
 				var marker = new google.maps.Marker({
 					position: {
 						lat: parseFloat(dataRealisasi.latitude),
 						lng: parseFloat(dataRealisasi.longitude),
 					},
 					map: map,
-					// Set other properties of the marker here
+					icon: {
+						url: iconUrl,
+						scaledSize: new google.maps.Size(32, 32),
+					},
 				});
-				// Assign the id property from dataRealisasi to the marker object
-				marker.id = dataRealisasi.id;
-				markerId = dataRealisasi.id;
 
-				// Add a click event listener to the marker
-				marker.addListener("click", function () {
-					showMarkerDetails(marker, markerId);
-				});
+				marker.id = dataRealisasi.id;
+				marker.dataRealisasi = dataRealisasi; // Attach dataRealisasi to the marker
+
+				return marker;
 			}
 
 			// Create a polygon on the map
 			function createPolygon(dataRealisasi) {
+				var defaultColor = "#FF0000"; // Default color: red
 				var polygon = new google.maps.Polygon({
 					paths: JSON.parse(dataRealisasi.polygon),
-					strokeColor: "#FF0000",
+					strokeColor: defaultColor,
 					strokeOpacity: 0.8,
 					strokeWeight: 2,
-					fillColor: "#FF0000",
+					fillColor: defaultColor,
 					fillOpacity: 0.35,
 					map: map,
 				});
 
-				// Add a click event listener to the polygon
-				polygon.addListener("click", function () {
-					zoomToPolygon(polygon);
+				// Store the polygon and its original status color
+				polygons.push({
+					polygon: polygon,
+					status: dataRealisasi.status
+				});
+
+				return polygon;
+			}
+
+			// Update the color of the polygon based on the status
+			function updatePolygonColor(polygon, status) {
+				var newColor;
+				if (status === 'Lunas') {
+					newColor = "#00FF00"; // Green for "Lunas"
+				} else {
+					newColor = "#FFA500"; // Orange for other statuses
+				}
+
+				polygon.setOptions({
+					strokeColor: newColor,
+					fillColor: newColor,
 				});
 			}
+
+			// Reset all polygons to their original status colors
+			function resetPolygonColors() {
+				polygons.forEach((item) => {
+					var statusColor = item.status === 'Lunas' ? "#00FF00" : "#FFA500";
+					item.polygon.setOptions({
+						strokeColor: statusColor,
+						fillColor: statusColor,
+					});
+				});
+			}
+
 
 			// Show marker details in a modal
 			function showMarkerDetails(marker, markerId) {
@@ -697,6 +784,24 @@
 				});
 			}
 
+			function showInfoWindow(entity, dataRealisasi) {
+				var contentString = `<div><strong>Status:</strong> ${dataRealisasi.status}</div>`;
+				infoWindow.setContent(contentString);
+
+				if (entity instanceof google.maps.Marker) {
+					infoWindow.setPosition(entity.getPosition());
+				} else if (entity instanceof google.maps.Polygon) {
+					var path = entity.getPath();
+					var bounds = new google.maps.LatLngBounds();
+					path.forEach(function (point) {
+						bounds.extend(point);
+					});
+					infoWindow.setPosition(bounds.getCenter());
+				}
+
+				infoWindow.open(map);
+			}
+
 			// Zoom the map to fit the marker
 			function zoomToMarker(marker) {
 				map.setZoom(18);
@@ -706,8 +811,8 @@
 			// Zoom the map to fit the polygon bounds
 			function zoomToPolygon(polygon) {
 				var bounds = new google.maps.LatLngBounds();
-				polygon.getPath().forEach(function (latLng) {
-					bounds.extend(latLng);
+				polygon.getPath().forEach(function (path) {
+					bounds.extend(path);
 				});
 				map.fitBounds(bounds);
 			}

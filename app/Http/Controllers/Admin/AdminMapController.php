@@ -64,41 +64,20 @@ class AdminMapController extends Controller
 		}
 
 		$dataRealisasis = DataRealisasi::whereIn('no_ijin', $commitment->pluck('no_ijin'))
-			->with(['fototanam', 'fotoproduksi'])->get();
+			->get();
 
-		dd($dataRealisasis);
+		// dd($dataRealisasis);
 
 		$result = [];
 		foreach ($dataRealisasis as $dataRealisasi) {
 			$result[] = [
-				'id' => $dataRealisasi->id,
-				'npwp' => str_replace(['.', '-'], '', $dataRealisasi->npwp_company),
-				'company' => $dataRealisasi->commitment->datauser->company_name,
-				'noIjin' => str_replace(['.', '/'], '', $dataRealisasi->no_ijin),
-				'no_ijin' => $dataRealisasi->no_ijin,
-				'perioderiph' => $dataRealisasi->commitment->periodetahun,
-				'pks_mitra_id' => $dataRealisasi->poktan_id,
-				'no_perjanjian' => $dataRealisasi->pks->no_perjanjian,
-				'nama_kelompok' => $dataRealisasi->masterkelompok->nama_kelompok,
-				'nama_petani' => $dataRealisasi->masteranggota->nama_petani,
-
-				'nama_lokasi' => $dataRealisasi->nama_lokasi,
-				'varietas' => $dataRealisasi->pks->varietas->nama_varietas,
-				'latitude' => $dataRealisasi->latitude,
+				'id'		=> $dataRealisasi->id,
+				'noIjin'	=> str_replace(['.', '/'], '', $dataRealisasi->no_ijin),
+				'no_ijin'	=> $dataRealisasi->no_ijin,
+				'latitude'	=> $dataRealisasi->latitude,
 				'longitude' => $dataRealisasi->longitude,
 				'polygon'	=> $dataRealisasi->polygon,
-				'altitude' => $dataRealisasi->altitude,
-
-				'tgl_tanam' => $dataRealisasi->mulai_tanam,
-				'tgl_akhir_tanam' => $dataRealisasi->akhir_tanam,
-				'luas_tanam' => $dataRealisasi->luas_lahan,
-				'fotoTanam' => $dataRealisasi->fototanam,
-
-				'tgl_panen' => $dataRealisasi->mulai_panen,
-				'tgl_akhir_panen' => $dataRealisasi->akhir_panen,
-				'volume' => $dataRealisasi->volume,
-				'fotoProduksi' => $dataRealisasi->fotoproduksi,
-
+				'status' => isset($dataRealisasi->commitment->completed->status) ? $dataRealisasi->commitment->completed->status : 'default_status',
 			];
 		}
 		return response()->json($result);
