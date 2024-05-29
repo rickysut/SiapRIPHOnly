@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataRealisasi;
 use App\Models\Lokasi;
 use App\Models\PullRiph;
 use App\Models\User;
@@ -58,25 +59,53 @@ class LocationExportController extends Controller
 			substr($noIjin, 10, 2) . "/" .
 			substr($noIjin, 12, 4);
 
-		$company = PullRiph::where('no_ijin', $formattedNoIjin)
-			->select('npwp','no_ijin')
-			->with(['datauser' => function ($query) {
-				$query->select('npwp_company', 'company_name');
-			}])
-			->with(['datarealisasi' => function ($query) use ($formattedNoIjin) {
-				$query->with(['pks' => function ($query) use ($formattedNoIjin) {
-					$query->where('no_ijin', $formattedNoIjin)->select('no_ijin', 'id','npwp', 'poktan_id', 'no_perjanjian');
-				}])
-				->with('masteranggota:anggota_id,nama_petani')
-				->with('masterkelompok:id,poktan_id,nama_kelompok');
-			}])
-			->with(['completed' => function ($query) {
-				$query->select('no_ijin', 'status');
-			}])
-			->first();
+		$lokasi = DataRealisasi::where('no_ijin', $formattedNoIjin)
+			->with([
+				'commitment' => function ($query) use ($formattedNoIjin) {
+					$query->with([
+						'pks' => function ($query) use ($formattedNoIjin) {
+							$query->where('no_ijin', $formattedNoIjin)->select('no_ijin', 'id', 'npwp', 'poktan_id', 'no_perjanjian');
+						},
+						'completed'
+					]);
+				},
+				'masteranggota:anggota_id,nama_petani',
+				'masterkelompok:id,poktan_id,nama_kelompok'
+			])
+			->get()
+			->map(function ($item) {
+				$item->commitment_nama = $item->commitment->nama ?? null;
+				$item->status = $item->commitment->completed->status ?? null;
+				$item->no_pks = $item->commitment->pks[0]->no_perjanjian ?? null;
+				$item->nama_petani = $item->masteranggota->nama_petani ?? null;
+				$item->nama_kelompok = $item->masterkelompok->nama_kelompok ?? null;
 
-		return response()->json($company);
+				// Hapus properti relasi yang sudah dipindahkan
+				unset($item->commitment);
+				unset($item->masteranggota);
+				unset($item->masterkelompok);
+
+				return $item;
+			});
+
+
+		// $company = PullRiph::where('no_ijin', $formattedNoIjin)
+		// 	->select('npwp','no_ijin')
+		// 	->with(['datauser' => function ($query) {
+		// 		$query->select('npwp_company', 'company_name');
+		// 	}])
+		// 	->with(['datarealisasi' => function ($query) use ($formattedNoIjin) {
+		// 		$query->with(['pks' => function ($query) use ($formattedNoIjin) {
+		// 			$query->where('no_ijin', $formattedNoIjin)->select('no_ijin', 'id','npwp', 'poktan_id', 'no_perjanjian');
+		// 		}])
+		// 		->with('masteranggota:anggota_id,nama_petani')
+		// 		->with('masterkelompok:id,poktan_id,nama_kelompok');
+		// 	}])
+		// 	->first();
+
+		return response()->json($lokasi);
 	}
+
 
 	/**
 	 * Show the form for creating a new resource.

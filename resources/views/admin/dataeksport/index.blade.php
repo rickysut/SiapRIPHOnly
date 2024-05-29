@@ -43,13 +43,16 @@
 				</div>
 
 				<div class="panel-content">
-					<table id="dataLokasi" class="table table-responsive table-bordered table-hover table-striped table-sm w-100">
+					<div class="col-12">
+
+					<table id="dataLokasi" class="table table-bordered table-hover table-striped table-sm w-100">
 						<thead class="thead-themed">
 							<th>Perusahaan</th>
 							<th>Nomor Rekomendasi (RIPH)</th>
 							<th>Nomor Perjanjian</th>
 							<th>Nama Kelompok</th>
 							<th>Nama Lokasi</th>
+							<th>Nama Petani</th>
 							<th>Latitude</th>
 							<th>Longitude</th>
 							<th>Polygon</th>
@@ -62,6 +65,7 @@
 						<tbody>
 						</tbody>
 					</table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -111,53 +115,106 @@
 			});
 
 			var companyName = '';
-			var noIjinA = '';
+			var exportNoIjin = '';
 
 			$('#showButton').on('click', function() {
 				$('#dataLokasi').DataTable().clear().draw();
-				var noIjin = $('#company').val();
+				var companyInput = $('#company').val();
 
-				if (noIjin !== '') {
-					noIjin = noIjin.replace(/[\/\.]/g, '');
+				if (companyInput !== '') {
+					companyInput = companyInput.replace(/[\/\.]/g, '');
 
-					var url = "{{ route('admin.getLocationByIjin', ':noIjin') }}";
-					url = url.replace(':noIjin', encodeURIComponent(noIjin));
+					var url = "{{ route('admin.getLocationByIjin', ':companyInput') }}";
+					url = url.replace(':companyInput', encodeURIComponent(companyInput));
 
 					// Ambil data dari URL menggunakan AJAX
 					$.ajax({
 						url: url,
 						method: 'GET',
 						success: function(response) {
-							companyName = response.datauser.company_name;
-							noIjinA = response.no_ijin;
-							noIjinB = noIjinA.replace(/[\/\.]/g, '');
+							// Hapus data yang ada di tabel
 							$('#dataLokasi').DataTable().clear().draw();
 
-							$.each(response.datarealisasi, function(index, realisasi) {
+							// Tambahkan data realisasi ke dalam tabel
+							$.each(response, function(index, realisasi) {
+								if (index === 0) {
+									companyName = realisasi.commitment_nama;
+									noIjin = realisasi.no_ijin
+									exportNoIjin = noIjin.replace(/[\/\.]/g, '');
+								}
+
 								$('#dataLokasi').DataTable().row.add([
-									response.datauser.company_name,
-									response.no_ijin,
-									realisasi.pks.no_perjanjian,
-									realisasi.masterkelompok.nama_kelompok,
+									realisasi.commitment_nama,
+									realisasi.no_ijin,
+									realisasi.no_pks,
+									realisasi.nama_kelompok,
 									realisasi.nama_lokasi,
+									realisasi.nama_petani,
 									realisasi.latitude,
 									realisasi.longitude,
 									realisasi.polygon,
 									realisasi.luas_lahan,
 									realisasi.mulai_tanam,
-									realisasi.mulai_panen,
 									realisasi.volume,
-									response.completed.status,
+									realisasi.mulai_panen,
+									realisasi.status,
 								]).draw();
 							});
 						},
 						error: function(xhr, status, error) {
 							console.error(error);
-							// Handle error jika terjadi
 						}
 					});
 				}
 			});
+
+			// $('#showButton').on('click', function() {
+			// 	$('#dataLokasi').DataTable().clear().draw();
+			// 	var noIjin = $('#company').val();
+			// 	console.log('raw no ijin: ', noIjin);
+
+			// 	if (noIjin !== '') {
+			// 		noIjin = noIjin.replace(/[\/\.]/g, '');
+			// 		console.log('formatted: ', noIjin);
+
+			// 		var url = "{{ route('admin.getLocationByIjin', ':noIjin') }}";
+			// 		url = url.replace(':noIjin', encodeURIComponent(noIjin));
+
+			// 		// Ambil data dari URL menggunakan AJAX
+			// 		$.ajax({
+			// 			url: url,
+			// 			method: 'GET',
+			// 			success: function(response) {
+			// 				companyName = response.datauser.company_name;
+			// 				noIjinA = response.no_ijin;
+			// 				noIjinB = noIjinA.replace(/[\/\.]/g, '');
+			// 				$('#dataLokasi').DataTable().clear().draw();
+
+			// 				$.each(response.datarealisasi, function(index, realisasi) {
+			// 					$('#dataLokasi').DataTable().row.add([
+			// 						response.datauser.company_name,
+			// 						response.no_ijin,
+			// 						realisasi.pks.no_perjanjian,
+			// 						realisasi.masterkelompok.nama_kelompok,
+			// 						realisasi.nama_lokasi,
+			// 						realisasi.latitude,
+			// 						realisasi.longitude,
+			// 						realisasi.polygon,
+			// 						realisasi.luas_lahan,
+			// 						realisasi.mulai_tanam,
+			// 						realisasi.mulai_panen,
+			// 						realisasi.volume,
+			// 						response.completed.status,
+			// 					]).draw();
+			// 				});
+			// 			},
+			// 			error: function(xhr, status, error) {
+			// 				console.error(error);
+			// 				// Handle error jika terjadi
+			// 			}
+			// 		});
+			// 	}
+			// });
 
 			$(document).ready(function() {
 				$('#dataLokasi').DataTable({
@@ -165,15 +222,22 @@
 					lengthChange: false,
 					dom:
 						"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'<'select'>>>" + // Move the select element to the left of the datatable buttons
-						"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+						"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
 						"<'row'<'col-sm-12'tr>>" +
 						"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+					columnDefs: [
+						{
+							targets: [0,1,2,3,4,8], // Kolom ke-5 (index dimulai dari 0), yaitu kolom 'polygon'
+							visible: false, // Sembunyikan kolom pada tampilan DataTable
+							exportable: true // Tetap tampilkan kolom saat ekspor
+						}
+					],
 					buttons: [
 						{
 							extend: 'csvHtml5',
 							text: '<i class="fal fa-file-csv"></i>',
 							title: function() {
-								return companyName + "_" + noIjinB;
+								return companyName + "_" + exportNoIjin;
 							},
 							titleAttr: 'Generate CSV',
 							className: 'btn-success btn-sm btn-icon mr-1'
