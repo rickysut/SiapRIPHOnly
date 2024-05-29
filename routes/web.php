@@ -39,6 +39,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('mapDataByYear/{periodeTahun}', 'UserMapDashboard@ByYears')->name('mapDataByYear');
 	Route::get('mapDataById/{id}', 'UserMapDashboard@show')->name('mapDataById');
 
+	//export data lokasi
+	Route::get('/getCompaniesByYear/{year}', 'LocationExportController@getCompaniesByYear')->name('getCompaniesByYear');
+	Route::get('/getLocationByIjin/{noIjin}', 'LocationExportController@getLocationByIjin')->name('getLocationByIjin');
+	Route::get('location/export', 'LocationExportController@index')->name('locationexport');
+
 	//data pemetaan
 	Route::group(['prefix' => 'map', 'as' => 'map.'], function () {
 		Route::get('getAllMap', 'AdminMapController@index')->name('getAllMap');

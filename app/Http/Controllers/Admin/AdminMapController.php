@@ -66,6 +66,8 @@ class AdminMapController extends Controller
 		$dataRealisasis = DataRealisasi::whereIn('no_ijin', $commitment->pluck('no_ijin'))
 			->with(['fototanam', 'fotoproduksi'])->get();
 
+		dd($dataRealisasis);
+
 		$result = [];
 		foreach ($dataRealisasis as $dataRealisasi) {
 			$result[] = [

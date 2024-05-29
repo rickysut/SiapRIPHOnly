@@ -521,6 +521,13 @@
 							<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>{{ trans('cruds.masterriph.title_lang') }}
 						</a>
 					</li>
+					<li class="c-sidebar-nav-item {{ request()->is('admin/riphAdmin') || request()->is('admin/riphAdmin/*') ? 'active' : '' }}">
+						<a href="{{ route('admin.locationexport') }}"
+							data-filter-tags="data benchmark riph tahunan">
+							<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>
+							Eksport Data Lokasi
+						</a>
+					</li>
 				@endcan
 
 				{{-- Master template --}}
