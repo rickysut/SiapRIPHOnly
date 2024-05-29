@@ -73,18 +73,7 @@ class LocationExportController extends Controller
 			->with(['completed' => function ($query) {
 				$query->select('no_ijin', 'status');
 			}])
-			// ->with(['lokasi' => function ($query) use ($formattedNoIjin) {
-			// 	$query->select('no_ijin', 'poktan_id', 'anggota_id', 'nama_lokasi')
-			// 		->with(['pks' => function ($query) use ($formattedNoIjin) {
-			// 			$query->where('no_ijin', $formattedNoIjin)->select('no_ijin', 'npwp', 'poktan_id', 'no_perjanjian');
-			// 		}])
-			// 		->with('masteranggota:anggota_id,nama_petani')
-			// 		->with('masterkelompok:id,poktan_id,nama_kelompok');
-			// }])
 			->first();
-
-		return response()->json($company);
-
 
 		return response()->json($company);
 	}
