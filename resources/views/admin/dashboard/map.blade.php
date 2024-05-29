@@ -29,6 +29,10 @@
 					<ul class="list-group">
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<span class="text-muted">Nomor RIPH</span>
+							<span class="fw-500" id="company"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Nomor RIPH</span>
 							<span class="fw-500" id="no_ijin"></span>
 						</li>
 						<li class="list-group-item d-flex justify-content-between align-items-center">
@@ -676,7 +680,6 @@
 				});
 			}
 
-
 			// Show marker details in a modal
 			function showMarkerDetails(marker, markerId) {
 				var geocoder = new google.maps.Geocoder();
@@ -722,7 +725,7 @@
 									var company = markerData.company;
 
 									// Update the modal elements with the marker data
-									$("#company").text(company);
+									$("#company").text(markerData.company);
 									$("#no_ijin").text(no_ijin);
 									$("#perioderiph").text(perioderiph);
 									$("#pks").text(no_perjanjian);
