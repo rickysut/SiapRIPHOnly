@@ -220,7 +220,12 @@ class PksController extends Controller
 			->where('poktan_id', $pks->poktan_id)
 			->get();
 
-		$sumLuas = $lokasis->sum('luas_tanam');
+			$dataRealisasi = DataRealisasi::where('npwp_company', $npwpCompany)
+			->where('no_ijin', $pks->no_ijin)
+			->where('poktan_id', $pks->poktan_id)
+			->get();
+
+		$sumLuas = $lokasis->sum('luas_lahan');
 		$sumProduksi = $lokasis->sum('volume');
 		// dd($sumLuas, $sumProduksi);
 
