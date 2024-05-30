@@ -33,7 +33,7 @@ class LocationExportController extends Controller
 
 	public function getCompaniesByYear($year)
 	{
-		$companies = PullRiph::select('no_ijin', 'user_id', 'npwp')->with('datauser')
+		$companies = PullRiph::select('no_ijin', 'user_id', 'npwp')->with('datauser')->has('datarealisasi')
 			->get()
 			->filter(function ($item) use ($year) {
 				return substr($item->no_ijin, -4) == $year;
@@ -106,70 +106,15 @@ class LocationExportController extends Controller
 		return response()->json($lokasi);
 	}
 
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create()
+	public function getRealisasiCompany($year)
 	{
-		//
-	}
+		$companies = PullRiph::where('periodetahun', $year)
+                ->has('datarealisasi')  // Filter companies that have datarealisasi
+                ->select('id', 'no_ijin', 'nama')
+                ->get();
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request)
-	{
-		//
-	}
+		$count = $companies->count();
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
-	{
-		//
+    	return response()->json($count);
 	}
 }

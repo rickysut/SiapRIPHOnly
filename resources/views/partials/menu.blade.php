@@ -668,6 +668,10 @@
 				</a>
 			</li>
 
+			@can('spatial_data_access')
+			<li class="nav-title" data-i18n="nav.administation">SPATIAL SYSTEM</li>
+			@endcan
+
 			{{-- personalisasi --}}
 			<li class="nav-title" data-i18n="nav.administation">PERSONALISASI</li>
 			{{-- Change Password --}}

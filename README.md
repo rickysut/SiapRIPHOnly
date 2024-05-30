@@ -25,3 +25,16 @@
 4. field luas_lahan di db data_realisasi menjadi double
 5. menambahkan catch error message untuk debug di PullRiphController
 6. menambahkan catch error message untuk debug di LoginController
+7. reduce data load on initmap (attempt: 1)
+8. count and sum method change to DataRealisasi instead of Lokasi
+9. New Template SKL Heading
+
+
+## Next Dev
+1. Reduce data load on initmap (attempt: 2)
+2. Give Administrator ability to reject the SKL Approval Submission
+3. Give user ability to change the data after Approval rejection
+4. Add new fields for Administrator to report where the product shall be go (sales in weight, keep in weight) in SKL Approval form.
+5. Advance. Change user behavior from map drawing and or uploading the KML to only select available area based on the farmer National ID.
+a. this will need new modules and database table
+b. new crud

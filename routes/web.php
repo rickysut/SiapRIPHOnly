@@ -43,6 +43,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('/getCompaniesByYear/{year}', 'LocationExportController@getCompaniesByYear')->name('getCompaniesByYear');
 	Route::get('/getLocationByIjin/{noIjin}', 'LocationExportController@getLocationByIjin')->name('getLocationByIjin');
 	Route::get('location/export', 'LocationExportController@index')->name('locationexport');
+	Route::get('realisasi/{year}/company', 'LocationExportController@getRealisasiCompany')->name('getRealisasiCompany');
 
 	//data pemetaan
 	Route::group(['prefix' => 'map', 'as' => 'map.'], function () {
