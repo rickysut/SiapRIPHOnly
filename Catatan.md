@@ -47,7 +47,7 @@ Analisa SWOT
 	c. Ketergantungan pada Sumber Daya Luar: Ketergantungan pada sumber daya dan teknologi dari pihak ketiga dapat menjadi ancaman jika terjadi kendala dalam penyediaan atau maintenance sistem.
 
 
-saya ingin menambahkan aspek-aspek:
+aspek-aspek:
 1. sumber daya (manusia, biaya) dan perangkat dalam pengumpulan data;
 2. perubahan kepemilikian dan atau pengusaaan lahan;
 3. aspek perubahan metode penyediaan data kelompok tani dan anggota kelompok tani yang sebelumnya dari aplikasi SIAPRIPH, kini dari sistem bank data spasial yang baru
