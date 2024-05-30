@@ -142,13 +142,15 @@
 							</tbody>
 							<tfoot class="thead-themed">
 								<tr>
-									<th></th>
-									<th class="text-right">Total Luas</th>
+									<th class="text-right" colspan="7">TOTAL REALISASI</th>
+								</tr>
+								<tr>
+									<th class="text-right" colspan="6">Luas Tanam: </th>
 									<th class="text-right">{{$sumLuas}} ha</th>
-									<th class="text-right">Total Produksi</th>
+								</tr>
+								<tr>
+									<th class="text-right" colspan="6">Volume Panen</th>
 									<th class="text-right">{{$sumProduksi}} ton</th>
-									<th></th>
-									<th></th>
 								</tr>
 							</tfoot>
 						</table>

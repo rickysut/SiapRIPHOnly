@@ -225,8 +225,8 @@ class PksController extends Controller
 			->where('poktan_id', $pks->poktan_id)
 			->get();
 
-		$sumLuas = $lokasis->sum('luas_lahan');
-		$sumProduksi = $lokasis->sum('volume');
+		$sumLuas = $dataRealisasi->sum('luas_lahan');
+		$sumProduksi = $dataRealisasi->sum('volume');
 		// dd($sumLuas, $sumProduksi);
 
 		if (empty($commitment->status) || $commitment->status == 3 || $commitment->status == 5) {
