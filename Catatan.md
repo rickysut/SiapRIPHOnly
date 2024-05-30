@@ -12,7 +12,7 @@ Menyediakan Bank Data lokasi (spasial) wajib tanam dan produksi bawang putih dal
 a. Kelompok Tani
 b. Anggota Kelompok Tani
 c. Data Spasial Lahan Anggota Kelompok Tani
-d. ...
+d. mengubah alur data kelompok tani dan anggota kelompok tani dari RIPH ke sistem bank data lokasi
 
 Analisa SWOT
 
@@ -28,7 +28,7 @@ Analisa SWOT
 
 	c. Perubahan Kepemilikan/Penguasaan Lahan: Dinamika kepemilikan dan penguasaan lahan yang sering berubah dapat mempengaruhi keakuratan dan keandalan data.
 
-	d. Tantangan dalam transisi Perubahan metode pengambilan data anggota kelompok tani yang sebelumnya dari Aplikasi SIAPRIPH sekarang diambil dari BANK DATA SPASIAL.
+	d. Tantangan dalam transisi Perubahan metode pengambilan data, (data anggota kelompok tani yang sebelumnya dari Aplikasi SIAPRIPH. kelak diambil dari BANK DATA SPASIAL), yang pasti akan mengubah bisnis proses (alur) pada sistem eksisting.
 
 3. Opportunities
 	a. Tersedianya Bank Data Spasial: Tersedianya bank data spasial lahan wajib tanam bawang putih untuk menghilangkan hambatan/kesulitan dalam menentukan titik lokasi dan pembuatan data poligon yang selama ini dirasakan oleh pengguna/pelaku usaha importir bawang putih, sehingga kelak pengguna tinggal memilih lokasi dari data yang disediakan.
