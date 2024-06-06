@@ -19,11 +19,8 @@ return new class extends Migration
 			$table->string('npwp')->nullable();
 			$table->string('no_ijin')->nullable();
 			$table->unsignedBigInteger('poktan_id')->nullable();
-			$table->string('kode_spatial', 16)->unique();
-			$table->string('ktp_petani', 255)->nullable();
 			$table->unsignedBigInteger('anggota_id')->nullable();
 			$table->string('nama_lokasi')->nullable();
-			$table->integer('jml_titik')->nullable();
 			$table->double('luas_lahan')->nullable();
 			$table->string('periode_tanam')->nullable();
 			$table->text('latitude')->nullable();
@@ -32,12 +29,10 @@ return new class extends Migration
 			$table->text('polygon')->nullable();
 			$table->decimal('luas_kira')->nullable();
 			$table->date('tgl_tanam')->nullable();
-			$table->date('tgl_akhir_tanam')->nullable();
 			$table->decimal('luas_tanam')->nullable();
 			$table->string('tanam_doc')->nullable();
 			$table->string('tanam_pict')->nullable();
 			$table->date('tgl_panen')->nullable();
-			$table->date('tgl_akhir_panen')->nullable();
 			$table->decimal('volume')->nullable();
 			$table->string('panen_doc')->nullable();
 			$table->string('panen_pict')->nullable();

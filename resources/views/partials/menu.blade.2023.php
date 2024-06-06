@@ -46,33 +46,18 @@
 				<i class="fal fa-angle-down"></i>
 			</a>
 		</div>
-		<div class="container" style="background-color: rgba(253, 0, 0, 0.281)">
+		<div class="container" style="background-color: rgba(0, 0, 0, 0.2)">
 			<ul id="date" class="list-table m-auto pt-3 pb-3">
 				<li>
-					{{-- <span class="d-inline-block" style="color:white"
-						data-filter-tags="date day today todate">
-						<span class="nav-link-text js-get-date">Hari ini</span>
-					</span> --}}
 					<span class="d-inline-block" style="color:white"
 						data-filter-tags="date day today todate">
-						<h4 class="nav-link-text">
-							SIMETHRIS 3.1 (2023)
-						</h4>
+						<span class="nav-link-text js-get-date">Hari ini</span>
 					</span>
 				</li>
 			</ul>
 		</div>
 		<ul id="js-nav-menu" class="nav-menu">
-			<li class="c-sidebar-nav-item">
-				<a href="{{ route('2024.admin.home') }}" title="Peta Wajib Tanam"
-					data-filter-tags="Pelaporan tahun 2024">
-					<i class="fa-fw fal fa-calendar c-sidebar-nav-icon"></i>
-					<span class="nav-link-text">Ke Simethris 4.@</span>
-				</a>
-			</li>
-
 			{{-- landing / beranda --}}
-			<li class="nav-title text-white" ></li>
 			@can('landing_access')
 				<li class="c-sidebar-nav-item {{ request()->is('admin') ? 'active' : '' }}">
 					<a href="{{ route('admin.home') }}" class="c-sidebar-nav-link"

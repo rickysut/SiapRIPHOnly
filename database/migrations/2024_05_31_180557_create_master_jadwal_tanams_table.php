@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('foreign_apis', function (Blueprint $table) {
+        Schema::create('master_jadwal_tanams', function (Blueprint $table) {
             $table->id();
-			$table->string('provider', 50);
-			$table->text('key');
-			$table->string('deskripsi', 55)->nullable;
-			$table->int('status')->nullable;
+			$table->string('kode_spatial', 16);
+			$table->date('awal_masa')->nullable();
+			$table->date('akhir_masa')->nullable();
             $table->timestamps();
-			$table->SoftDeletes();
+			$table->softDeletes();
         });
     }
 
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('foreign_apis');
+        Schema::dropIfExists('master_jadwal_tanams');
     }
 };

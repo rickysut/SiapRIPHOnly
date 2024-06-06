@@ -1,4 +1,4 @@
-<aside class="page-sidebar">
+<aside class="page-sidebar" >
 	<div class="page-logo">
 		<a href="/admin" class="page-logo-link press-scale-down d-flex align-items-center position-relative">
 			<img src="{{ asset('img/favicon.png') }}" alt="Simethris" aria-roledescription="logo">
@@ -46,7 +46,7 @@
 				<i class="fal fa-angle-down"></i>
 			</a>
 		</div>
-		<div class="container" style="background-color: rgba(253, 0, 0, 0.281)">
+		<div class="container" style="background-color: rgba(0, 0, 0, 0.2)">
 			<ul id="date" class="list-table m-auto pt-3 pb-3">
 				<li>
 					{{-- <span class="d-inline-block" style="color:white"
@@ -55,24 +55,25 @@
 					</span> --}}
 					<span class="d-inline-block" style="color:white"
 						data-filter-tags="date day today todate">
-						<h4 class="nav-link-text">
-							SIMETHRIS 3.1 (2023)
-						</h4>
+						<h5 class="nav-link-text">
+							SIMETHRIS 4.@
+						</h5>
 					</span>
 				</li>
 			</ul>
 		</div>
 		<ul id="js-nav-menu" class="nav-menu">
 			<li class="c-sidebar-nav-item">
-				<a href="{{ route('2024.admin.home') }}" title="Peta Wajib Tanam"
-					data-filter-tags="Pelaporan tahun 2024">
-					<i class="fa-fw fal fa-calendar c-sidebar-nav-icon"></i>
-					<span class="nav-link-text">Ke Simethris 4.@</span>
+				<a href="{{ route('admin.home') }}" title="Pilih Tahun Pelaporan" data-filter-tags="tahun pelaporan">
+					<i class="fal fa-calendar"></i>
+					<span class="nav-link-text">Ke Simethris 3.1 (2023)</span>
 				</a>
 			</li>
 
+
 			{{-- landing / beranda --}}
-			<li class="nav-title text-white" ></li>
+			<li class="nav-title text-white"></li>
+
 			@can('landing_access')
 				<li class="c-sidebar-nav-item {{ request()->is('admin') ? 'active' : '' }}">
 					<a href="{{ route('admin.home') }}" class="c-sidebar-nav-link"
@@ -83,7 +84,6 @@
 					</a>
 				</li>
 			@endcan
-
 			{{-- dashhboard --}}
 			@can('dashboard_access')
 				@if (Auth::user()->roles[0]->title == 'User')
@@ -160,8 +160,8 @@
 			@can('user_task_access')
 				<li class="nav-title">Pelaporan Realisasi</li>
 				@can('pull_access')
-					<li class="c-sidebar-nav-item {{ request()->is('admin/task/pull') ? 'active' : '' }}">
-						<a href="{{ route('admin.task.pull') }}"
+					<li class="c-sidebar-nav-item {{ request()->is('2024/user/pull') ? 'active' : '' }}">
+						<a href="{{ route('2024.user.pull.index') }}"
 							data-filter-tags="sinkronisasi sync tarik data siap riph">
 							<i class="fa-fw fal fa-sync-alt c-sidebar-nav-icon">
 							</i>
@@ -171,9 +171,8 @@
 				@endcan
 				@can('commitment_access')
 					@if (Auth::user()->roles[0]->title == 'User')
-						<li class="c-sidebar-nav-item {{ request()->is('admin/task/commitment') ||
-						request()->is('admin/task/pks*') ? 'active' : '' }}">
-							<a href="{{ route('admin.task.commitment') }}"
+						<li class="c-sidebar-nav-item {{ request()->is('2024/user/commitment*') ? 'active' : '' }}">
+							<a href="{{ route('2024.user.commitment.index') }}"
 								data-filter-tags="daftar komitmen riph index">
 								<i class="fa-fw fal fa-ballot c-sidebar-nav-icon"></i>
 								{{ trans('cruds.commitment.title_lang') }}
@@ -636,6 +635,41 @@
 			@endcan
 			@endif
 
+
+			@can('spatial_data_access')
+				<li class="nav-title" data-i18n="nav.administation">DATA CPCL</li>
+				<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/list') ? 'active' : '' }}">
+					<a href="{{route('2024.spatial.index')}}" title="Coming soon!"
+					data-filter-tags="data spatial spasial">
+						<i class="fal fa-users"></i>
+						<span class="nav-link-text">Daftar CPCL</span>
+					</a>
+				</li>
+				<li class="c-sidebar-nav-item">
+					<a href="javascript:void(0);" title="Coming soon!"
+					data-filter-tags="data spatial spasial">
+						<i class="fal fa-user-plus"></i>
+						<span class="nav-link-text">CPCL Baru</span>
+					</a>
+				</li>
+
+				<li class="nav-title" data-i18n="nav.administation">DATA SPATIAL</li>
+				<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/list') ? 'active' : '' }}">
+					<a href="{{route('2024.spatial.index')}}" title="Coming soon!"
+					data-filter-tags="data spatial spasial">
+						<i class="fal fa-map"></i>
+						<span class="nav-link-text">Daftar Lokasi</span>
+					</a>
+				</li>
+				<li class="c-sidebar-nav-item">
+					<a href="javascript:void(0);" title="Coming soon!"
+					data-filter-tags="data spatial spasial">
+						<i class="fal fa-map-marker-plus"></i>
+						<span class="nav-link-text">Peta Lokasi Baru</span>
+					</a>
+				</li>
+			@endcan
+
 			{{-- support --}}
 			<li class="nav-title" data-i18n="nav.administation">DUKUNGAN</li>
 			@can('administrator_access')
@@ -675,6 +709,7 @@
 				</a>
 			</li>
 			@endif
+
 			<li class="disabled">
 				<a href="javascript:void(0);" title="Coming soon!"
 				data-filter-tags="dukungan support tiket" disabled>
@@ -682,10 +717,6 @@
 					<span class="nav-link-text">Tiket Bantuan</span>
 				</a>
 			</li>
-
-			@can('spatial_data_access')
-			<li class="nav-title" data-i18n="nav.administation">SPATIAL SYSTEM</li>
-			@endcan
 
 			{{-- personalisasi --}}
 			<li class="nav-title" data-i18n="nav.administation">PERSONALISASI</li>

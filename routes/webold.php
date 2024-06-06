@@ -15,17 +15,9 @@ Route::get('/v2/register', function () {
 
 Route::get('/home', function () {
 	if (session('status')) {
-		if (Auth::user()->roles[0]->title == 'Spatial Administrator' || Auth::user()->roles[0]->title == 'Spatial Staff') {
-			return redirect()->route('2024.spatial.home')->with('status', session('status'));
-		}else{
-			return redirect()->route('admin.home')->with('status', session('status'));
-		}
-	}
-	if (Auth::user()->roles[0]->title == 'Spatial Administrator' || Auth::user()->roles[0]->title == 'Spatial Staff') {
-		return redirect()->route('2024.spatial.home')->with('status', session('status'));
-	}else{
 		return redirect()->route('admin.home')->with('status', session('status'));
 	}
+	return redirect()->route('admin.home');
 });
 
 
@@ -171,11 +163,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 			//pengisian data realisasi
 			Route::get('{id}/realisasi', 'CommitmentController@realisasi')->name('realisasi');
 			Route::post('{id}/realisasi/storeUserDocs', 'CommitmentController@storeUserDocs')->name('realisasi.storeUserDocs');
-
 			Route::get('{id}/penangkar', 'PenangkarRiphController@mitra')->name('penangkar');
 			Route::post('{id}/penangkar/store', 'PenangkarRiphController@store')->name('penangkar.store');
-
-
 		});
 		Route::delete('commitmentmd', 'CommitmentController@massDestroy')->name('commitment.massDestroy');
 
@@ -279,6 +268,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('produksi/listLokasi/{id}', 'DataLokasiTanamController@listLokasiTanamProduksi')->name('ajuproduksi.listlokasi');
 });
 
+//route untuk Pelaku usaha
+Route::group(['prefix' => 'importir', 'as' => 'importir.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
+});
+
 Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' => 'Verifikator', 'middleware' => ['auth']], function () {
 
 	//verifikasi data lokasi tanam
@@ -377,7 +370,6 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
 
 Route::group(['prefix' => 'wilayah', 'as' => 'wilayah.', 'namespace' => 'Wilayah', 'middleware' => ['auth']], function () {
 	Route::get('getAllProvinsi', 'GetWilayahController@getAllProvinsi');
-	Route::get('getAllKabupaten', 'GetWilayahController@getAllKabupaten');
 	Route::get('getKabupatenByProvinsi/{provinsiId}', 'GetWilayahController@getKabupatenByProvinsi');
 	Route::get('getKecamatanByKabupaten/{id}', 'GetWilayahController@getKecamatanByKabupaten');
 	Route::get('getDesaByKec/{kecamatanId}', 'GetWilayahController@getDesaByKecamatan');
@@ -409,82 +401,3 @@ Route::group(['prefix' => 'test', 'as' => 'test.', 'namespace' => 'Admin', 'midd
 	Route::get('files', 'ListFileController@index')->name('files');
 	Route::delete('files', 'ListFileController@destroy')->name('files.delete');
 });
-
-
-//Route untuk simethris 2024
-Route::group(['prefix' => '2024', 'as' => '2024.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
-	Route::group(['namespace' => 'Thn2024'], function () {
-
-		Route::group(['prefix' => 'datafeeder', 'as' => 'datafeeder.'], function () {
-			Route::get('/getPksById/{id}', 'DataFeederController@getPksById')->name('getPksById');
-			Route::get('/getPksByIjin/{id}', 'DataFeederController@getPksByIjin')->name('getPksByIjin');
-			Route::get('/getLokasiByPks/{noIjin}/{poktanId}', 'DataFeederController@getLokasiByPks')->name('getLokasiByPks');
-			Route::get('/getSpatialByKecamatan/{kecId}', 'DataFeederController@getSpatialByKecamatan')->name('getSpatialByKecamatan');
-			Route::get('/getSpatialByKode/{spatial}', 'DataFeederController@getSpatialByKode')->name('getSpatialByKode');
-			Route::get('/getAllSpatials', 'DataFeederController@getAllSpatials')->name('getAllSpatials');
-		});
-
-		//route untuk adminisrator
-		Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-			Route::get('/', 'HomeController@index')->name('home');
-		});
-
-		//route untuk pejabat
-		Route::group(['prefix' => 'pejabat', 'as' => 'pejabat.'], function () {
-			Route::get('/', 'HomeController@index')->name('home');
-		});
-
-		//route untuk verifikator
-		Route::group(['prefix' => 'verifikator', 'as' => 'verifikator.'], function () {
-			Route::get('/', 'HomeController@index')->name('home');
-		});
-
-		//route untuk pelaku usaha
-		Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
-			Route::get('/', 'HomeController@index')->name('home');
-
-			//pullriph
-			Route::group(['prefix' => 'pull', 'as' => 'pull.'], function () {
-				Route::get('/', 'PullRiphController@index')->name('index');
-				Route::get('/getriph', 'PullRiphController@pull')->name('getriph');
-				Route::post('/store', 'PullRiphController@store')->name('store');
-			});
-
-
-			//commitment
-			Route::group(['prefix' => 'commitment', 'as' => 'commitment.'], function () {
-				Route::get('/', 'CommitmentController@index')->name('index');
-				Route::get('{id}/show', 'CommitmentController@show')->name('show');
-				Route::put('pks/{id}/update', 'CommitmentController@updatePks')->name('updatepks');
-				Route::delete('{pullriph}', 'CommitmentController@destroy')->name('destroy');
-
-				//pengisian data realisasi
-				Route::get('{id}/realisasi', 'CommitmentController@realisasi')->name('realisasi');
-				Route::post('{id}/realisasi/storeUserDocs', 'CommitmentController@storeUserDocs')->name('storeUserDocs');
-				Route::get('daftarlokasi/{noIjin}/{poktanId}', 'PksController@daftarLokasi')->name('daftarLokasi');
-				Route::get('addrealisasi/{noIjin}/{spatial}', 'PksController@addrealisasi')->name('addrealisasi');
-
-				Route::get('{id}/penangkar', 'PenangkarRiphController@mitra')->name('penangkar');
-				Route::post('{id}/penangkar/store', 'PenangkarRiphController@store')->name('penangkar.store');
-				Route::delete('/commitmentmd', 'CommitmentController@massDestroy')->name('massDestroy');
-
-				//daftar anggota & lokasi by pks
-				// Route::get('/', 'CommitmentController@index')->name('index');
-			});
-
-			//pks
-			Route::group(['prefix' => 'pks', 'as' => 'pks.'], function () {
-
-			});
-		});
-
-		//route untuk tim spatial
-		Route::group(['prefix' => 'spatial', 'as' => 'spatial.'], function () {
-			Route::get('/', 'HomeController@index')->name('home');
-			Route::get('/list', 'SpatialController@index')->name('index');
-			Route::get('/createsingle', 'SpatialController@createsingle')->name('createsingle');
-		});
-	});
-});
-
-

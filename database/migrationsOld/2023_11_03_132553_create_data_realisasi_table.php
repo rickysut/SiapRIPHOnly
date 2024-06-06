@@ -19,10 +19,8 @@ return new class extends Migration
 			$table->string('no_ijin');
 			$table->bigInteger('poktan_id');
 			$table->bigInteger('pks_id');
-			$table->string('ktp_petani', 16);
 			$table->bigInteger('anggota_id');
 			$table->bigInteger('lokasi_id');
-			$table->string('kode_spatial')->nullable();
 
 			//data spasial
 			$table->string('nama_lokasi')->nullable();
@@ -35,7 +33,7 @@ return new class extends Migration
 			//data tanam
 			$table->date('mulai_tanam')->nullable();
 			$table->date('akhir_tanam')->nullable();
-			$table->double('luas_lahan')->nullable();
+			$table->decimal('luas_lahan')->nullable();
 			$table->json('foto_tanam')->nullable();
 
 			//data produksi

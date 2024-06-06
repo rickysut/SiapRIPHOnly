@@ -16,9 +16,6 @@ return new class extends Migration
 		Schema::dropIfExists('saprodis');
 		Schema::create('saprodis', function (Blueprint $table) {
 			$table->bigIncrements('id');
-			$table->string('kode_spatial')->nullable(); // untuk kebutuhan mendatang, by lokasi
-			$table->string('ktp_petani')->nullable(); // untuk kebutuhan mendatang, by petani
-			$table->string('poktan_id')->nullable(); // untuk kebutuhan mendatang, by poktan
 			$table->unsignedBigInteger('pks_id')->nullable();
 			$table->string('npwp')->nullable();
 			$table->string('no_ijin')->nullable();

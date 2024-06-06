@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
 			$table->string('provider', 50);
 			$table->text('key');
-			$table->string('deskripsi', 55)->nullable;
 			$table->int('status')->nullable;
             $table->timestamps();
 			$table->SoftDeletes();

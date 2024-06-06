@@ -16,10 +16,8 @@ return new class extends Migration
         Schema::dropIfExists('master_poktans');
         Schema::create('master_poktans', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('npwp', 50); //jangan digunakan
-            $table->string('poktan_id'); //id dari riph
-            $table->string('kode_register', 50);
-			$table->text('alamat')->nullable();
+            $table->string('npwp', 50);
+            $table->string('poktan_id');
             $table->string('id_provinsi')->nullable();
             $table->string('id_kabupaten')->nullable();
             $table->string('id_kecamatan')->nullable();

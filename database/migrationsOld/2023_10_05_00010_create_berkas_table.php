@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('foreign_apis', function (Blueprint $table) {
-            $table->id();
-			$table->string('provider', 50);
-			$table->text('key');
-			$table->string('deskripsi', 55)->nullable;
-			$table->int('status')->nullable;
+        Schema::create('berkas', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('kind');
+            $table->string('name');
+            $table->string('description');
             $table->timestamps();
-			$table->SoftDeletes();
+            $table->softDeletes();
         });
     }
 
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('foreign_apis');
+        Schema::dropIfExists('berkas');
     }
 };

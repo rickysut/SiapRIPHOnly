@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('foreign_apis', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-			$table->string('provider', 50);
-			$table->text('key');
-			$table->string('deskripsi', 55)->nullable;
-			$table->int('status')->nullable;
+            $table->string('name');
+            $table->string('slug');
             $table->timestamps();
-			$table->SoftDeletes();
+            $table->softDeletes();
+            $table->string('hexcolor', 8);
+            $table->string('textcolor', 8);
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('foreign_apis');
+        Schema::dropIfExists('categories');
     }
 };
