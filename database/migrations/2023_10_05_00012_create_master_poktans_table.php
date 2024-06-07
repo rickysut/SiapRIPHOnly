@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('nama_kelompok')->nullable();
             $table->string('nama_pimpinan')->nullable();
             $table->string('hp_pimpinan')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

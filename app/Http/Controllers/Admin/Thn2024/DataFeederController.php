@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Thn2024;
 use App\Http\Controllers\Controller;
 use App\Models2024\Lokasi;
 use App\Models2024\MasterAnggota;
+use App\Models2024\MasterPoktan;
 use App\Models2024\MasterSpatial;
 use App\Models2024\Pks;
 use App\Models2024\PullRiph;
@@ -215,4 +216,92 @@ class DataFeederController extends Controller
 			'data' => $spatials,
 		]);
 	}
+
+	public function getAllPoktan(Request $request)
+{
+    $draw = $request->input('draw', 1);
+    $start = $request->input('start', 0);
+    $length = $request->input('length', 10);
+    $searchValue = $request->input('search.value', '');
+
+    $data = MasterPoktan::with([
+        'provinsi',
+        'kabupaten',
+        'kecamatan',
+        'desa',
+    ])->get();
+
+    $query = $data->map(function ($item) {
+        return [
+            'id' => $item->id,
+            'nama_kelompok' => $item->nama_kelompok,
+            'nama_pimpinan' => $item->nama_pimpinan,
+            'hp_pimpinan' => $item->hp_pimpinan,
+            'id_provinsi' => $item->id_provinsi,
+            'nama_provinsi' => $item->provinsi ? $item->provinsi->nama : null,
+            'id_kabupaten' => $item->id_kabupaten,
+            'nama_kabupaten' => $item->kabupaten ? $item->kabupaten->nama_kab : null,
+            'id_kecamatan' => $item->id_kecamatan,
+            'nama_kecamatan' => $item->kecamatan ? $item->kecamatan->nama_kecamatan : null,
+            'id_kelurahan' => $item->id_kelurahan,
+            'nama_desa' => $item->desa ? $item->desa->nama_desa : null,
+        ];
+    });
+
+    if ($searchValue) {
+        $query = $query->filter(function ($item) use ($searchValue) {
+            return strpos(strtolower($item['nama_kelompok']), strtolower($searchValue)) !== false ||
+                   strpos(strtolower($item['nama_pimpinan']), strtolower($searchValue)) !== false ||
+                   strpos(strtolower($item['hp_pimpinan']), strtolower($searchValue)) !== false ||
+                   strpos(strtolower($item['nama_provinsi']), strtolower($searchValue)) !== false ||
+                   strpos(strtolower($item['nama_kabupaten']), strtolower($searchValue)) !== false ||
+                   strpos(strtolower($item['nama_kecamatan']), strtolower($searchValue)) !== false ||
+                   strpos(strtolower($item['nama_desa']), strtolower($searchValue)) !== false;
+        });
+    }
+
+    if ($request->has('order')) {
+        $orderColumn = $request->input('order')[0]['column'];
+        $orderDirection = $request->input('order')[0]['dir'];
+        $columnName = $request->input('columns')[$orderColumn]['data'];
+
+        // Gunakan switch case atau if else untuk menentukan kolom pengurutan
+        switch ($columnName) {
+            case 'nama_kelompok':
+                $query = $query->sortBy('nama_kelompok');
+                break;
+			case 'nama_pimpinan':
+				$query = $query->sortByDesc('nama_pimpinan');
+				break;
+			case 'kontak':
+				$query = $query->sortByDesc('kontak');
+				break;
+			case 'nama_provinsi':
+				$query = $query->sortByDesc('nama_provinsi');
+				break;
+			case 'nama_kabupaten':
+				$query = $query->sortByDesc('nama_kabupaten');
+				break;
+			case 'nama_kecamatan':
+				$query = $query->sortByDesc('nama_kecamatan');
+				break;
+			case 'nama_desa':
+				$query = $query->sortByDesc('nama_desa');
+				break;
+        }
+    }
+
+    $totalRecords = $data->count();
+    $filteredRecords = $query->count();
+
+    $poktans = $query->slice($start)->take($length)->values();
+
+    return response()->json([
+        'draw' => $draw,
+        'recordsTotal' => $totalRecords,
+        'recordsFiltered' => $filteredRecords,
+        'data' => $poktans,
+    ]);
+}
+
 }

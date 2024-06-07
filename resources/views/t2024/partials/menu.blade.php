@@ -636,13 +636,13 @@
 			@endif
 
 
-			@can('spatial_data_access')
+			@can('cpcl_data_access')
 				<li class="nav-title" data-i18n="nav.administation">DATA CPCL</li>
-				<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/list') ? 'active' : '' }}">
-					<a href="{{route('2024.spatial.index')}}" title="Coming soon!"
+				<li class="c-sidebar-nav-item {{ request()->is('2024/cpcl/poktan*') ? 'active' : '' }}">
+					<a href="{{route('2024.cpcl.poktan.index')}}" title="Coming soon!"
 					data-filter-tags="data spatial spasial">
 						<i class="fal fa-users"></i>
-						<span class="nav-link-text">Daftar CPCL</span>
+						<span class="nav-link-text">Daftar Kelompok Tani</span>
 					</a>
 				</li>
 				<li class="c-sidebar-nav-item">

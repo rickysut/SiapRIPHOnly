@@ -486,104 +486,71 @@
 				kabupatenSelect.empty();
 				kecamatanSelect.empty();
 				desaSelect.empty();
-
-				// Menambahkan opsi default untuk kabupaten, kecamatan, dan desa
 				kabupatenSelect.append($('<option>', {
 					value: '',
-					text: 'Select District'
+					text: '-- pilih kabupaten'
 				}));
 				kecamatanSelect.append($('<option>', {
 					value: '',
-					text: 'Select Sub-district'
+					text: '-- pilih kecamatan'
 				}));
 				desaSelect.append($('<option>', {
 					value: '',
-					text: 'Select Village'
+					text: '-- pilih desa'
 				}));
 
-				// Mengambil data kabupaten berdasarkan provinsi yang dipilih
 				$.get('/wilayah/getKabupatenByProvinsi/' + selectedProvinsiId, function (data) {
-					// Mengisi elemen <select> kabupaten dengan opsi berdasarkan data kabupaten yang diterima
 					$.each(data, function (key, value) {
 						var option = $('<option>', {
 							value: value.kabupaten_id,
 							text: value.nama_kab
 						});
 
-						// Memeriksa apakah nilai "old" ada dan sama dengan nilai kabupaten_id
-						if ('{{ old("kabupaten") }}' == value.kabupaten_id) {
-							option.attr('selected', 'selected');
-						}
-
 						kabupatenSelect.append(option);
 					});
 				});
 			});
 
-			// Menambahkan event listener untuk perubahan pada elemen <select> kabupaten
 			kabupatenSelect.change(function () {
 				var selectedKabupatenId = kabupatenSelect.val();
-
-				// Mengosongkan elemen <select> kecamatan dan desa
 				kecamatanSelect.empty();
 				desaSelect.empty();
 
-				// Menambahkan opsi default untuk kecamatan dan desa
 				kecamatanSelect.append($('<option>', {
 					value: '',
-					text: 'Select Sub-district'
+					text: '-- pilih kecamatan'
 				}));
 				desaSelect.append($('<option>', {
 					value: '',
-					text: 'Select Village'
+					text: '-- pilih desa'
 				}));
 
-				// Mengambil data kecamatan berdasarkan kabupaten yang dipilih
 				$.get('/wilayah/getKecamatanByKabupaten/' + selectedKabupatenId, function (data) {
-					// Mengisi elemen <select> kecamatan dengan opsi berdasarkan data kecamatan yang diterima
 					$.each(data, function (key, value) {
 						var option = $('<option>', {
 							value: value.kecamatan_id,
 							text: value.nama_kecamatan
 						});
-
-						// Memeriksa apakah nilai "old" ada dan sama dengan nilai kecamatan_id
-						if ('{{ old("kecamatan") }}' == value.kecamatan_id) {
-							option.attr('selected', 'selected');
-						}
-
 						kecamatanSelect.append(option);
 					});
 				});
 			});
 
-			// Menambahkan event listener untuk perubahan pada elemen <select> kecamatan
 			kecamatanSelect.change(function () {
 				var selectedKecamatanId = kecamatanSelect.val();
-
-				// Mengosongkan elemen <select> desa
 				desaSelect.empty();
 
-				// Menambahkan opsi default untuk desa
 				desaSelect.append($('<option>', {
 					value: '',
-					text: 'Select Village'
+					text: '-- pilih desa'
 				}));
 
-				// Mengambil data desa berdasarkan kecamatan yang dipilih
 				$.get('/wilayah/getDesaByKec/' + selectedKecamatanId, function (data) {
-					// Mengisi elemen <select> desa dengan opsi berdasarkan data desa yang diterima
 					$.each(data, function (key, value) {
 						var option = $('<option>', {
 							value: value.kelurahan_id,
 							text: value.nama_desa
 						});
-
-						// Memeriksa apakah nilai "old" ada dan sama dengan nilai kelurahan_id
-						if ('{{ old("desa") }}' == value.kelurahan_id) {
-							option.attr('selected', 'selected');
-						}
-
 						desaSelect.append(option);
 					});
 				});
