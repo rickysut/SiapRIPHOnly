@@ -16,7 +16,7 @@
 				<i class="fal fa-print mr-1"></i> Cetak SKL
 			</button>
 		@elseif (Auth::user()->roles[0]->title == 'Pejabat')
-			<a class="btn btn-sm btn-info mr-1" href="{{route('verification.skl.recomendation.show', $verifikasi->id)}}" role="button"><i class="fal fa-undo text-align-center"></i> Kembali</a>
+			{{-- <a class="btn btn-sm btn-info mr-1" href="{{route('verification.skl.recomendation.show', $verifikasi->id)}}" role="button"><i class="fal fa-undo text-align-center"></i> Kembali</a> --}}
 			<button class="btn btn-sm btn-danger" type="submit">
 				<i class="fas fa-upload text-align-center"></i>Terbitkan SKL
 			</button>
