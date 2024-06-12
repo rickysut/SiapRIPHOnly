@@ -41,7 +41,7 @@
 									<label class="form-label" for="id_provinsi">Provinsi <span class="text-danger">*</span></label>
 									<select id="id_provinsi" name="id_provinsi" class="form-control w-100 @error('id_provinsi') is-invalid @enderror" required>
 										<option value="" hidden></option>
-										<option value="{{$poktan->id_provinsi}}" selected>{{$poktan->provinsi->nama}}</option>
+										<option value="{{$poktan->provinsi_id}}" selected>{{$poktan->provinsi->nama}}</option>
 									</select>
 									<span class="help-block" id="help-provinsi"></span>
 								</div>
@@ -49,7 +49,7 @@
 									<label class="form-label" for="id_kabupaten">Kabupaten <span class="text-danger">*</span></label>
 									<select id="id_kabupaten" name="id_kabupaten" class="form-control w-100 @error('id_kabupaten') is-invalid @enderror" required>
 										<option value="" hidden></option>
-										<option value="{{$poktan->id_kabupaten}}" selected>{{$poktan->kabupaten->nama_kab}}</option>
+										<option value="{{$poktan->kabupaten_id}}" selected>{{$poktan->kabupaten->nama_kab}}</option>
 									</select>
 									<div class="help-block" id="help-kabupaten"></div>
 								</div>
@@ -59,7 +59,7 @@
 									<label class="form-label" for="id_kecamatan">Kecamatan <span class="text-danger">*</span></label>
 									<select id="id_kecamatan" name="id_kecamatan" class="form-control @error('id_kecamatan') is-invalid @enderror" required>
 										<option value="" hidden></option>
-										<option value="{{$poktan->id_kecamatan}}" selected>{{$poktan->kecamatan->nama_kecamatan}}</option>
+										<option value="{{$poktan->kecamatan_id}}" selected>{{$poktan->kecamatan->nama_kecamatan}}</option>
 									</select>
 									<div class="help-block" id="help-kecamatan"></div>
 								</div>
@@ -67,15 +67,15 @@
 									<label class="form-label" for="id_kelurahan">Desa/Kelurahan <span class="text-danger">*</span></label>
 									<select id="id_kelurahan" name="id_kelurahan" class="form-control @error('id_kelurahan') is-invalid @enderror" required>
 										<option value="" hidden></option>
-										<option value="{{$poktan->id_kelurahan}}" selected>{{$poktan->desa->nama_desa}}</option>
+										<option value="{{$poktan->kelurahan_id}}" selected>{{$poktan->desa->nama_desa}}</option>
 									</select>
 									<div class="help-block" id="help-desa"></div>
 								</div>
 							</div>
 							<div class="form-group row d-flex align-items-end">
 								<div class="col-lg-4">
-									<label class="form-label" for="poktan_id">ID Poktan di RIPH <span class="text-danger">*</span></label>
-									<input type="text" id="poktan_id" name="poktan_id"  class="form-control @error('poktan_id') is-invalid @enderror" placeholder="id poktan di aplikasi riph" value="{{$poktan->poktan_id}}">
+									<label class="form-label" for="kode_register">Kode Registrasi <span class="text-danger">*</span></label>
+									<input type="text" id="kode_register" name="kode_register"  class="form-control @error('kode_register') is-invalid @enderror" placeholder="kode registrasi kelompok tani" value="{{$poktan->kode_register}}">
 									<span class="help-block" id="help-poktanid"></span>
 								</div>
 								<div class="col-lg-2">

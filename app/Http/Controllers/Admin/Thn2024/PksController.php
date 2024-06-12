@@ -120,6 +120,79 @@ class PksController extends Controller
 		return view('t2024.pks.addLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class','data', 'mapkey', 'kabupatens'));
 	}
 
+	public function createPks($noIjin, $poktanId)
+	{
+		$module_name = 'PKS';
+		$page_title = 'PKS';
+		$page_heading = 'Perjanjian Kerjasama';
+		$heading_class = 'fal fa-signature';
+
+		$ijin = substr($noIjin, 0, 4) . '/' .
+			substr($noIjin, 4, 2) . '.' .
+			substr($noIjin, 6, 3) . '/' .
+			substr($noIjin, 9, 1) . '/' .
+			substr($noIjin, 10, 2) . '/' .
+			substr($noIjin, 12, 4);
+
+		$poktan = MasterPoktan::find($poktanId);
+
+		$varietass = Varietas::select('id', 'nama_varietas')->get();
+
+
+		return view('t2024.pks.create', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'ijin', 'poktanId', 'poktan', 'varietass'));
+	}
+
+	public function storePks(Request $request){
+		DB::beginTransaction();
+
+		try {
+
+			// dd($request->all());
+			$pks = new Pks();
+
+			$npwp_company = Auth::user()->data_user->npwp_company;
+			$poktanId = $request->input('poktan_id');
+			$noIjin = $request->input('no_ijin');
+
+			$commitment = PullRiph::where('no_ijin', $noIjin)->first();
+
+			$noIjinString = str_replace(['/', '.', '-'], '', $noIjin);
+
+			$filenpwp = str_replace(['.', '-'], '', $npwp_company);
+			$pks->no_ijin = $request->input('no_ijin');
+			$pks->poktan_id = $request->input('poktan_id');
+			$pks->no_perjanjian = $request->input('no_perjanjian');
+			$pks->tgl_perjanjian_start = $request->input('tgl_perjanjian_start');
+			$pks->tgl_perjanjian_end = $request->input('tgl_perjanjian_end');
+			$pks->varietas_tanam = $request->input('varietas_tanam');
+			$pks->periode_tanam = $request->input('periode_tanam');
+
+			if ($request->hasFile('berkas_pks')) {
+				$file = $request->file('berkas_pks');
+				$request->validate([
+					'berkas_pks' => 'mimes:pdf',
+				]);
+				$filename = 'pks_' . $filenpwp . '_' . $noIjinString . '_' . $poktanId . '_' . time() . '.' . $file->extension();
+				$path = 'uploads/' . $filenpwp . '/' . $commitment->periodetahun;
+				$file->storeAs($path, $filename, 'public');
+				if (Storage::disk('public')->exists($path . '/' . $filename)) {
+					$pks->berkas_pks = $filename;
+				} else {
+					return redirect()->back()->with('error', "Gagal mengunggah berkas. Error: " . $e->getMessage());
+				}
+			}
+
+			$pks->save();
+
+			DB::commit();
+
+			return response()->json(['message' => 'Data PKS berhasil diperbarui'], 200);
+		} catch (\Exception $e) {
+			DB::rollback();
+			return response()->json(['message' => 'Gagal memperbarui data PKS: ' . $e->getMessage()], 500);
+		}
+	}
+
 	public function index(Request $request)
 	{
 		abort_if(Gate::denies('pks_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -650,38 +723,5 @@ class PksController extends Controller
 	}
 
 
-	//unused
-	public function create($id)
-	{
-		$npwp = (Auth::user()::find(Auth::user()->id)->data_user->npwp_company ?? null);
 
-		$nomor = Str::substr($no_riph, 0, 4) . '/' . Str::substr($no_riph, 4, 2) . '.' . Str::substr($no_riph, 6, 3) . '/' .
-			Str::substr($no_riph, 9, 1) . '/' . Str::substr($no_riph, 10, 2) . '/' . Str::substr($no_riph, 12, 4);
-
-		$query = 'select g.nama_kelompok, g.id_kecamatan, g.id_kelurahan , count(p.nama_petani) as jum_petani, round(SUM(p.luas_lahan),2) as luas from poktans p, group_tanis g where p.npwp = "' . $npwp . '"' . ' and p.id_poktan=g.id_poktan and g.no_riph= "' . $nomor . '" and g.id_poktan = "' . $poktan . '" GROUP BY g.nama_kelompok';
-
-
-		$poktans = DB::select(DB::raw($query));
-		// dd($poktans);
-		foreach ($poktans as $poktan) {
-			$access_token = $this->getAPIAccessToken(config('app.simevi_user'), config('app.simevi_pwd'));
-			$datakecamatan = $this->getAPIKecamatan($access_token, $poktan->id_kecamatan);
-			if ($datakecamatan['data'][0]) {
-				$kec = $datakecamatan['data'][0]['nm_kec'];
-				$poktan->kecamatan = $kec;
-			}
-			$datakelurahan = $this->getAPIDesa($access_token, $poktan->id_kelurahan);
-			if ($datakelurahan['data'][0]) {
-				$desa = $datakelurahan['data'][0]['nm_desa'];
-				$poktan->kelurahan = $desa;
-			}
-		}
-
-		// dd($poktans);
-		$module_name = 'Proses RIPH';
-		$page_title = 'Kelompok Tani';
-		$page_heading = 'Buat PKS ';
-		$heading_class = 'fal fa-ballot-check';
-		return view('admin.pks.create', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'poktans'));
-	}
 }

@@ -19,7 +19,11 @@
 						Daftar <span class="fw-300"><i>Realisasi Lokasi dan Pelaksana</i></span>
 					</h2>
 					<div class="panel-toolbar">
-						<div class="btn-group">
+						<a href="{{route('2024.spatial.createsingle')}}" class="btn btn-xs btn-primary waves-effect waves-themed" data-toggle="tooltip" data-offset="0,10" data-original-title="Buat Peta Tunggal baru (Manual)">
+							<i class="fal fa-map-marked-alt"></i>
+							Buat/Import Peta Baru
+						</a>
+						<div class="btn-group" hidden>
 							<button type="button" class="btn btn-xs btn-primary waves-effect waves-themed">
 								<i class="fal fa-plus mr-1"></i>
 								Peta Baru
@@ -94,6 +98,10 @@
 				type: "GET",
 				dataSrc: "data"
 			},
+			"columnDefs": [
+				{ "targets": [2,3], "className": "text-right" },
+				{ "targets": [4], "className": "text-center" },
+			],
 			columns:[
 				{data: 'kode_spatial'},
 				{data: 'ktp_petani',
@@ -101,13 +109,51 @@
 						return row.anggota.nama_petani;
 					}
 				},
-				{data: 'luas_lahan'},
+				{
+					data: 'luas_lahan',
+					render: function(data, type, row) {
+						// if (type === 'display') {
+						// 	return parseFloat(data).toLocaleString('id-ID', {
+						// 		minimumFractionDigits: 2,
+						// 		maximumFractionDigits: 2
+						// 	});
+						// }
+						var luasHektare = parseFloat(data) / 10000;
+						return luasHektare.toLocaleString('id-ID', {
+							minimumFractionDigits: 4,
+							maximumFractionDigits: 4
+						});
+						return `
+							<div class="justify-content-end">`
+								+ data + `
+							</div>
+							`;
+					}
+				},
 				{data: 'provinsi_id',
 					render: function (data, type, row) {
 						return row.provinsi.nama;
 					}
 				},
-				{data: 'kode_spatial'},
+
+				{
+					data: 'kode_spatial',
+					render: function(data, type, row) {
+						var kode = data.replace(/[^a-zA-Z0-9]/g, '');
+
+						var url = "{{ route('2024.spatial.edit', ':kode') }}";
+						url = url.replace(':kode', kode);
+						var link = `
+							<div class="justify-content-center">
+								<a href="${url}" class="btn btn-icon btn-xs btn-default waves-effect waves-themed" data-toggle="tooltip" data-offset="0,10" data-original-title="Buat Peta Tunggal baru (Manual)">
+									<i class="fal fa-edit"></i>
+								</a>
+							</div>
+						`;
+
+						return link;
+					}
+				}
 			],
 			buttons: [
 				{

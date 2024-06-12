@@ -14,7 +14,7 @@ class DataRealisasi extends Model
 {
 	use HasFactory, SoftDeletes, Auditable;
 
-	public $table = 'data_realisasi';
+	public $table = 't2024_data_realisasi';
 
 	protected $fillable = [
 		'npwp_company',

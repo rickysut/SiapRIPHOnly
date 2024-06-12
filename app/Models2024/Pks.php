@@ -48,7 +48,7 @@ class Pks extends Model
 
 	public function masterpoktan()
 	{
-		return $this->belongsTo(MasterPoktan::class, 'poktan_id', 'poktan_id');
+		return $this->belongsTo(MasterPoktan::class, 'poktan_id');
 	}
 
 	public function anggota()

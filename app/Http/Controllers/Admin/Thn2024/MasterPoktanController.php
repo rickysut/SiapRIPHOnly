@@ -34,7 +34,6 @@ class MasterPoktanController extends Controller
 		$heading_class = 'fal fa-users';
 
 		return view('t2024.masterpoktan.create', compact('module_name', 'page_title', 'page_heading', 'heading_class'));
-
     }
     public function store(Request $request)
     {

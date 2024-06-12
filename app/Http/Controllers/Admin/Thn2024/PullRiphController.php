@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Thn2024;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 use App\Models2024\PullRiph;
 use App\Models2024\AjuVerifProduksi;
 use App\Models2024\AjuVerifSkl;
@@ -12,6 +13,7 @@ use App\Models2024\Completed;
 use App\Models2024\DataRealisasi;
 use App\Models2024\Lokasi;
 use App\Models2024\Pks;
+use Exception;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
@@ -30,7 +32,7 @@ class PullRiphController extends Controller
 		$page_title = 'Tarik Data RIPH';
 		$page_heading = 'Tarik Data RIPH';
 		$heading_class = 'fa fa-sync-alt';
-		$npwp_company = (Auth::user()::find(Auth::user()->id)->npwp_company ?? null);
+		$npwp_company = (Auth::user()::find(Auth::user()->id)->data_user->npwp_company ?? null);
 		$noIjins = PullRiph::where('npwp', $npwp_company)->select('no_ijin')->get();
 		// Cari ajutanam yang memiliki nomor ijin dari $noIjins
 		$ajutanam = AjuVerifTanam::whereIn('no_ijin', $noIjins)->get();
@@ -70,7 +72,6 @@ class PullRiphController extends Controller
 			$response = $client->__soapCall('get_riph', $parameter);
 		} catch (\Exception $e) {
 			$errorMessage = $e->getMessage();
-			// Log pesan kesalahan ke dalam file log laravel
 			Log::error("Error: $errorMessage. Code: " . $e->getCode() . ". Trace: " . $e->getTraceAsString());
 			return redirect()->back()->with('error', 'Pull Method. Error while trying to retrieve data. Please Contact Administrator for this error: (' . $errorMessage . ')');
 		}
@@ -79,48 +80,49 @@ class PullRiphController extends Controller
 		return $res;
 	}
 
+
+
 	public function store(Request $request)
 	{
-		$filepath = '';
+		$jsonData = [];
+
 		try {
-			$options = array(
-				'soap_version' => SOAP_1_1,
-				'exceptions' => true,
-				'trace' => 1,
-				'cache_wsdl' => WSDL_CACHE_MEMORY,
-				'connection_timeout' => 25,
-				'style' => SOAP_RPC,
-				'use' => SOAP_ENCODED,
-			);
-
-			$client = new \SoapClient('https://riph.pertanian.go.id/api.php/simethris?wsdl', $options);
+			// Get and sanitize NPWP
 			$stnpwp = $request->get('npwp');
-			$npwp = str_replace('.', '', $stnpwp);
-			$npwp = str_replace('-', '', $npwp);
-			$noijin =  $request->get('no_ijin');
-			$fijin = str_replace('.', '', $noijin);
-			$fijin = str_replace('/', '', $fijin);
-			$parameter = array(
-				'user' => 'simethris',
-				'pass' => 'wsriphsimethris',
-				'npwp' => $npwp,
-				'nomor' =>  $request->get('no_ijin')
-			);
-			$response = $client->__soapCall('get_riph', $parameter);
-			$datariph = json_encode((array)simplexml_load_string($response));
-			$filepath = 'uploads/' . $npwp . '/' . $fijin . '.json';
-			Storage::disk('public')->put($filepath, $datariph);
-		} catch (\Exception $e) {
-			$errorMessage = $e->getMessage();
-			Log::error("Error: $errorMessage. Code: " . $e->getCode() . ". Trace: " . $e->getTraceAsString());
-			return redirect()->back()->with('error', 'Soap Error while trying to connect to Client. Please Contact Administrator for this error: (' . $errorMessage . ')');
-		}
+			$npwp = str_replace(['.', '-'], '', $stnpwp);
 
-		// dd($datariph);
+			// Get and sanitize no_ijin
+			$noijin = $request->get('no_ijin');
+			$fijin = str_replace(['.', '/'], '', $noijin);
+
+			// Construct the file source path
+			$fileSource = 'uploads/' . $fijin . '.json';
+
+			// Check if the file exists
+			if (!Storage::disk('public')->exists($fileSource)) {
+				throw new Exception("File not found: " . $fileSource);
+			}
+
+			// Load file content
+			$response = Storage::disk('public')->get($fileSource);
+
+			// Decode JSON content into an associative array
+			$jsonData = json_decode($response, true);
+
+			// Validate the JSON structure as needed
+			if (json_last_error() !== JSON_ERROR_NONE) {
+				throw new Exception("Error decoding JSON: " . json_last_error_msg());
+			}
+		} catch (\Exception $e) {
+			// Handle exceptions and errors
+			$errorMessage = $e->getMessage();
+			return redirect()->back()->with('error', 'Error while trying to access the file. Please contact the administrator for this error: (' . $errorMessage . ')');
+		}
 
 		$user = Auth::user();
 		DB::beginTransaction();
 		try {
+			// Update or create PullRiph record
 			$riph = PullRiph::updateOrCreate(
 				[
 					'npwp' => $stnpwp,
@@ -129,29 +131,27 @@ class PullRiphController extends Controller
 				],
 				[
 					'keterangan'        => $request->get('keterangan'),
-					'nama'                => $request->get('nama'),
-					'periodetahun'        => $request->get('periodetahun'),
-					'tgl_ijin'            => $request->get('tgl_ijin'),
-					'tgl_akhir'            => $request->get('tgl_akhir'),
-					'no_hs'                => $request->get('no_hs'),
-					'volume_riph'        => $request->get('volume_riph'),
-					'volume_produksi'    => $request->get('volume_produksi'),
-					'luas_wajib_tanam'    => $request->get('luas_wajib_tanam'),
-					'stok_mandiri'        => $request->get('stok_mandiri'),
-					'pupuk_organik'        => $request->get('pupuk_organik'),
-					'npk'                => $request->get('npk'),
-					'dolomit'            => $request->get('dolomit'),
+					'nama'              => $request->get('nama'),
+					'periodetahun'      => $request->get('periodetahun'),
+					'tgl_ijin'          => $request->get('tgl_ijin'),
+					'tgl_akhir'         => $request->get('tgl_akhir'),
+					'no_hs'             => $request->get('no_hs'),
+					'volume_riph'       => $request->get('volume_riph'),
+					'volume_produksi'   => $request->get('volume_produksi'),
+					'luas_wajib_tanam'  => $request->get('luas_wajib_tanam'),
+					'stok_mandiri'      => $request->get('stok_mandiri'),
+					'pupuk_organik'     => $request->get('pupuk_organik'),
+					'npk'               => $request->get('npk'),
+					'dolomit'           => $request->get('dolomit'),
 					'za'                => $request->get('za'),
-					'mulsa'                => $request->get('mulsa'),
-					'datariph' => $filepath
+					'mulsa'             => $request->get('mulsa'),
+					'datariph'          => json_encode($jsonData) // Save the decoded JSON data as string
 				]
 			);
 
-			$dtjson = json_decode($datariph);
 			if ($riph) {
-				$lastPoktan = '';
-				if ($dtjson->riph->wajib_tanam->kelompoktani->loop === null) {
-					return redirect()->back()->with('error', 'Gagal menyimpan. Data Kelompok tani tidak lengkap.');
+				if (!isset($jsonData['riph']['wajib_tanam']['rencanalokasi']['loop'])) {
+					return redirect()->back()->with('error', 'Gagal menyimpan. Data tidak lengkap.');
 				} else {
 					DataRealisasi::where([
 						'npwp_company' => $stnpwp,
@@ -162,157 +162,27 @@ class PullRiphController extends Controller
 						'npwp' => $stnpwp,
 						'no_ijin' => $noijin,
 					])->forceDelete();
-					PKS::where([
-						'npwp' => $stnpwp,
-						'no_ijin' => $noijin,
-					])->forceDelete();
 
-					if (is_array($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
-						// Kelompoktani adalah array
-						foreach ($dtjson->riph->wajib_tanam->kelompoktani->loop as $poktan) {
-							$nama = trim($poktan->nama_kelompok, ' ');
-
-							$lastLokasi = Lokasi::where('kode_spatial', 'like', 'KRA-020-%')->orderBy('kode_spatial', 'desc')->first();
-
-							// Ambil 4 digit terakhir dan tambahkan 1, atau gunakan '0001' jika tidak ada data sebelumnya
-							if ($lastLokasi) {
-								$lastKdSpatial = (int)substr($lastLokasi->kode_spatial, -4);
-								$newKdSpatial = 'KRA-020-' . str_pad($lastKdSpatial + 1, 4, '0', STR_PAD_LEFT);
-							} else {
-								$newKdSpatial = 'KRA-020-0001';
-							}
-
-
-							$ktp = isset($poktan->ktp_petani) ? $poktan->ktp_petani : '';
-							if (is_string($ktp)) {
-								// Menghapus karakter yang tidak diperlukan
-								$ktp = preg_replace('/[^0-9\p{Latin}\pP\p{Sc}@\s]+/u', '', $ktp);
-								$ktp = trim($ktp, "\u{00a0}");
-								$ktp = trim($ktp, "\u{00c2}");
-							} else {
-								// Kesalahan terdeteksi jika $ktp bukan string
-								$ktp = "";
-							}
-
-							$periodeTanam = isset($poktan->periode_tanam) ? $poktan->periode_tanam : '';
-							if (is_string($periodeTanam)) {
-								$periodeTanam = $poktan->periode_tanam;
-							} else {
-								// Kesalahan terdeteksi jika $ktp bukan string
-								$periodeTanam = "";
-							}
-
-							$idpoktan = isset($poktan->id_poktan) ? trim($poktan->id_poktan, ' ') : '';
-							$idpetani = isset($poktan->id_petani) ? trim($poktan->id_petani, ' ') : '';
-							$idkabupaten = isset($poktan->id_kabupaten) ? trim($poktan->id_kabupaten, ' ') : '';
-							$idkecamatan = isset($poktan->id_kecamatan) ? trim($poktan->id_kecamatan, ' ') : '';
-							$idkelurahan = isset($poktan->id_kelurahan) && is_string($poktan->id_kelurahan) ? trim($poktan->id_kelurahan, ' ') : '';
-
-							$lastPoktan = $idpoktan;
-							Pks::updateOrCreate(
+					if (is_array($jsonData['riph']['wajib_tanam']['rencanalokasi']['loop'])) {
+						foreach ($jsonData['riph']['wajib_tanam']['rencanalokasi']['loop'] as $rlokasi) {
+							Lokasi::updateOrCreate(
 								[
 									'npwp' => $stnpwp,
 									'no_ijin' => $noijin,
-									'poktan_id' => $idpoktan
-								],
-								[
-									'kabupaten_id' => $idkabupaten,
-									'kecamatan_id' => $idkecamatan,
-									'kelurahan_id' => $idkelurahan
+									'kode_spatial' => $rlokasi['kode_spatial'],
+									'luas_lahan' => trim($rlokasi['luas_lahan']),
 								]
 							);
-
-							//lokasi, data ini milik komitmen tertentu dari perusahaan tertentu
-							$lokasi = Lokasi::updateOrCreate(
-								[
-									'npwp' => $stnpwp,
-									'no_ijin' => $noijin,
-									'kode_spatial' => $newKdSpatial,
-									'ktp_petani' => $ktp,
-									'poktan_id' => $idpoktan,
-									'anggota_id' => $idpetani,
-									'luas_lahan' => trim($poktan->luas_lahan, ' '),
-									'periode_tanam' => $periodeTanam,
-								],
-							);
 						}
-					} elseif (is_object($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
-						$poktan = $dtjson->riph->wajib_tanam->kelompoktani->loop;
-						$nama = trim($poktan->nama_kelompok, ' ');
-
-						$lastLokasi = Lokasi::where('kode_spatial', 'like', 'KRA-020-%')->orderBy('kode_spatial', 'desc')->first();
-
-						// Ambil 4 digit terakhir dan tambahkan 1, atau gunakan '0001' jika tidak ada data sebelumnya
-						if ($lastLokasi) {
-							$lastKdSpatial = (int)substr($lastLokasi->kode_spatial, -4);
-							$newKdSpatial = 'KRA-020-' . str_pad($lastKdSpatial + 1, 4, '0', STR_PAD_LEFT);
-						} else {
-							$newKdSpatial = 'KRA-020-0001';
-						}
-
-						$ktp = isset($poktan->ktp_petani) ? $poktan->ktp_petani : '';
-						if (is_string($ktp)) {
-							// Menghapus karakter yang tidak diperlukan
-							$ktp = preg_replace('/[^0-9\p{Latin}\pP\p{Sc}@\s]+/u', '', $ktp);
-							$ktp = trim($ktp, "\u{00a0}");
-							$ktp = trim($ktp, "\u{00c2}");
-						} else {
-							// Kesalahan terdeteksi jika $ktp bukan string
-							$ktp = "";
-						}
-
-						$periodeTanam = isset($poktan->periode_tanam) ? $poktan->periode_tanam : '';
-						if (is_string($periodeTanam)) {
-							$periodeTanam = $poktan->periode_tanam;
-						} else {
-							// Kesalahan terdeteksi jika $ktp bukan string
-							$periodeTanam = "";
-						}
-						$idpoktan = isset($poktan->id_poktan) ? trim($poktan->id_poktan, ' ') : '';
-						$idpetani = isset($poktan->id_petani) ? trim($poktan->id_petani, ' ') : '';
-						$idkabupaten = isset($poktan->id_kabupaten) ? trim($poktan->id_kabupaten, ' ') : '';
-						$idkecamatan = isset($poktan->id_kecamatan) ? trim($poktan->id_kecamatan, ' ') : '';
-						$idkelurahan = isset($poktan->id_kelurahan) && is_string($poktan->id_kelurahan) ? trim($poktan->id_kelurahan, ' ') : '';
-
-						DataRealisasi::where([
-							'npwp_company' => $stnpwp,
-							'no_ijin' => $noijin,
-						])->forceDelete();
-
-						Lokasi::where([
-							'npwp' => $stnpwp,
-							'no_ijin' => $noijin,
-						])->forceDelete();
-						PKS::where([
-							'npwp' => $stnpwp,
-							'no_ijin' => $noijin,
-						])->forceDelete();
-
-						$lastPoktan = $idpoktan;
-						Pks::updateOrCreate(
-							[
-								'npwp' => $stnpwp,
-								'no_ijin' => $noijin,
-								'poktan_id' => $idpoktan
-							],
-							[
-								'kabupaten_id' => $idkabupaten,
-								'kecamatan_id' => $idkecamatan,
-								'kelurahan_id' => $idkelurahan
-							]
-						);
-
+					} elseif (is_object($jsonData['riph']['wajib_tanam']['rencanalokasi']['loop'])) {
+						$rlokasi = $jsonData['riph']['wajib_tanam']['rencanalokasi']['loop'];
 						Lokasi::updateOrCreate(
 							[
 								'npwp' => $stnpwp,
 								'no_ijin' => $noijin,
-								'kode_spatial' => $newKdSpatial,
-								'ktp_petani' => $ktp,
-								'poktan_id' => $idpoktan,
-								'anggota_id' => $idpetani,
-								'luas_lahan' => trim($poktan->luas_lahan, ' '),
-								'periode_tanam' => $periodeTanam,
-							],
+								'kode_spatial' => $rlokasi['kode_spatial'],
+								'luas_lahan' => trim($rlokasi['luas_lahan']),
+							]
 						);
 					}
 				}
@@ -321,10 +191,10 @@ class PullRiphController extends Controller
 		} catch (\Exception $e) {
 			DB::rollback();
 			$errorMessage = $e->getMessage();
-			// Log pesan kesalahan ke dalam file log laravel
 			Log::error("Error: $errorMessage. Code: " . $e->getCode() . ". Trace: " . $e->getTraceAsString());
-			return redirect()->back()->with('error', 'Pull Store Method. Please Contact Administrator for this error: (' . $errorMessage . ')');
+			return redirect()->back()->with('error', 'Pull Store Method. Please contact the administrator for this error: (' . $errorMessage . ')');
 		}
+
 		return redirect()->route('2024.user.commitment.index')->with('success', 'Sukses menyimpan data dan dapat Anda lihat pada daftar di bawah ini.');
 	}
 }

@@ -6,6 +6,7 @@ use App\Models\MasterDesa;
 use App\Models\MasterKabupaten;
 use App\Models\MasterKecamatan;
 use App\Models\MasterProvinsi;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,7 +15,7 @@ class MasterSpatial extends Model
 {
     use HasFactory, SoftDeletes;
 
-	public $table = 'master_spatials';
+	public $table = 't2024_master_spatials';
 
 	protected $dates = [
 		'created_at',
@@ -38,6 +39,10 @@ class MasterSpatial extends Model
 		'kabupaten_id',
 		'kecamatan_id',
 		'kelurahan_id',
+		'kml_url',
+		'nama_petugas',
+		'tgl_peta',
+		'tgl_tanam'
 	];
 
 	public function anggota()

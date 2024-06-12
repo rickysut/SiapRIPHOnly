@@ -39,6 +39,31 @@
 			<div class="panel" id="panel-5">
 				<div class="panel-container show">
 					<div class="panel-content">
+						<div class="row d-flex justify-content-between align-items-end">
+							<div class="col-lg-10">
+								<div class="form-group">
+									<label class="form-label" for="selectPoktan">Buat PKS</label>
+									<div class="input-group">
+										<select class="custom-select" id="selectPoktan" name="selectPoktan" aria-label="Example select with button addon">
+											@foreach ($poktans as $poktan)
+												<option value="" hidden>piilh kelompok tani</option>
+												<option value="{{$poktan->id}}">{{$poktan->nama_kelompok}}</option>
+											@endforeach
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-2 mt-1">
+								@php
+									$ijin = str_replace(['/', '.', '-'], '', $commitment->no_ijin);
+								@endphp
+								<div class="text-right">
+									<button class="btn btn-primary waves-effect waves-themed" type="button" id="createPksButton" data-ijin="{{$ijin}}">Buat PKS</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-content">
 						<table id="tblPks" class="table table-sm table-bordered table-hover table-striped w-100">
 							<thead>
 								<tr>
@@ -545,6 +570,27 @@
 <script>
 	$(document).ready(function()
 	{
+		$("#selectPoktan").select2({
+			placeholder: "-- pilih poktan"
+		});
+
+		$('#createPksButton').on('click', function() {
+            var selectedPoktanId = $('#selectPoktan').val();
+            var noIjin = $(this).data('ijin');
+
+            if (!selectedPoktanId) {
+                alert('Pilih kelompok tani terlebih dahulu.');
+                return;
+            }
+
+            var url = '{{ route("2024.user.commitment.pks.create", ["noIjin" => ":no_ijin", "poktanId" => ":poktanId"]) }}';
+
+            url = url.replace(':no_ijin', noIjin);
+            url = url.replace(':poktanId', selectedPoktanId);
+
+            window.location.href = url;
+        });
+
 		var varietass = {!! json_encode($varietass) !!};
 		var csrfToken = $('meta[name="csrf-token"]').attr('content');
 		var noIjin = '{{$commitment->no_ijin}}';

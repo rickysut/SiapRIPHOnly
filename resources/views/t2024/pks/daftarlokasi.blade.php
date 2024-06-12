@@ -134,7 +134,7 @@
 					data: 'ktp_petani',
 					name: 'nama_petani',
 					render: function (data, type, row) {
-						return row.masteranggota.nama_petani + ' / ' + data;
+						return row.anggota.nama_petani + ' / ' + data;
 					}
 				},
 				{

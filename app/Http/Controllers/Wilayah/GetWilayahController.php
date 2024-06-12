@@ -87,4 +87,64 @@ class GetWilayahController extends Controller
 
 		return response()->json($result);
 	}
+
+	public function getDesaById($id)
+	{
+		$desa = MasterDesa::where('kelurahan_id', $id)->first();
+
+		$data = $desa ? [
+			'kelurahan_id' => $desa->kelurahan_id,
+			'nama_desa' => $desa->nama_desa,
+		] : [
+			'kelurahan_id' => 'Kode tidak terdaftar',
+			'nama_desa' => 'Desa tidak terdaftar',
+		];
+
+		return response()->json($data);
+	}
+
+	public function getKecById($id)
+	{
+		$kecamatan = MasterKecamatan::where('kecamatan_id', $id)->first();
+
+		$data = $kecamatan ? [
+			'kecamatan_id' => $kecamatan->kecamatan_id,
+			'nama_kecamatan' => $kecamatan->nama_kecamatan,
+		] : [
+			'kecamatan_id' => 'Kode tidak terdaftar',
+			'nama_kecamatan' => 'Kecamatan tidak terdaftar',
+		];
+
+		return response()->json($data);
+	}
+
+	public function getKabById($id)
+	{
+		$kabupaten = MasterKabupaten::where('kabupaten_id', $id)->first();
+
+		$data = $kabupaten ? [
+			'kabupaten_id' => $kabupaten->kabupaten_id,
+			'nama_kab' => $kabupaten->nama_kab,
+		] : [
+			'kabupaten_id' => 'Kode tidak terdaftar',
+			'nama_kab' => 'Kabupaten tidak terdaftar',
+		];
+
+		return response()->json($data);
+	}
+
+	public function getProvById($id)
+	{
+		$provinsi = MasterProvinsi::where('provinsi_id', $id)->first();
+
+		$data = $provinsi ? [
+			'provinsi_id' => $provinsi->provinsi_id,
+			'nama' => $provinsi->nama,
+		] : [
+			'provinsi_id' => 'Kode tidak terdaftar',
+			'nama' => 'Provinsi tidak terdaftar',
+		];
+
+		return response()->json($data);
+	}
 }

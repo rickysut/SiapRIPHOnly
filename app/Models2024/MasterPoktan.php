@@ -6,16 +6,17 @@ use App\Models\MasterDesa;
 use App\Models\MasterKabupaten;
 use App\Models\MasterKecamatan;
 use App\Models\MasterProvinsi;
+
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MasterPoktan extends Model
 {
-	use HasFactory;
-	use Auditable;
+	use HasFactory, SoftDeletes,Auditable;
 
-	public $table = 'master_poktans';
+	public $table = 't2024_master_poktans';
 
 	protected $dates = [
 		'created_at',
@@ -25,12 +26,12 @@ class MasterPoktan extends Model
 
 	protected $fillable = [
 		'id',
-		'npwp',
-		'poktan_id',
-		'id_provinsi',
-		'id_kabupaten',
-		'id_kecamatan',
-		'id_kelurahan',
+		'kode_register',
+		'alamat',
+		'provinsi_id',
+		'kabupaten_id',
+		'kecamatan_id',
+		'kelurahan_id',
 		'nama_kelompok',
 		'nama_pimpinan',
 		'hp_pimpinan',
@@ -39,29 +40,29 @@ class MasterPoktan extends Model
 
 	public function pks()
 	{
-		return $this->belongsTo(Pks::class, 'poktan_id', 'poktan_id');
+		return $this->belongsTo(Pks::class, 'id', 'poktan_id');
 	}
 
 	public function anggota()
 	{
-		return $this->hasMany(MasterAnggota::class, 'poktan_id', 'poktan_id');
+		return $this->hasMany(MasterAnggota::class, 'poktan_id');
 	}
 
 	public function provinsi()
 	{
-		return $this->belongsTo(MasterProvinsi::class, 'id_provinsi', 'provinsi_id');
+		return $this->belongsTo(MasterProvinsi::class, 'provinsi_id', 'provinsi_id');
 	}
 	public function kabupaten()
 	{
-		return $this->belongsTo(MasterKabupaten::class, 'id_kabupaten', 'kabupaten_id');
+		return $this->belongsTo(MasterKabupaten::class, 'kabupaten_id', 'kabupaten_id');
 	}
 	public function kecamatan()
 	{
-		return $this->belongsTo(MasterKecamatan::class, 'id_kecamatan', 'kecamatan_id');
+		return $this->belongsTo(MasterKecamatan::class, 'kecamatan_id', 'kecamatan_id');
 	}
 	public function desa()
 	{
-		return $this->belongsTo(MasterDesa::class, 'id_kelurahan', 'kelurahan_id');
+		return $this->belongsTo(MasterDesa::class, 'kelurahan_id', 'kelurahan_id');
 	}
 
 	public function getProvinsiFromKabupatenAttribute()

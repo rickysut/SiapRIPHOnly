@@ -18,10 +18,11 @@ use App\Models2024\AjuVerifSkl;
 use App\Models2024\AjuVerifTanam;
 use App\Models2024\Lokasi;
 use App\Models2024\MasterAnggota;
+use App\Models2024\MasterSpatial;
 use App\Models2024\Skl;
 use App\Models2024\PullRiph;
 use App\Models2024\Pks;
-use App\Models\MasterPoktan;
+use App\Models2024\MasterPoktan;
 use App\Models\UserDocs;
 use App\Models\Varietas;
 use App\Models\PenangkarRiph;
@@ -119,6 +120,14 @@ class CommitmentController extends Controller
 			->where('npwp', $npwp)
 			->findOrFail($id);
 
+		$poktans = MasterPoktan::with(['anggota.spatial.lokasi', 'pks'])
+			->select('id', 'nama_kelompok', 'kode_register')
+			->whereDoesntHave('pks')
+			->whereHas('anggota.spatial.lokasi', function ($query) use ($commitment) {
+				$query->where('no_ijin', $commitment->no_ijin);
+			})
+			->get();
+
 		$docs = UserDocs::where('no_ijin', $commitment->no_ijin)->first();
 		$penangkars = PenangkarRiph::where('npwp', $npwp)
 			->when(isset($commitment->no_ijin), function ($query) use ($commitment) {
@@ -134,8 +143,11 @@ class CommitmentController extends Controller
 		} else {
 			$disabled = true; // input di-disable
 		}
-		return view('t2024.commitment.realisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'penangkars', 'docs', 'npwp', 'varietass', 'disabled'));
+		return view('t2024.commitment.realisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'penangkars', 'docs', 'npwp', 'varietass', 'disabled', 'poktans'));
 	}
+
+
+
 
 	public function updatePks(Request $request, $id)
 	{
@@ -145,7 +157,7 @@ class CommitmentController extends Controller
 			$npwp_company = Auth::user()->data_user->npwp_company;
 			$pks = Pks::findOrFail($id);
 			$commitment = PullRiph::where('no_ijin', $pks->no_ijin)->first();
-			$noIjin = str_replace(['/','.'],'', $commitment->no_ijin);
+			$noIjin = str_replace(['/', '.'], '', $commitment->no_ijin);
 
 			$filenpwp = str_replace(['.', '-'], '', $npwp_company);
 			$pks->no_perjanjian = $request->input('no_perjanjian');

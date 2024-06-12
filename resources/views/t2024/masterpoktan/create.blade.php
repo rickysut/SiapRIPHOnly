@@ -70,8 +70,8 @@
 							</div>
 							<div class="form-group row d-flex align-items-end">
 								<div class="col-lg-4">
-									<label class="form-label" for="poktan_id">ID Poktan di RIPH <span class="text-danger">*</span></label>
-									<input type="text" id="poktan_id" name="poktan_id"  class="form-control @error('poktan_id') is-invalid @enderror" placeholder="id poktan di aplikasi riph" value="">
+									<label class="form-label" for="kode_register">Kode Registrasi <span class="text-danger">*</span></label>
+									<input type="text" id="kode_register" name="kode_register"  class="form-control @error('kode_register') is-invalid @enderror" placeholder="kode registrasi kelompok tani" value="">
 									<span class="help-block" id="help-poktanid"></span>
 								</div>
 								<div class="col-lg-2">

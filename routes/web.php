@@ -381,6 +381,10 @@ Route::group(['prefix' => 'wilayah', 'as' => 'wilayah.', 'namespace' => 'Wilayah
 	Route::get('getKabupatenByProvinsi/{provinsiId}', 'GetWilayahController@getKabupatenByProvinsi')->name('getKabupatenByProvinsi');
 	Route::get('getKecamatanByKabupaten/{id}', 'GetWilayahController@getKecamatanByKabupaten')->name('getKecamatanByKabupaten');
 	Route::get('getDesaByKec/{kecamatanId}', 'GetWilayahController@getDesaByKecamatan')->name('getDesaByKecamatan');
+	Route::get('getDesaById/{id}', 'GetWilayahController@getDesaById')->name('getDesaById');
+	Route::get('getKecById/{id}', 'GetWilayahController@getKecById')->name('getKecById');
+	Route::get('getKabById/{id}', 'GetWilayahController@getKabById')->name('getKabById');
+	Route::get('getProvById/{id}', 'GetWilayahController@getProvById')->name('getProvById');
 });
 
 Route::group(['prefix' => 'digisign', 'as' => 'digisign.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
@@ -423,6 +427,13 @@ Route::group(['prefix' => '2024', 'as' => '2024.', 'namespace' => 'Admin', 'midd
 			Route::get('/getSpatialByKode/{spatial}', 'DataFeederController@getSpatialByKode')->name('getSpatialByKode');
 			Route::get('/getAllSpatials', 'DataFeederController@getAllSpatials')->name('getAllSpatials');
 			Route::get('/getAllPoktan', 'DataFeederController@getAllPoktan')->name('getAllPoktan');
+			Route::get('/getAllCpcl', 'DataFeederController@getAllCpcl')->name('getAllCpcl');
+			Route::get('/{kecId}/getAllCpclByKec', 'DataFeederController@getAllCpclByKec')->name('getAllCpclByKec');
+			Route::get('/{nik}/getCpclByNik', 'DataFeederController@getCpclByNik')->name('getCpclByNik');
+
+
+			//ini jangan dijalankan lagi
+			Route::get('/updateOrCreateDesa', 'DataFeederController@updateOrCreateDesa')->name('updateOrCreateDesa');
 		});
 
 		//route untuk adminisrator
@@ -462,6 +473,11 @@ Route::group(['prefix' => '2024', 'as' => '2024.', 'namespace' => 'Admin', 'midd
 				//pengisian data realisasi
 				Route::get('{id}/realisasi', 'CommitmentController@realisasi')->name('realisasi');
 				Route::post('{id}/realisasi/storeUserDocs', 'CommitmentController@storeUserDocs')->name('storeUserDocs');
+
+				Route::group(['prefix' => 'pks', 'as' => 'pks.'], function () {
+					Route::get('/{noIjin}/{poktanId}/create', 'PksController@createPks')->name('create');
+					Route::post('/store', 'PksController@storePks')->name('storePks');
+				});
 				Route::get('daftarlokasi/{noIjin}/{poktanId}', 'PksController@daftarLokasi')->name('daftarLokasi');
 				Route::get('addrealisasi/{noIjin}/{spatial}', 'PksController@addrealisasi')->name('addrealisasi');
 
@@ -474,9 +490,7 @@ Route::group(['prefix' => '2024', 'as' => '2024.', 'namespace' => 'Admin', 'midd
 			});
 
 			//pks
-			Route::group(['prefix' => 'pks', 'as' => 'pks.'], function () {
 
-			});
 		});
 
 		//route untuk tim spatial
@@ -484,6 +498,8 @@ Route::group(['prefix' => '2024', 'as' => '2024.', 'namespace' => 'Admin', 'midd
 			Route::get('/', 'HomeController@index')->name('home');
 			Route::get('/list', 'SpatialController@index')->name('index');
 			Route::get('/createsingle', 'SpatialController@createsingle')->name('createsingle');
+			Route::post('/storesingle', 'SpatialController@storesingle')->name('storesingle');
+			Route::get('/{id}/show', 'SpatialController@show')->name('edit');
 		});
 
 		//route untuk cpcl
@@ -491,9 +507,16 @@ Route::group(['prefix' => '2024', 'as' => '2024.', 'namespace' => 'Admin', 'midd
 			Route::get('/', 'HomeController@index')->name('home');
 			Route::group(['prefix' => 'poktan', 'as' => 'poktan.'], function () {
 				Route::get('/list', 'MasterPoktanController@index')->name('index');
-				Route::get('/create', 'MasterPoktanController@create')->name('create');
+				Route::get('/registrasi', 'MasterPoktanController@create')->name('create');
 				Route::get('/{id}/edit', 'MasterPoktanController@edit')->name('edit');
 				// Route::get('/updateIdProvinsi', 'MasterPoktanController@updateIdProvinsi')->name('updateIdProvinsi');
+			});
+
+			Route::group(['prefix' => 'anggota', 'as' => 'anggota.'], function () {
+				Route::get('/list', 'MasterCpclController@index')->name('index');
+				Route::get('/registrasi', 'MasterCpclController@create')->name('create');
+				Route::get('/{nik}/show', 'MasterCpclController@show')->name('show');
+				Route::get('/{nik}/edit', 'MasterCpclController@edit')->name('edit');
 			});
 		});
 	});

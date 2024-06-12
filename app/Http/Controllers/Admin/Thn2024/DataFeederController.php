@@ -9,6 +9,8 @@ use App\Models2024\MasterPoktan;
 use App\Models2024\MasterSpatial;
 use App\Models2024\Pks;
 use App\Models2024\PullRiph;
+use App\Models\MasterDesa;
+use App\Models\MasterKecamatan;
 use Illuminate\Http\Request;
 use Svg\Tag\Rect;
 
@@ -41,12 +43,11 @@ class DataFeederController extends Controller
 	public function getPksByIjin(Request $request, $id)
 	{
 		$commitment = PullRiph::find($id);
-
 		$query = Pks::query()
 			->select('id', 'no_ijin', 'poktan_id', 'no_perjanjian', 'tgl_perjanjian_start', 'tgl_perjanjian_end', 'varietas_tanam', 'periode_tanam', 'berkas_pks')
 			->where('no_ijin', $commitment->no_ijin)
 			->with(['masterpoktan' => function ($query) {
-				$query->select('id', 'poktan_id', 'nama_kelompok');
+				$query->select('id', 'nama_kelompok');
 			}])
 			->withCount('lokasi')
 			->withSum('lokasi', 'luas_lahan');
@@ -92,40 +93,33 @@ class DataFeederController extends Controller
 		$length = $request->input('length', 10);
 		$searchValue = $request->input('search.value', '');
 
-		$query = Lokasi::query()
-			->select('id', 'no_ijin', 'poktan_id', 'ktp_petani', 'kode_spatial')
-			->where('no_ijin', $noIjin)
-			->where('poktan_id', $poktanId)
-			->with([
-				'masteranggota:id,poktan_id,nama_petani,ktp_petani',
-				'datarealisasi:id,poktan_id,no_ijin,ktp_petani,nama_lokasi,luas_lahan',
-			]);
+		$pks = Pks::where('no_ijin', $noIjin)
+        ->where('poktan_id', $poktanId)
+        ->with(['anggota.spatial' => function ($query) use ($noIjin) {
+            $query->whereHas('lokasi', function ($lokasiQuery) use ($noIjin) {
+                $lokasiQuery->where('no_ijin', $noIjin);
+            });
+        }])
+        ->get();
 
-		if ($request->has('search') && !empty($request->input('search')['value'])) {
-			$searchValue = $request->input('search')['value'];
-			$query->where(function ($subQuery) use ($searchValue) {
-				$subQuery->where('kode_spatial', 'like', '%' . $searchValue . '%')
-					->orWhere('ktp_petani', 'like', '%' . $searchValue . '%')
-					->orWhereHas('masteranggota', function ($subSubQuery) use ($searchValue) {
-						$subSubQuery->where('nama_petani', 'like', '%' . $searchValue . '%');
-					})
-					->orWhereHas('datarealisasi', function ($subSubQuery) use ($searchValue) {
-						$subSubQuery->where('nama_lokasi', 'like', '%' . $searchValue . '%');
-					});
-			});
-		}
+		$query = $pks->map(function ($item) {
+			return [
+				'id' => $item->id,
+				'nama_kelompok' => $item->nama_kelompok,
+				'nama_pimpinan' => $item->nama_pimpinan,
+				'hp_pimpinan' => $item->hp_pimpinan,
+				'provinsi_id' => $item->provinsi_id,
+				'nama_provinsi' => $item->provinsi ? $item->provinsi->nama : null,
+				'kabupaten_id' => $item->kabupaten_id,
+				'nama_kabupaten' => $item->kabupaten ? $item->kabupaten->nama_kab : null,
+				'kecamatan_id' => $item->kecamatan_id,
+				'nama_kecamatan' => $item->kecamatan ? $item->kecamatan->nama_kecamatan : null,
+				'kelurahan_id' => $item->kelurahan_id,
+				'nama_desa' => $item->desa ? $item->desa->nama_desa : null,
+			];
+		});
 
-		if ($request->has('order')) {
-			$orderColumn = $request->input('order')[0]['column'];
-			$orderDirection = $request->input('order')[0]['dir'];
-			$columnName = $request->input('columns')[$orderColumn]['data'];
-			$query->orderBy($columnName, $orderDirection);
-		}
-
-		$totalRecords = $query->count();
-		$filteredRecords = $query->count();
-
-		$query = $query->offset($start)->limit($length)->get();
+		dd($pks);
 
 		return response()->json([
 			'draw' => $draw,
@@ -218,90 +212,249 @@ class DataFeederController extends Controller
 	}
 
 	public function getAllPoktan(Request $request)
-{
-    $draw = $request->input('draw', 1);
-    $start = $request->input('start', 0);
-    $length = $request->input('length', 10);
-    $searchValue = $request->input('search.value', '');
+	{
+		$draw = $request->input('draw', 1);
+		$start = $request->input('start', 0);
+		$length = $request->input('length', 10);
+		$searchValue = $request->input('search.value', '');
 
-    $data = MasterPoktan::with([
-        'provinsi',
-        'kabupaten',
-        'kecamatan',
-        'desa',
-    ])->get();
+		$data = MasterPoktan::with([
+			'provinsi',
+			'kabupaten',
+			'kecamatan',
+			'desa',
+		])->get();
 
-    $query = $data->map(function ($item) {
-        return [
-            'id' => $item->id,
-            'nama_kelompok' => $item->nama_kelompok,
-            'nama_pimpinan' => $item->nama_pimpinan,
-            'hp_pimpinan' => $item->hp_pimpinan,
-            'id_provinsi' => $item->id_provinsi,
-            'nama_provinsi' => $item->provinsi ? $item->provinsi->nama : null,
-            'id_kabupaten' => $item->id_kabupaten,
-            'nama_kabupaten' => $item->kabupaten ? $item->kabupaten->nama_kab : null,
-            'id_kecamatan' => $item->id_kecamatan,
-            'nama_kecamatan' => $item->kecamatan ? $item->kecamatan->nama_kecamatan : null,
-            'id_kelurahan' => $item->id_kelurahan,
-            'nama_desa' => $item->desa ? $item->desa->nama_desa : null,
-        ];
-    });
+		$query = $data->map(function ($item) {
+			return [
+				'id' => $item->id,
+				'nama_kelompok' => $item->nama_kelompok,
+				'nama_pimpinan' => $item->nama_pimpinan,
+				'hp_pimpinan' => $item->hp_pimpinan,
+				'provinsi_id' => $item->provinsi_id,
+				'nama_provinsi' => $item->provinsi ? $item->provinsi->nama : null,
+				'kabupaten_id' => $item->kabupaten_id,
+				'nama_kabupaten' => $item->kabupaten ? $item->kabupaten->nama_kab : null,
+				'kecamatan_id' => $item->kecamatan_id,
+				'nama_kecamatan' => $item->kecamatan ? $item->kecamatan->nama_kecamatan : null,
+				'kelurahan_id' => $item->kelurahan_id,
+				'nama_desa' => $item->desa ? $item->desa->nama_desa : null,
+			];
+		});
 
-    if ($searchValue) {
-        $query = $query->filter(function ($item) use ($searchValue) {
-            return strpos(strtolower($item['nama_kelompok']), strtolower($searchValue)) !== false ||
-                   strpos(strtolower($item['nama_pimpinan']), strtolower($searchValue)) !== false ||
-                   strpos(strtolower($item['hp_pimpinan']), strtolower($searchValue)) !== false ||
-                   strpos(strtolower($item['nama_provinsi']), strtolower($searchValue)) !== false ||
-                   strpos(strtolower($item['nama_kabupaten']), strtolower($searchValue)) !== false ||
-                   strpos(strtolower($item['nama_kecamatan']), strtolower($searchValue)) !== false ||
-                   strpos(strtolower($item['nama_desa']), strtolower($searchValue)) !== false;
-        });
-    }
+		if ($searchValue) {
+			$query = $query->filter(function ($item) use ($searchValue) {
+				return strpos(strtolower($item['nama_kelompok']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['nama_pimpinan']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['hp_pimpinan']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['nama_provinsi']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['nama_kabupaten']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['nama_kecamatan']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['nama_desa']), strtolower($searchValue)) !== false;
+			});
+		}
 
-    if ($request->has('order')) {
-        $orderColumn = $request->input('order')[0]['column'];
-        $orderDirection = $request->input('order')[0]['dir'];
-        $columnName = $request->input('columns')[$orderColumn]['data'];
+		if ($request->has('order')) {
+			$orderColumn = $request->input('order')[0]['column'];
+			$orderDirection = $request->input('order')[0]['dir'];
+			$columnName = $request->input('columns')[$orderColumn]['data'];
 
-        // Gunakan switch case atau if else untuk menentukan kolom pengurutan
-        switch ($columnName) {
-            case 'nama_kelompok':
-                $query = $query->sortBy('nama_kelompok');
-                break;
-			case 'nama_pimpinan':
-				$query = $query->sortByDesc('nama_pimpinan');
-				break;
-			case 'kontak':
-				$query = $query->sortByDesc('kontak');
-				break;
-			case 'nama_provinsi':
-				$query = $query->sortByDesc('nama_provinsi');
-				break;
-			case 'nama_kabupaten':
-				$query = $query->sortByDesc('nama_kabupaten');
-				break;
-			case 'nama_kecamatan':
-				$query = $query->sortByDesc('nama_kecamatan');
-				break;
-			case 'nama_desa':
-				$query = $query->sortByDesc('nama_desa');
-				break;
-        }
-    }
+			// Gunakan switch case atau if else untuk menentukan kolom pengurutan
+			switch ($columnName) {
+				case 'nama_kelompok':
+					$query = $query->sortBy('nama_kelompok');
+					break;
+				case 'nama_pimpinan':
+					$query = $query->sortByDesc('nama_pimpinan');
+					break;
+				case 'kontak':
+					$query = $query->sortByDesc('kontak');
+					break;
+				case 'nama_provinsi':
+					$query = $query->sortByDesc('nama_provinsi');
+					break;
+				case 'nama_kabupaten':
+					$query = $query->sortByDesc('nama_kabupaten');
+					break;
+				case 'nama_kecamatan':
+					$query = $query->sortByDesc('nama_kecamatan');
+					break;
+				case 'nama_desa':
+					$query = $query->sortByDesc('nama_desa');
+					break;
+			}
+		}
 
-    $totalRecords = $data->count();
-    $filteredRecords = $query->count();
+		$totalRecords = $data->count();
+		$filteredRecords = $query->count();
 
-    $poktans = $query->slice($start)->take($length)->values();
+		$poktans = $query->slice($start)->take($length)->values();
 
-    return response()->json([
-        'draw' => $draw,
-        'recordsTotal' => $totalRecords,
-        'recordsFiltered' => $filteredRecords,
-        'data' => $poktans,
-    ]);
-}
+		return response()->json([
+			'draw' => $draw,
+			'recordsTotal' => $totalRecords,
+			'recordsFiltered' => $filteredRecords,
+			'data' => $poktans,
+		]);
+	}
 
+	public function getAllCpcl(Request $request)
+	{
+		$draw = $request->input('draw', 1);
+		$start = $request->input('start', 0);
+		$length = $request->input('length', 10);
+		$searchValue = $request->input('search.value', '');
+
+		$data = MasterAnggota::with([
+			'provinsi' => function($query) {
+				$query->select('provinsi_id', 'nama');
+			},
+			'kabupaten' => function($query) {
+				$query->select('kabupaten_id', 'nama_kab');
+			},
+			'kecamatan' => function($query) {
+				$query->select('kecamatan_id', 'nama_kecamatan');
+			},
+			'desa' => function($query) {
+				$query->select('kelurahan_id', 'nama_desa');
+			},
+			'spatial'
+		])->get();
+
+		$query = $data->map(function ($item) {
+			$spatialCount = $item->spatial->count();
+			$spatialSum = $item->spatial->sum('luas_lahan');
+			return [
+				'id' => $item->id,
+				'nama_petani' => $item->nama_petani,
+				'ktp_petani' => $item->ktp_petani,
+				'kontak' => $item->hp_petani,
+				'provinsi_id' => $item->provinsi_id,
+				'nama_provinsi' => $item->provinsi ? $item->provinsi->nama : null,
+				'kabupaten_id' => $item->kabupaten_id,
+				'nama_kabupaten' => $item->kabupaten ? $item->kabupaten->nama_kab : null,
+				'kecamatan_id' => $item->kecamatan_id,
+				'nama_kecamatan' => $item->kecamatan ? $item->kecamatan->nama_kecamatan : null,
+				'kelurahan_id' => $item->kelurahan_id,
+				'nama_desa' => $item->desa ? $item->desa->nama_desa : null,
+				'jumlah_spatial' => $spatialCount,
+				'total_luas' => $spatialSum,
+			];
+		});
+
+		if ($searchValue) {
+			$query = $query->filter(function ($item) use ($searchValue) {
+				return strpos(strtolower($item['nama_petani']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['ktp_petani']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['kontak']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['nama_provinsi']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['nama_kabupaten']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['nama_kecamatan']), strtolower($searchValue)) !== false ||
+					strpos(strtolower($item['nama_desa']), strtolower($searchValue)) !== false;
+					strtolower($item['jumlah_spatial']) == strtolower($searchValue);
+			});
+		}
+
+		if ($request->has('order')) {
+			$orderColumn = $request->input('order')[0]['column'];
+			$orderDirection = $request->input('order')[0]['dir'];
+			$columnName = $request->input('columns')[$orderColumn]['data'];
+
+			// Gunakan switch case atau if else untuk menentukan kolom pengurutan
+			switch ($columnName) {
+				case 'nama_petani':
+					$query = $query->sortBy('nama_petani');
+					break;
+				case 'ktp_petani':
+					$query = $query->sortByDesc('ktp_petani');
+					break;
+				case 'kontak':
+					$query = $query->sortByDesc('kontak');
+					break;
+				case 'nama_provinsi':
+					$query = $query->sortByDesc('nama_provinsi');
+					break;
+				case 'nama_kabupaten':
+					$query = $query->sortByDesc('nama_kabupaten');
+					break;
+				case 'nama_kecamatan':
+					$query = $query->sortByDesc('nama_kecamatan');
+					break;
+				case 'nama_desa':
+					$query = $query->sortByDesc('nama_desa');
+					break;
+				case 'jumlah_spatial':
+					$query = $query->sortByDesc('nama_desa');
+					break;
+			}
+		}
+
+		$totalRecords = $data->count();
+		$filteredRecords = $query->count();
+
+		$poktans = $query->slice($start)->take($length)->values();
+
+		return response()->json([
+			'draw' => $draw,
+			'recordsTotal' => $totalRecords,
+			'recordsFiltered' => $filteredRecords,
+			'data' => $poktans,
+		]);
+	}
+
+	public function getAllCpclByKec(Request $request, $kecId)
+	{
+		$cpcls = MasterAnggota::select('ktp_petani', 'nama_petani', 'kecamatan_id')->where('kecamatan_id', $kecId)->get();
+		$data = [];
+		foreach ($cpcls as $cpcl) {
+			$data[] = [
+				'ktp_petani' => $cpcl->ktp_petani,
+				'nama_petani' => $cpcl->nama_petani,
+				'kecamatan_id' => $cpcl->kecamatan_id
+			];
+		}
+
+		return response()->json($data);
+	}
+
+	public function updateOrCreateDesa()
+	{
+		// Path ke file JSON
+		$jsonFilePath = storage_path('app/public/output_file.json');
+
+		// Baca file JSON
+		if (!file_exists($jsonFilePath)) {
+			return response()->json(['error' => 'File JSON tidak ditemukan.'], 404);
+		}
+
+		$jsonData = file_get_contents($jsonFilePath);
+		$desas = json_decode($jsonData, true);
+
+		foreach ($desas as $desa) {
+			MasterDesa::updateOrCreate(
+				['kelurahan_id' => $desa['kelurahan_id']],
+				[
+					'kecamatan_id' => $desa['kecamatan_id'],
+					'nama_desa' => strtoupper($desa['nama_desa']), // Mengubah nama desa menjadi huruf kapital
+				]
+			);
+		}
+
+
+		return response()->json(['success' => 'Data desa berhasil diupdate atau dibuat.'], 200);
+	}
+
+	public function getCpclByNik(Request $request, $nik)
+	{
+		$nikData = MasterAnggota::select('ktp_petani', 'nama_petani')->where('ktp_petani', $nik)->first();
+
+		$data = $nikData ? [
+			'ktp_petani' => $nikData->ktp_petani,
+			'nama_petani' => $nikData->nama_petani,
+		] : [
+			'ktp_petani' => 'KTP tidak terdaftar',
+			'nama_petani' => 'KTP tidak terdaftar',
+		];
+		return response()->json($data);
+	}
 }

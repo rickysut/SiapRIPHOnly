@@ -11,7 +11,7 @@ class Lokasi extends Model
 	use \Awobaz\Compoships\Compoships;
 	use HasFactory, SoftDeletes;
 
-	protected $table = 'lokasis';
+	protected $table = 't2024_lokasis';
 
 	protected $dates = [
 		'created_at',
