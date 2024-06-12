@@ -68,7 +68,7 @@ div[data-size="A4"] {
   margin-bottom: 0.5cm;
   -webkit-box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
           box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
-  background: url(../img/svg/pattern-1.svg) no-repeat center bottom;
+  /* background: url(../img/svg/pattern-1.svg) no-repeat center bottom; */
   background-size: cover;
   /* padding-top: 0rem; */
   /* padding-bottom: 4rem; */
