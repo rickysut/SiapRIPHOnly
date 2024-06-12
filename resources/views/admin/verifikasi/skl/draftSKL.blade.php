@@ -10,7 +10,8 @@
 		<i class="fal fa-print mr-1"></i> Cetak SKL
 	</button> --}}
 	<form action="{{route('verification.skl.recomendation.approve', $skl->id)}}" method="post" onsubmit="return confirm('Anda setuju untuk menerbitkan Surat Keterangan Lunas untuk RIPH Nomor: {{$skl->no_ijin}}')">
-		<a class="btn btn-sm btn-info" href="{{route('verification.skl.recomendation.show', $verifikasi->id)}}" role="button"><i class="fal fa-undo text-align-center mr-1"></i> Kembali</a>
+		<a class="btn btn-sm btn-info" href="" role="button"><i class="fal fa-undo text-align-center mr-1"></i> Kembali</a>
+		{{-- {{route('verification.skl.recomendation.show', $verifikasi->id)}} --}}
 		@csrf
 		@method('PUT')
 		<button class="btn btn-sm btn-danger" type="submit">
