@@ -19,7 +19,7 @@
 		<link id="mytheme" rel="stylesheet" media="screen, print" href="#">
 		<link id="myskin" rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/skins/skin-master.css') }}">
 		<link rel="stylesheet" media="screen, print" href="{{asset('/css/smartadmin/page-invoice.css')}}">
-		<link href="https://fonts.googleapis.com/css2?family=Tahoma&display=swap" rel="stylesheet">
+		{{-- <link href="https://fonts.googleapis.com/css2?family=Tahoma&display=swap" rel="stylesheet"> --}}
 
 		<!-- Place favicon.ico in the root directory -->
 
