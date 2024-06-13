@@ -39,31 +39,6 @@
 			<div class="panel" id="panel-5">
 				<div class="panel-container show">
 					<div class="panel-content">
-						<div class="row d-flex justify-content-between align-items-end">
-							<div class="col-lg-10">
-								<div class="form-group">
-									<label class="form-label" for="selectPoktan">Buat PKS</label>
-									<div class="input-group">
-										<select class="custom-select" id="selectPoktan" name="selectPoktan" aria-label="Example select with button addon">
-											@foreach ($poktans as $poktan)
-												<option value="" hidden>piilh kelompok tani</option>
-												<option value="{{$poktan->id}}">{{$poktan->nama_kelompok}}</option>
-											@endforeach
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-2 mt-1">
-								@php
-									$ijin = str_replace(['/', '.', '-'], '', $commitment->no_ijin);
-								@endphp
-								<div class="text-right">
-									<button class="btn btn-primary waves-effect waves-themed" type="button" id="createPksButton" data-ijin="{{$ijin}}">Buat PKS</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="panel-content">
 						<table id="tblPks" class="table table-sm table-bordered table-hover table-striped w-100">
 							<thead>
 								<tr>
@@ -606,12 +581,12 @@
 			processing: true,
 			serverSide: true,
 			ajax: {
-				url: "{{ route('2024.datafeeder.getPksByIjin', $commitment->id) }}", // Rute untuk mengambil data
+				url: "{{ route('2024.datafeeder.getPksByIjin', $ijin) }}", // Rute untuk mengambil data
 				type: "GET",
 			},
 			columns: [
 				{ data: 'no_perjanjian' },
-				{ data: 'masterpoktan.nama_kelompok' },
+				{ data: 'nama_poktan' },
 				{
 					data: 'lokasi_count',
 					render: function (data, type, row) {

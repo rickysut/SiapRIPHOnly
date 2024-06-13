@@ -2,6 +2,10 @@
 
 namespace App\Models2024;
 
+use App\Models\MasterDesa;
+use App\Models\MasterKabupaten;
+use App\Models\MasterKecamatan;
+use App\Models\MasterProvinsi;
 use App\Models\Varietas;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +18,7 @@ class Pks extends Model
 	use HasFactory;
 	use SoftDeletes;
 
-	public $table = 'pks';
+	public $table = 't2024_pks';
 
 	protected $dates = [
 		'created_at',
@@ -26,6 +30,7 @@ class Pks extends Model
 		'npwp',
 		'no_ijin',
 		'poktan_id',
+		'nama_poktan',
 		'no_perjanjian',
 		'tgl_perjanjian_start',
 		'tgl_perjanjian_end',
@@ -64,5 +69,22 @@ class Pks extends Model
 	public function varietas()
 	{
 		return $this->belongsTo(Varietas::class, 'varietas_tanam');
+	}
+
+	public function provinsi()
+	{
+		return $this->belongsTo(MasterProvinsi::class, 'provinsi_id', 'provinsi_id');
+	}
+	public function kabupaten()
+	{
+		return $this->belongsTo(MasterKabupaten::class, 'kabupaten_id', 'kabupaten_id');
+	}
+	public function kecamatan()
+	{
+		return $this->belongsTo(MasterKecamatan::class, 'kecamatan_id', 'kecamatan_id');
+	}
+	public function desa()
+	{
+		return $this->belongsTo(MasterDesa::class, 'kelurahan_id', 'kelurahan_id');
 	}
 }

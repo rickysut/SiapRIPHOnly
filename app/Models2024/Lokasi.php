@@ -26,6 +26,7 @@ class Lokasi extends Model
 		'poktan_id',
 		'anggota_id',
 		'ktp_petani',
+		'nama_petani',
 		'nama_lokasi',
 		'luas_lahan',
 		'periode_tanam',

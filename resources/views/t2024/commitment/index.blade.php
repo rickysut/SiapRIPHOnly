@@ -32,7 +32,7 @@ td {
 							@foreach ($commitments as $commitment)
 							<tr>
 								<td>
-									<a href="{{ route('2024.user.commitment.show', $commitment->id) }}" title="Lihat Data Komitmen" target="_blank">
+									<a href="{{ route('2024.user.commitment.show', $noIjin) }}" title="Lihat Data Komitmen" target="_blank">
 										{{$commitment->no_ijin}}
 									</a>
 								</td>
@@ -58,7 +58,8 @@ td {
 									</div>
 								</td>
 								<td class="text-center">
-									<a href="{{ route('2024.user.commitment.realisasi', $commitment->id) }}"
+
+									<a href="{{ route('2024.user.commitment.realisasi', $noIjin) }}"
 										class="btn btn-icon btn-xs btn-primary" data-toggle="tooltip"
 										title data-original-title="Isi Laporan Realisasi Tanam dan Produksi">
 										<i class="fal fa-edit"></i>

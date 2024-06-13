@@ -421,7 +421,7 @@ Route::group(['prefix' => '2024', 'as' => '2024.', 'namespace' => 'Admin', 'midd
 
 		Route::group(['prefix' => 'datafeeder', 'as' => 'datafeeder.'], function () {
 			Route::get('/getPksById/{id}', 'DataFeederController@getPksById')->name('getPksById');
-			Route::get('/getPksByIjin/{id}', 'DataFeederController@getPksByIjin')->name('getPksByIjin');
+			Route::get('/getPksByIjin/{noIjin}', 'DataFeederController@getPksByIjin')->name('getPksByIjin');
 			Route::get('/getLokasiByPks/{noIjin}/{poktanId}', 'DataFeederController@getLokasiByPks')->name('getLokasiByPks');
 			Route::get('/getSpatialByKecamatan/{kecId}', 'DataFeederController@getSpatialByKecamatan')->name('getSpatialByKecamatan');
 			Route::get('/getSpatialByKode/{spatial}', 'DataFeederController@getSpatialByKode')->name('getSpatialByKode');
@@ -466,12 +466,12 @@ Route::group(['prefix' => '2024', 'as' => '2024.', 'namespace' => 'Admin', 'midd
 			//commitment
 			Route::group(['prefix' => 'commitment', 'as' => 'commitment.'], function () {
 				Route::get('/', 'CommitmentController@index')->name('index');
-				Route::get('{id}/show', 'CommitmentController@show')->name('show');
+				Route::get('{noIjin}/show', 'CommitmentController@show')->name('show');
 				Route::put('pks/{id}/update', 'CommitmentController@updatePks')->name('updatepks');
 				Route::delete('{pullriph}', 'CommitmentController@destroy')->name('destroy');
 
 				//pengisian data realisasi
-				Route::get('{id}/realisasi', 'CommitmentController@realisasi')->name('realisasi');
+				Route::get('{noIjin}/realisasi', 'CommitmentController@realisasi')->name('realisasi');
 				Route::post('{id}/realisasi/storeUserDocs', 'CommitmentController@storeUserDocs')->name('storeUserDocs');
 
 				Route::group(['prefix' => 'pks', 'as' => 'pks.'], function () {

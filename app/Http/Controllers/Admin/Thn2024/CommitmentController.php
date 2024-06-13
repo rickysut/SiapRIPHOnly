@@ -91,14 +91,21 @@ class CommitmentController extends Controller
 
 			// $countLokasi = $commitment->lokasi->count('id');
 			// dd($countLokasi);
+			$noIjin = str_replace(['.', '-', '/'], '', $commitment->no_ijin);
 		}
-		return view('t2024.commitment.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitments', 'pksCount', 'pksFileCount'));
+		return view('t2024.commitment.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitments', 'pksCount', 'pksFileCount', 'noIjin'));
 	}
 
-	public function show($id)
+	public function show($noIjin)
 	{
+		$noIjin = substr($noIjin, 0, 4) . '/' .
+			substr($noIjin, 4, 2) . '.' .
+			substr($noIjin, 6, 3) . '/' .
+			substr($noIjin, 9, 1) . '/' .
+			substr($noIjin, 10, 2) . '/' .
+			substr($noIjin, 12, 4);
 		$npwp_company = Auth::user()->data_user->npwp_company;
-		$commitment = PullRiph::where('npwp', $npwp_company)->findOrFail($id);
+		$commitment = PullRiph::where('npwp', $npwp_company)->where('no_ijin', $noIjin)->first();
 
 		$module_name = 'Komitmen';
 		$page_title = 'Data Komitmen';
@@ -108,24 +115,27 @@ class CommitmentController extends Controller
 		return view('t2024.commitment.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitment'));
 	}
 
-	public function realisasi($id)
+	public function realisasi($noIjin)
 	{
 		$module_name = 'Komitmen';
 		$page_title = 'Data Realisasi';
 		$page_heading = 'Realisasi Komitmen';
 		$heading_class = 'fal fa-file-edit';
+		$ijin = $noIjin;
+		$noIjin = substr($noIjin, 0, 4) . '/' .
+			substr($noIjin, 4, 2) . '.' .
+			substr($noIjin, 6, 3) . '/' .
+			substr($noIjin, 9, 1) . '/' .
+			substr($noIjin, 10, 2) . '/' .
+			substr($noIjin, 12, 4);
 
 		$npwp = Auth::user()->data_user->npwp_company;
 		$commitment = PullRiph::select('id', 'npwp', 'no_ijin', 'status')
 			->where('npwp', $npwp)
-			->findOrFail($id);
+			->where('no_ijin',$noIjin)->first();
 
-		$poktans = MasterPoktan::with(['anggota.spatial.lokasi', 'pks'])
-			->select('id', 'nama_kelompok', 'kode_register')
-			->whereDoesntHave('pks')
-			->whereHas('anggota.spatial.lokasi', function ($query) use ($commitment) {
-				$query->where('no_ijin', $commitment->no_ijin);
-			})
+		$poktans = Pks::where('no_ijin', $noIjin)
+			->groupBy('poktan_id')
 			->get();
 
 		$docs = UserDocs::where('no_ijin', $commitment->no_ijin)->first();
@@ -143,7 +153,7 @@ class CommitmentController extends Controller
 		} else {
 			$disabled = true; // input di-disable
 		}
-		return view('t2024.commitment.realisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'penangkars', 'docs', 'npwp', 'varietass', 'disabled', 'poktans'));
+		return view('t2024.commitment.realisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'noIjin','penangkars', 'docs', 'npwp', 'varietass', 'disabled', 'poktans', 'ijin'));
 	}
 
 

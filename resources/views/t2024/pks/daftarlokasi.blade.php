@@ -38,7 +38,7 @@
 							<label for="">Kelompoktani</label>
 							<input disabled class="form-control form-control-sm fw-500 text-primary"
 							placeholder="" aria-describedby="helpId"
-							value="{{$pks->masterpoktan->nama_kelompok}}">
+							value="{{$pks->nama_poktan}}">
 						</div>
 					</div>
 				</div>
@@ -59,10 +59,10 @@
 							<thead class="thead-themed">
 								<th>Kode Lokasi</th>
 								<th>Pelaksana</th>
-								<th>Luas</th>
-								<th>Tanggal Tanam</th>
-								<th>Panen</th>
-								<th>Tanggal Panen</th>
+								<th>Realisasi Tanam</th>
+								<th>Tanggal</th>
+								<th>Realisasi Panen</th>
+								<th>Tanggal</th>
 								<th>Tindakan</th>
 							</thead>
 							<tbody>
@@ -102,6 +102,7 @@
 		var noIjin = '{{$commitment->no_ijin}}';
 		var formattedNoIjin = noIjin.replace(/[\/.]/g, '');
 		var poktanId = '{{$pks->poktan_id}}';
+		var ijin = '{{$ijin}}';
 
 		$('#tblLokasi').dataTable(
 		{
@@ -134,70 +135,29 @@
 					data: 'ktp_petani',
 					name: 'nama_petani',
 					render: function (data, type, row) {
-						return row.anggota.nama_petani + ' / ' + data;
+						return row.nama_petani + ' / ' + data;
 					}
 				},
-				{
-					data: 'datarealisasi',
-					render: function(data, type, row) {
-						if (data) {
-							return data.luas_lahan + ' ha';
-						} else {
-							return `<span title="belum ada data" class="text-danger">
-								<i class="fa fa-exclamation-circle"></i></span>`;
-						}
-					}
-				},
-				{
-					data: 'datarealisasi',
-					render: function(data, type, row) {
-						if (data) {
-							return data.mulai_tanam;
-						} else {
-							return `<span title="belum ada data" class="text-danger">
-								<i class="fa fa-exclamation-circle"></i></span>`;
-						}
-					}
-				},
-				{
-					data: 'datarealisasi',
-					render: function(data, type, row) {
-						if (data) {
-							return data.volume + ' ton';
-						} else {
-							return `<span title="belum ada data" class="text-danger">
-								<i class="fa fa-exclamation-circle"></i></span>`;
-						}
-					}
-				},
-				{
-					data: 'datarealisasi',
-					render: function(data, type, row) {
-						if (data) {
-							return data.mulai_panen;
-						} else {
-							return `<span title="belum ada data" class="text-danger">
-								<i class="fa fa-exclamation-circle"></i></span>`;
-						}
-					}
-				},
+				{ data: 'luas_tanam'},
+				{ data: 'tgl_tanam'},
+				{ data: 'volume_panen'},
+				{ data: 'tgl_panen'},
 				{
 					data: 'kode_spatial',
 					render: function(data, type, row) {
-						var noIjin = row.no_ijin;
-						var kdSpatial = data;
 						if (data) {
 							if(data){
-								return `<a href="" title="ubah data tanam" class="btn btn-primary btn-icon btn-xs text-white" >
+								return `<a href="{{route('2024.user.commitment.addrealisasi', ['noIjin' => ':ijin', 'spatial' => ':spatial'])}}" title="Isi/ubah data realisasi tanam" class="btn btn-primary btn-icon btn-xs text-white" >
 										<i class="fa fa-edit"></i>
 									</a>
+
 									<a href="" title="ubah data tanam" class="btn btn-warning btn-icon btn-xs text-white" >
 										<i class="fa fa-dolly"></i>
 									</a>
 									<a href="" title="ubah data tanam" class="btn btn-info btn-icon btn-xs text-white" >
 										<i class="fa fa-images"></i>
 									</a>
-									`;
+									`.replace(':ijin', ijin).replace(':spatial', data);
 							}else{
 								return `<a href="" title="isi data tanam" class="btn btn-warning btn-icon btn-xs text-white" >
 									<i class="fa fa-map"></i>

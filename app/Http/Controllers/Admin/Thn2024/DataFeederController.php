@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Thn2024;
 
 use App\Http\Controllers\Controller;
+use App\Models2024\DataRealisasi;
 use App\Models2024\Lokasi;
 use App\Models2024\MasterAnggota;
 use App\Models2024\MasterPoktan;
@@ -40,15 +41,19 @@ class DataFeederController extends Controller
 		}
 	}
 
-	public function getPksByIjin(Request $request, $id)
+	public function getPksByIjin(Request $request, $noIjin)
 	{
-		$commitment = PullRiph::find($id);
+		$noIjin = substr($noIjin, 0, 4) . '/' .
+			substr($noIjin, 4, 2) . '.' .
+			substr($noIjin, 6, 3) . '/' .
+			substr($noIjin, 9, 1) . '/' .
+			substr($noIjin, 10, 2) . '/' .
+			substr($noIjin, 12, 4);
+
+		$commitment = PullRiph::where('no_ijin', $noIjin)->first();
 		$query = Pks::query()
-			->select('id', 'no_ijin', 'poktan_id', 'no_perjanjian', 'tgl_perjanjian_start', 'tgl_perjanjian_end', 'varietas_tanam', 'periode_tanam', 'berkas_pks')
+			->select('id', 'no_ijin', 'poktan_id', 'nama_poktan','no_perjanjian', 'tgl_perjanjian_start', 'tgl_perjanjian_end', 'varietas_tanam', 'periode_tanam', 'berkas_pks')
 			->where('no_ijin', $commitment->no_ijin)
-			->with(['masterpoktan' => function ($query) {
-				$query->select('id', 'nama_kelompok');
-			}])
 			->withCount('lokasi')
 			->withSum('lokasi', 'luas_lahan');
 
@@ -93,38 +98,36 @@ class DataFeederController extends Controller
 		$length = $request->input('length', 10);
 		$searchValue = $request->input('search.value', '');
 
-		$pks = Pks::where('no_ijin', $noIjin)
+		$pks = Lokasi::select('id', 'no_ijin', 'poktan_id', 'kode_spatial', 'nama_petani', 'ktp_petani')->where('no_ijin', $noIjin)
         ->where('poktan_id', $poktanId)
-        ->with(['anggota.spatial' => function ($query) use ($noIjin) {
-            $query->whereHas('lokasi', function ($lokasiQuery) use ($noIjin) {
-                $lokasiQuery->where('no_ijin', $noIjin);
-            });
-        }])
-        ->get();
+		->with('datarealisasi', 'spatial.anggota')
+		->get();
 
 		$query = $pks->map(function ($item) {
+			$datarealisasi = $item->datarealisasi;
+			$spatial = $item->spatial;
+    		$masteranggota = $spatial ? $spatial->anggota : null;
 			return [
 				'id' => $item->id,
-				'nama_kelompok' => $item->nama_kelompok,
-				'nama_pimpinan' => $item->nama_pimpinan,
-				'hp_pimpinan' => $item->hp_pimpinan,
-				'provinsi_id' => $item->provinsi_id,
-				'nama_provinsi' => $item->provinsi ? $item->provinsi->nama : null,
-				'kabupaten_id' => $item->kabupaten_id,
-				'nama_kabupaten' => $item->kabupaten ? $item->kabupaten->nama_kab : null,
-				'kecamatan_id' => $item->kecamatan_id,
-				'nama_kecamatan' => $item->kecamatan ? $item->kecamatan->nama_kecamatan : null,
-				'kelurahan_id' => $item->kelurahan_id,
-				'nama_desa' => $item->desa ? $item->desa->nama_desa : null,
+				'nama_kelompok' => $item->nama_poktan,
+				'kode_spatial' => $item->kode_spatial,
+				'ktp_petani' => $item->ktp_petani,
+				'nama_petani' => $item->nama_petani,
+				'spatial_petani' => $masteranggota ? $masteranggota->nama_petani:null,
+				'spatial_ktp' => $masteranggota ? $masteranggota->ktp_petani : null,
+				'luas_tanam' => $datarealisasi ? $datarealisasi->luas_tanam : 0,
+				'tgl_tanam' => $datarealisasi ? $datarealisasi->mulai_tanam : null,
+				'volume_panen' => $datarealisasi ? $datarealisasi->volume : 0,
+				'tgl_panen' => $datarealisasi ? $datarealisasi->mulai_panen : null,
 			];
 		});
 
-		dd($pks);
+		// dd($pks);
 
 		return response()->json([
 			'draw' => $draw,
-			'recordsTotal' => $totalRecords,
-			'recordsFiltered' => $filteredRecords,
+			// 'recordsTotal' => $totalRecords,
+			// 'recordsFiltered' => $filteredRecords,
 			'data' => $query,
 		]);
 	}

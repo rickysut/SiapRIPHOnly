@@ -45,6 +45,8 @@ class PksController extends Controller
 
 		$npwpCompany = Auth::user()->data_user->npwp_company;
 
+		$ijin = $noIjin;
+
 		$noIjin = substr($noIjin, 0, 4) . '/' .
 			substr($noIjin, 4, 2) . '.' .
 			substr($noIjin, 6, 3) . '/' .
@@ -52,7 +54,7 @@ class PksController extends Controller
 			substr($noIjin, 10, 2) . '/' .
 			substr($noIjin, 12, 4);
 
-		$pks = Pks::select('id', 'no_ijin', 'poktan_id', 'no_perjanjian')
+		$pks = Pks::select('id', 'no_ijin', 'poktan_id', 'no_perjanjian', 'nama_poktan')
 			->where('no_ijin', $noIjin)
 			->where('poktan_id', $poktanId)
 			->first();
@@ -75,7 +77,7 @@ class PksController extends Controller
 			$disabled = true; // input di-disable
 		}
 
-		return view('t2024.pks.daftarlokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'commitment', 'disabled', 'sumLuas', 'sumProduksi'));
+		return view('t2024.pks.daftarlokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'commitment', 'disabled', 'sumLuas', 'sumProduksi', 'ijin'));
 	}
 
 	public function addrealisasi($noIjin, $spatial)
@@ -92,20 +94,21 @@ class PksController extends Controller
 			substr($noIjin, 10, 2) . '/' .
 			substr($noIjin, 12, 4);
 
-		$spatial = substr($spatial, 0, 3) . '-' .
-			substr($spatial, 3, 3) . '-' .
-			substr($spatial, 6, 4);
+		// dd($spatial);
 
 		$mapkey = ForeignApi::find(1);
 		$npwpCompany = Auth::user()->data_user->npwp_company;
 		$lokasi = Lokasi::where('no_ijin',$noIjin)->where('kode_spatial', $spatial)->first();
-		// dd($lokasi);
+		// dd($spatial);
 		$pks = Pks::where('poktan_id', $lokasi->poktan_id)->where('no_ijin', $noIjin)->first();
-		$spatial = MasterSpatial::select('id', 'kode_spatial', 'ktp_petani', 'latitude','longitude', 'polygon', 'altitude', 'luas_lahan', 'kabupaten_id')->where('kode_spatial', $spatial)->first();
-		$anggota = MasterAnggota::select('id', 'ktp_petani', 'nama_petani')->where('ktp_petani', $spatial->ktp_petani)->first();
-		$poktan = MasterPoktan::select('id','poktan_id','nama_kelompok')->where('poktan_id', $lokasi->poktan_id)->first();
+		$spatial = MasterSpatial::select('id', 'kode_spatial', 'latitude','longitude', 'polygon', 'altitude', 'luas_lahan', 'kabupaten_id', 'ktp_petani')->where('kode_spatial', $spatial)
+		->first();
 
 		$kabupatens = MasterKabupaten::select('kabupaten_id', 'nama_kab')->get();
+		if (!$spatial) {
+			// Handle case where spatial is null
+			return redirect()->back()->with('Perhatian', 'Data Spatial tidak ditemukan.');
+		}
 
 		$data = [
 
@@ -113,11 +116,10 @@ class PksController extends Controller
 			'lokasi' => $lokasi,
 			'pks' => $pks,
 			'spatial' => $spatial,
-			'anggota' => $anggota,
-			'poktan' => $poktan,
+			'anggota' => $spatial->anggota,
 		];
-
-		return view('t2024.pks.addLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class','data', 'mapkey', 'kabupatens'));
+		// dd($data);
+		return view('t2024.pks.addRealisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class','data', 'mapkey', 'kabupatens'));
 	}
 
 	public function createPks($noIjin, $poktanId)
@@ -192,6 +194,13 @@ class PksController extends Controller
 			return response()->json(['message' => 'Gagal memperbarui data PKS: ' . $e->getMessage()], 500);
 		}
 	}
+
+
+
+
+
+
+
 
 	public function index(Request $request)
 	{
