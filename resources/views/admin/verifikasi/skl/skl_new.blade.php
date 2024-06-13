@@ -163,8 +163,8 @@
 									@endif
 								@endif --}}
 							<br>
-							<u><strong>{{$pejabat->nama ?? ''}}</strong></u><br>
-							<span class="mr-1">NIP.</span>{{$pejabat->nip ??''}}
+							<u><strong>{{$pejabat->nama ?? 'Andi Muhammad Idil Fitri, SE, MM'}}</strong></u><br>
+							<span class="mr-1">NIP.</span>{{$pejabat->nip ??'196912111997031003'}}
 						</div>
 					</dd>
 				</dl>
