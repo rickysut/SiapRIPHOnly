@@ -523,8 +523,6 @@ class VerifSklController extends Controller
 		$total_luas = $commitment->datarealisasi->sum('luas_lahan');
 		$total_volume = $commitment->datarealisasi->sum('volume');
 
-		dd($pejabat);
-
 		$data = [
 			'Perusahaan' => $commitment->datauser->company_name,
 			'No. RIPH' => $commitment->no_ijin,
@@ -532,8 +530,6 @@ class VerifSklController extends Controller
 			'Pejabat'	=> $pejabat->nama,
 			'Status' => 'LUNAS',
 		];
-
-		dd($data);
 
 		$QrCode = QrCode::size(70)->generate('Perusahaan: ' . $data['Perusahaan'] . ', No. RIPH: ' . $data['No. RIPH'] . ', No. SKL: ' . $data['No. SKL'] . ', Disetujui dan Ditandatangani oleh: ' . 'Andi Muhammad Idil Fitri, SE, MM' . ', Status: ' . $data['Status'] . ', Tautan Berkas: Belum tersedia.');
 
