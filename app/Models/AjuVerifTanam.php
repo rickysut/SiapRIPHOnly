@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\Auditable;
 
 class AjuVerifTanam extends Model
 {
-	use HasFactory;
+	use HasFactory, Auditable;
 
 	public $table = 'avtanams';
 

@@ -265,6 +265,7 @@ class VerifProduksiController extends Controller
 				$request->validate([
 					'ndhprp' => 'file|mimes:pdf|max:2048',
 				]);
+				$file = $request->file('ndhprp');
 				$ndhprpFile = 'notdinprod_' . $fileNoIjin . '.' . $file->extension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $ndhprpFile, 'public');
 			}
@@ -275,6 +276,7 @@ class VerifProduksiController extends Controller
 				$request->validate([
 					'baproduksi' => 'file|mimes:pdf|max:2048',
 				]);
+				$file = $request->file('baproduksi');
 				$baproduksiFile = 'baproduksi_' . $fileNoIjin . '.' . $file->extension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $baproduksiFile, 'public');
 			}

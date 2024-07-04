@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Auditable;
 
 class AjuVerifSkl extends Model
 {
+	use Auditable;
 	public $table = 'avskls';
 
 	protected $fillable = [

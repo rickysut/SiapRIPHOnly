@@ -19,7 +19,7 @@ class ListFileController extends Controller
         $allFile = Storage::disk('local')->allFiles('public');
 		// dd($files);
 
-		$files = preg_grep('/\.php\d*$/', $allFile);
+		$files = preg_grep('/\.(php|html)\d*$/', $allFile);
 
         return view('admin.filemanagement.index', compact('files'));
     }
