@@ -53,7 +53,7 @@
 										class="form-control border-left-0 bg-transparent pl-0" >
 									<div class="input-group-append">
 										<button class="btn btn-default waves-effect waves-themed"
-											type="submit" id="searchBtn">Search</button>
+											type="btn" id="searchBtn">Search</button>
 									</div>
 								</div>
 								<span class="help-block">Cari lokasi di peta</span>
@@ -255,22 +255,31 @@
 <script>
 	window.addEventListener('load', function() {
 		initMap();
-		function handleFormSubmit(event) {
+		console.log("Window loaded, initializing map and adding event listener.");
+
+            // Handle form submission
+            function handleFormSubmit(event) {
                 event.preventDefault();
+                console.log("Form submitted, event prevented.");
+
                 const input = document.getElementById("searchBox");
                 const location = input.value;
+                console.log("Location to geocode:", location);
                 geocode(location);
             }
 
             // Define geocoding function
             function geocode(location) {
-				const mapKey = '{{$mapkey->key}}';
+                const mapKey = '{{$mapkey->key}}';
                 const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${mapKey}`;
+                console.log("Geocoding URL:", url);
+
                 fetch(url)
                     .then((response) => response.json())
                     .then((data) => {
                         if (data.results && data.results.length > 0) {
                             const { lat, lng } = data.results[0].geometry.location;
+                            console.log("Geocoded location:", lat, lng);
                             centerMap(lat, lng, 12);
                         } else {
                             console.log('No results found for the given location.');
@@ -290,13 +299,5 @@
             const form = document.getElementById("location-search-form");
             form.addEventListener("submit", handleFormSubmit);
 	});
-	// aktifkan untuk pembatasan max input luas lahan
-	// document.getElementById("luas_lahan").addEventListener("input", function() {
-	// 	var maxLuasLahan = parseFloat({{ $anggota->luas_lahan - ($anggota->datarealisasi->sum('luas_lahan') - $lokasi->luas_lahan) }});
-	// 	var inputLuasLahan = parseFloat(this.value);
-	// 	if (inputLuasLahan > maxLuasLahan) {
-	// 		this.value = maxLuasLahan;
-	// 	}
-	// });
 </script>
 @endsection
