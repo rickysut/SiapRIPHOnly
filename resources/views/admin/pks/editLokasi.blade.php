@@ -53,7 +53,7 @@
 										class="form-control border-left-0 bg-transparent pl-0" >
 									<div class="input-group-append">
 										<button class="btn btn-default waves-effect waves-themed"
-											type="btn" id="searchBtn">Search</button>
+											type="button" id="searchBtn"  onclick="handleSearchClick()">Search</button>
 									</div>
 								</div>
 								<span class="help-block">Cari lokasi di peta</span>
@@ -257,47 +257,40 @@
 		initMap();
 		console.log("Window loaded, initializing map and adding event listener.");
 
-            // Handle form submission
-            function handleFormSubmit(event) {
-                event.preventDefault();
-                console.log("Form submitted, event prevented.");
-
-                const input = document.getElementById("searchBox");
-                const location = input.value;
-                console.log("Location to geocode:", location);
-                geocode(location);
-            }
-
-            // Define geocoding function
-            function geocode(location) {
-                const mapKey = '{{$mapkey->key}}';
-                const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${mapKey}`;
-                console.log("Geocoding URL:", url);
-
-                fetch(url)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data.results && data.results.length > 0) {
-                            const { lat, lng } = data.results[0].geometry.location;
-                            console.log("Geocoded location:", lat, lng);
-                            centerMap(lat, lng, 12);
-                        } else {
-                            console.log('No results found for the given location.');
-                        }
-                    })
-                    .catch((error) => console.log(error));
-            }
-
-            // Define map centering function
-            function centerMap(lat, lng, zoom) {
-                const center = new google.maps.LatLng(lat, lng);
-                myMap.setCenter(center);
-                myMap.setZoom(zoom);
-            }
-
-            // Add event listener to form
-            const form = document.getElementById("location-search-form");
-            form.addEventListener("submit", handleFormSubmit);
 	});
+
+	function handleSearchClick() {
+            const input = document.getElementById("searchBox");
+            const location = input.value;
+            console.log("Location to geocode:", location);
+            geocode(location);
+        }
+
+        // Define geocoding function
+        function geocode(location) {
+            const mapKey = '{{$mapkey->key}}';
+            const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${mapKey}`;
+            console.log("Geocoding URL:", url);
+
+            fetch(url)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.results && data.results.length > 0) {
+                        const { lat, lng } = data.results[0].geometry.location;
+                        console.log("Geocoded location:", lat, lng);
+                        centerMap(lat, lng, 12);
+                    } else {
+                        console.log('No results found for the given location.');
+                    }
+                })
+                .catch((error) => console.log(error));
+        }
+
+        // Define map centering function
+        function centerMap(lat, lng, zoom) {
+            const center = new google.maps.LatLng(lat, lng);
+            myMap.setCenter(center);
+            myMap.setZoom(zoom);
+        }
 </script>
 @endsection
