@@ -1,5 +1,11 @@
 @extends('layouts.app')
-
+@section('style')
+<style>
+	.grecaptcha-badge{
+		display: none ;
+	}
+</style>
+@endsection
 @section('content')
 
 <div class="row">
@@ -101,7 +107,16 @@
 					</div>
 					<div class="row no-gutters">
 						<div class="col-lg-12 pl-lg-1 my-2" data-title="Tombol masuk" data-intro="Klik tombol ini untuk mengakses aplikasi jika seluruh kolom telah terisi" data-step="6">
-							<button id="js-login-btn" type="submit" class="btn btn-block btn-info btn-xm">{{ trans('global.login') }}</button>
+							<button
+									id="js-login-btn"
+									type="submit"
+									class="btn btn-block btn-info btn-sm " {{--g-recaptcha --}}
+									{{-- data-sitekey="{{config('services.recaptcha.site_key')}}"
+									data-callback='onSubmit'
+									data-action='submit' --}}
+								>
+									{{ trans('global.login') }}
+								</button>
 						</div>
 					</div>
 
@@ -117,8 +132,31 @@
 	</div>
 </div>
 @endsection
+@push('scripts')
+	<script>
+		function onSubmit(token) {
+			document.getElementById("js-login").submit();
+		}
+	</script>
+@endpush
 @section('scripts')
+@if ($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let errorMessages = '<ul>';
+            @foreach ($errors->all() as $error)
+                errorMessages += '<li>{{ $error }}</li>';
+            @endforeach
+            errorMessages += '</ul>';
 
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Errors',
+                html: errorMessages
+            });
+        });
+    </script>
+@endif
 <script>
 	$(document).ready(function () {
 		@if ($errors->any())

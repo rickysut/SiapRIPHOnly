@@ -39,6 +39,8 @@
     <link rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/fa-solid.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/fa-brands.css') }}">
 
+	<link rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/notifications/sweetalert2/sweetalert2.bundle.css') }}">
+
     @yield('style')
 
     <!-- CSRF Token -->
@@ -46,6 +48,7 @@
 
     <!-- Scripts -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+	<script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
 
 <body class="">
@@ -101,9 +104,10 @@
         </div>
     </div>
     @include('partials.pagesettings')
+	@stack('scripts')
     <script src="{{ asset('js/vendors.bundle.js') }}"></script>
     <script src="{{ asset('js/app.bundle.js') }}"></script>
-
+	<script src="{{ asset('js/smartadmin/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
     {{-- <script>
         $(document).ready(function() {
             $(function() {

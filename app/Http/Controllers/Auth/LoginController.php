@@ -12,7 +12,9 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\DataUser;
+use Closure;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class LoginController extends Controller
 {
@@ -191,6 +193,17 @@ class LoginController extends Controller
 			'roleaccess' => 'required|integer',
 			$this->username() => 'required|string',
 			//'password' => 'required|string',
+			// 'g-recaptcha-response' => ['required', function (string $attribute, mixed $value, Closure $fail) use ($request) {
+			// 	$g_response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+			// 		'secret' => config('services.recaptcha.secret_key'),
+			// 		'response' => $value,
+			// 		'remoteip' => $request->ip()
+			// 	]);
+
+			// 	if (!$g_response->json('success')) {
+			// 		$fail("The {$attribute} is invalid.");
+			// 	}
+			// }]
 		]);
 	}
 
