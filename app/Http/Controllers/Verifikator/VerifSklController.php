@@ -361,7 +361,7 @@ class VerifSklController extends Controller
 				$request->validate([
 					'ndhpskl' => 'file|mimes:pdf|max:2048',
 				]);
-				$ndhpsklFile = 'notdinskl_' . $fileNoIjin . '.' . $file->extension();
+				$ndhpsklFile = 'notdinskl_' . $fileNoIjin . '_' . time() . '.' . $file->extension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $ndhpsklFile, 'public');
 			}
 
@@ -371,7 +371,7 @@ class VerifSklController extends Controller
 				$request->validate([
 					'baskls' => 'file|mimes:pdf|max:2048',
 				]);
-				$basklFile = 'baskls_' . $fileNoIjin . '.' . $file->extension();
+				$basklFile = 'baskls_' . $fileNoIjin . '_' . time() . '.' . $file->extension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $basklFile, 'public');
 			}
 

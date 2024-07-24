@@ -238,7 +238,7 @@ class VerifTanamController extends Controller
 					'batanam' => 'file|mimes:pdf|max:2048', // Hanya izinkan file PDF
 				]);
 
-				$filenameBatanam = 'batanam_' . $fileNoIjin . '.' . $file->extension();
+				$filenameBatanam = 'batanam_' . $fileNoIjin . '_' . time() . '.' . $file->extension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $filenameBatanam, 'public');
 			}
 
@@ -251,7 +251,7 @@ class VerifTanamController extends Controller
 					'ndhprt' => 'file|mimes:pdf|max:2048', // Hanya izinkan file PDF
 				]);
 
-				$filenameNdhprt = 'notdintanam_' . $fileNoIjin . '.' . $file->extension();
+				$filenameNdhprt = 'notdintanam_' . $fileNoIjin . '_' . time() . '.' . $file->extension();
 				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $filenameNdhprt, 'public');
 			}
 
