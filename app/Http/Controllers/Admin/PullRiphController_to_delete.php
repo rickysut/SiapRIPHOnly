@@ -14,6 +14,7 @@ use App\Models\Lokasi;
 use App\Models\MasterAnggota;
 use App\Models\Pks;
 use App\Models\MasterPoktan;
+use App\Models\UserDocs;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
@@ -163,10 +164,27 @@ class PullRiphController extends Controller
 						'npwp' => $stnpwp,
 						'no_ijin' => $noijin,
 					])->forceDelete();
+
 					PKS::where([
 						'npwp' => $stnpwp,
 						'no_ijin' => $noijin,
 					])->forceDelete();
+
+					AjuVerifTanam::where([
+						'npwp' => $stnpwp,
+						'no_ijin' => $noijin,
+					])->forceDelete();
+
+					AjuVerifProduksi::where([
+						'npwp' => $stnpwp,
+						'no_ijin' => $noijin,
+					])->forceDelete();
+
+					UserDocs::where([
+						'npwp' => $stnpwp,
+						'no_ijin' => $noijin,
+					])->forceDelete();
+
 					if (is_array($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
 						// Kelompoktani adalah array
 						foreach ($dtjson->riph->wajib_tanam->kelompoktani->loop as $poktan) {
