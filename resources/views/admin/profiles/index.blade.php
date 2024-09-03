@@ -16,6 +16,9 @@
 	</div>
 </div>
 @else
+<div class="alert alert-warning" role="alert">
+	<strong>Info!</strong> Perubahan Data Profile hanya dapat dilakukan melalui aplikasi RIPH (SIAP RIPH).
+</div>
 <div class="panel" >
 	<div class="panel-hdr">
 		<h2>
