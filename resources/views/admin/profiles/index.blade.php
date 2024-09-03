@@ -113,11 +113,11 @@
 													<div class="form-group row">
 														<div class="col-md-6">
 															<label class="form-label" for="fix_phone">No. Telepon</label>
-															<input type="text" name="fix_phone" class="form-control" placeholder="Nomor Telepon Perusahaan" value="{{ ($data_user->fix_phone??'') }}" >
+															<input type="text" name="fix_phone" class="form-control" placeholder="Nomor Telepon Perusahaan" value="{{ ($data_user->fix_phone??'') }}" readonly>
 														</div>
 														<div class="col-md-6">
 															<label class="form-label" for="fax">No. Fax</label>
-															<input type="text" name="fax" class="form-control" placeholder="Nomor Fax Perusahaan" value="{{ ($data_user->fax??'') }}">
+															<input type="text" name="fax" class="form-control" placeholder="Nomor Fax Perusahaan" value="{{ ($data_user->fax??'') }}" readonly>
 														</div>
 													</div>
 													<div class="form-group row">
@@ -130,7 +130,7 @@
 													<div class="form-group row">
 														<div class="col-md-6">
 															<label class="form-label" for="provinsi">Provinsi</label>
-															<select id="province" class="select2-prov form-control w-100" name="provinsi" readonly>
+															<select id="province" class="select2-prov form-control w-100" name="provinsi" disabled>
 																@php
 																	$selectedProvinsiCode = $data_user && $data_user->provinsi ? $data_user->provinsi : null;
 																	$selectedProvinsiName = $selectedProvinsiCode ?
@@ -143,7 +143,7 @@
 														</div>
 														<div class="col-md-6">
 															<label class="form-label" for="kabupaten">Kabupaten</label>
-															<select id="kabupaten" class="select2-kab form-control w-100" name="kabupaten" readonly>
+															<select id="kabupaten" class="select2-kab form-control w-100" name="kabupaten" disabled>
 																@php
 																	$selectedKabupatenCode = $data_user && $data_user->kabupaten ? $data_user->kabupaten : null;
 																	$selectedKabupatenName = $selectedKabupatenCode ?
@@ -155,7 +155,7 @@
 															</select>
 														</div>
 													</div>
-													<div class="form-group row">
+													<div class="form-group row" hidden>
 														<div class="col-md-6">
 															<label class="form-label" for="kecamatan">Kecamatan</label>
 															<select id="kecamatan" class="select2-kec form-control w-100" name="kecamatan" readonly>
@@ -231,7 +231,7 @@
 												</div>
 												<div class="col-md-6">
 													<label class="form-label" for="ktp">No. KTP</label>
-													<input type="text" name="ktp" class="form-control ktp" placeholder="No. KTP" value="{{ ($data_user->ktp??'') }}">
+													<input type="text" name="ktp" class="form-control ktp" placeholder="No. KTP" value="{{ ($data_user->ktp??'') }}" readonly>
 													<div class="help-block">Diisi digit no KTP</div>
 												</div>
 											</div>
