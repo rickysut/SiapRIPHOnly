@@ -85,29 +85,29 @@
 											<div class="panel-container show">
 												<div class="panel-content">
 													<div class="form-group row">
-														<label class="col-xl-12 form-label" for="company_name">Nama Perusahaan <span class="text-danger">*</span></label>
+														<label class="col-xl-12 form-label" for="company_name">Nama Perusahaan</label>
 														<div class="col-md-12">
-															<input type="text" name="company_name" class="form-control" placeholder="Nama Perusahaan" value="{{ ($data_user->company_name??'') }}" required>
+															<input type="text" name="company_name" class="form-control" placeholder="Nama Perusahaan" value="{{ ($data_user->company_name??'') }}" readonly>
 														</div>
 													</div>
 													<div class="form-group row">
 														<div class="col-md-6">
-															<label class="form-label" for="pic_name">Penanggung Jawab <span class="text-danger">*</span></label>
-															<input type="text" name="pic_name" class="form-control" placeholder="Nama Penanggung Jawab" value="{{ ($data_user->pic_name??'') }}" required>
+															<label class="form-label" for="pic_name">Penanggung Jawab</label>
+															<input type="text" name="pic_name" class="form-control" placeholder="Nama Penanggung Jawab" value="{{ ($data_user->pic_name??'') }}" readonly>
 														</div>
 														<div class="col-md-6">
-															<label class="form-label" for="jabatan">Jabatan <span class="text-danger">*</span></label>
-															<input type="text" name="jabatan" class="form-control" placeholder="Jabatan Di Perusahaan" value="{{ ($data_user->jabatan??'') }}" required>
+															<label class="form-label" for="jabatan">Jabatan</label>
+															<input type="text" name="jabatan" class="form-control" placeholder="Jabatan Di Perusahaan" value="{{ ($data_user->jabatan??'') }}" readonly>
 														</div>
 													</div>
 													<div class="form-group row">
 														<div class="col-md-6">
-															<label class="form-label" for="npwp_company">Nomor Pokok Wajib Pajak (NPWP) <span class="text-danger">*</span></label>
-															<input type="text" name="npwp_company" class="form-control npwp_company" placeholder="00.000.000.0-000.000"  value="{{ ($data_user->npwp_company??'') }}" required>
+															<label class="form-label" for="npwp_company">Nomor Pokok Wajib Pajak (NPWP)</label>
+															<input type="text" name="npwp_company" class="form-control npwp_company" placeholder="00.000.000.0-000.000"  value="{{ ($data_user->npwp_company??'') }}" readonly>
 														</div>
 														<div class="col-md-6">
-															<label class="form-label" for="nib_company">Nomor Induk Berusaha (NIB) <span class="text-danger">*</span></label>
-															<input type="text" name="nib_company" class="form-control nib_company" placeholder="Nomor Induk Berusaha" value="{{ ($data_user->nib_company??'') }}" required>
+															<label class="form-label" for="nib_company">Nomor Induk Berusaha (NIB)</label>
+															<input type="text" name="nib_company" class="form-control nib_company" placeholder="Nomor Induk Berusaha" value="{{ ($data_user->nib_company??'') }}" readonly>
 														</div>
 													</div>
 													<div class="form-group row">
@@ -121,16 +121,16 @@
 														</div>
 													</div>
 													<div class="form-group row">
-														<label class="col-xl-12 form-label" for="address_company">Alamat  <span class="text-danger">*</span></label>
+														<label class="col-xl-12 form-label" for="address_company">Alamat </label>
 														<div class="col-md-12">
-															<textarea type="text" name="address_company" class="form-control" placeholder="Alamat" rows="2" required>{{ ($data_user->address_company??'') }}</textarea>
+															<textarea type="text" name="address_company" class="form-control" placeholder="Alamat" rows="2" readonly>{{ ($data_user->address_company??'') }}</textarea>
 														</div>
 													</div>
 
 													<div class="form-group row">
 														<div class="col-md-6">
-															<label class="form-label" for="provinsi">Provinsi <span class="text-danger">*</span></label>
-															<select id="province" class="select2-prov form-control w-100" name="provinsi" required>
+															<label class="form-label" for="provinsi">Provinsi</label>
+															<select id="province" class="select2-prov form-control w-100" name="provinsi" readonly>
 																@php
 																	$selectedProvinsiCode = $data_user && $data_user->provinsi ? $data_user->provinsi : null;
 																	$selectedProvinsiName = $selectedProvinsiCode ?
@@ -142,8 +142,8 @@
 															</select>
 														</div>
 														<div class="col-md-6">
-															<label class="form-label" for="kabupaten">Kabupaten <span class="text-danger">*</span></label>
-															<select id="kabupaten" class="select2-kab form-control w-100" name="kabupaten" required>
+															<label class="form-label" for="kabupaten">Kabupaten</label>
+															<select id="kabupaten" class="select2-kab form-control w-100" name="kabupaten" readonly>
 																@php
 																	$selectedKabupatenCode = $data_user && $data_user->kabupaten ? $data_user->kabupaten : null;
 																	$selectedKabupatenName = $selectedKabupatenCode ?
@@ -157,8 +157,8 @@
 													</div>
 													<div class="form-group row">
 														<div class="col-md-6">
-															<label class="form-label" for="kecamatan">Kecamatan <span class="text-danger">*</span></label>
-															<select id="kecamatan" class="select2-kec form-control w-100" name="kecamatan" required>
+															<label class="form-label" for="kecamatan">Kecamatan</label>
+															<select id="kecamatan" class="select2-kec form-control w-100" name="kecamatan" readonly>
 																@if ($data_user && $data_user->kecamatan)
 																	@php
 																		$Kecamatan_id = $data_user->kecamatan;
@@ -173,8 +173,8 @@
 															</select>
 														</div>
 														<div class="col-md-6">
-															<label class="form-label" for="desa">Desa <span class="text-danger">*</span></label>
-															<select id="desa" class="select2-des form-control w-100" name="desa" required>
+															<label class="form-label" for="desa">Desa</label>
+															<select id="desa" class="select2-des form-control w-100" name="desa" readonly>
 																@if ($data_user && $data_user->desa)
 																	@php
 																		$Desa_id = $data_user->desa;
@@ -191,12 +191,12 @@
 													</div>
 													<div class="form-group row">
 														<div class="col-md-6">
-															<label class="form-label" for="kodepos">Kode Pos <span class="text-danger">*</span></label>
-															<input type="text" name="kodepos" class="form-control kodepos" placeholder="Kode Pos" value="{{ ($data_user->kodepos??'') }}"required>
+															<label class="form-label" for="kodepos">Kode Pos</label>
+															<input type="text" name="kodepos" class="form-control kodepos" placeholder="Kode Pos" value="{{ ($data_user->kodepos??'') }}" readonly>
 														</div>
 														<div class="col-md-6">
-															<label class="form-label" for="email_company">Email Perusahaan <span class="text-danger">*</span></label>
-															<input type="text" name="email_company" class="form-control email_company" placeholder="Email Perusahaan" value="{{ ($data_user->email_company??'') }}" required>
+															<label class="form-label" for="email_company">Email Perusahaan</label>
+															<input type="text" name="email_company" class="form-control email_company" placeholder="Email Perusahaan" value="{{ ($data_user->email_company??'') }}" readonly>
 														</div>
 													</div>
 												</div>
@@ -215,22 +215,22 @@
 										<div class="panel-content">
 											<div class="form-group row">
 												<div class="col-md-6">
-													<label class="form-label" for="name">Nama Lengkap <span class="text-danger">*</span></label>
-													<input type="text" id="name" name="name"  class="form-control" placeholder="Nama Lengkap" value="{{ ($data_user->name??'') }}" required>
+													<label class="form-label" for="name">Nama Lengkap</label>
+													<input type="text" id="name" name="name"  class="form-control" placeholder="Nama Lengkap" value="{{ ($data_user->name??'') }}" readonly>
 												</div>
 												<div class="col-md-6">
-													<label class="form-label" for="email">Email <span class="text-danger">*</span></label>
-													<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ auth()->user()->email }}" required autocomplete="email">
+													<label class="form-label" for="email">Email</label>
+													<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ auth()->user()->email }}" readonly autocomplete="email">
 												</div>
 											</div>
 											<div class="form-group row">
 												<div class="col-md-6">
-													<label class="form-label" for="mobile_phone">No. Handphone <span class="text-danger">*</span></label>
-													<input type="text" name="mobile_phone" class="form-control" placeholder="No. Handphone" value="{{ ($data_user->mobile_phone??'') }}" required>
+													<label class="form-label" for="mobile_phone">No. Handphone</label>
+													<input type="text" name="mobile_phone" class="form-control" placeholder="No. Handphone" value="{{ ($data_user->mobile_phone??'') }}" readonly>
 													<div class="help-block">Jangan menggunakan no. pribadi.</div>
 												</div>
 												<div class="col-md-6">
-													<label class="form-label" for="ktp">No. KTP <span class="text-danger">*</span></label>
+													<label class="form-label" for="ktp">No. KTP</label>
 													<input type="text" name="ktp" class="form-control ktp" placeholder="No. KTP" value="{{ ($data_user->ktp??'') }}">
 													<div class="help-block">Diisi digit no KTP</div>
 												</div>
@@ -255,19 +255,30 @@
 													<input type="file" accept=".jpg, .png" class="custom-file-input" name="imagektp" aria-describedby="imagektp" value="">
 													<label class="custom-file-label" for="imagektp"></label>
 												</div>
-												<span class="help-block">Unggah foto KTP. JPG atau PNG, max 2Mb.</span>
+												<span class="help-block">
+													@if($data_user->ktp_image)
+														<a href="{{ asset($data_user->ktp_image) }}" target="blank">Lihat KTP</a>
+													@else
+														Unggah foto KTP. JPG atau PNG, max 2Mb.
+													@endif
+												</span>
 											</div>
 											<div class="form-group">
 												<label class="form-label" for="assignment">Assignment/Surat Tugas</label>
 												<div class="custom-file">
-													<input type="file" class="custom-file-input" name="assignment" aria-describedby="assignment" value="" >
+													<input type="file" accept=".pdf" class="custom-file-input" name="assignment" aria-describedby="assignment" value="" >
 													<label class="custom-file-label" for="assignment"></label>
 												</div>
-												<span class="help-block">Unggah surat tugas. PDF atau JPG, max 2Mb.</span>
+												<span class="help-block">
+													@if($data_user->assignment)
+														<a href="{{ asset($data_user->assignment) }}" target="blank">Lihat Surat Tugas</a>
+													@else
+														Unggah surat tugas. PDF max 2Mb.
+													@endif
+												</span>
 											</div>
 										</div>
 									</div>
-
 								</div>
 							</div>
 						</div>
@@ -289,7 +300,7 @@
 @section('scripts')
 @parent
 <script src="{{ asset('js/jquery/jquery.validate.js') }}"></script>
-<script src="{{ asset('js/jquery/additional-methods.js') }}"></script>
+{{-- <script src="{{ asset('js/jquery/additional-methods.js') }}"></script> --}}
 <script src="{{ asset('js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
 
 
@@ -302,155 +313,153 @@
 			$('.ktp').mask('0000000000000000');
 			var $validator = $("#profileform").validate({
 				rules: {
-					name: {
-						required: true
-					},
-					email: {
-						required: true,
-					},
-					mobile_phone: {
-						required: true,
-						minlength: 10
-					},
-					ktp: {
-						required: true,
-						minlength: 16
-					},
-					company_name: {
-						required: true
-					},
-					pic_name: {
-						required: true
-					},
-					jabatan: {
-						required: true
-					},
-					npwp_company: {
-						required: true,
-						minlength: 15
-					},
-					nib_company: {
-						required: true,
-						minlength: 13
-					},
-					address_company: {
-						required: true
-					},
-					provinsi: {
-						required: true
-					},
-					kabupaten: {
-						required: true
-					},
+					// name: {
+					// 	required: true
+					// },
+					// email: {
+					// 	required: true,
+					// },
+					// mobile_phone: {
+					// 	required: true,
+					// 	minlength: 10
+					// },
+					// ktp: {
+					// 	required: true,
+					// 	minlength: 16
+					// },
+					// company_name: {
+					// 	required: true
+					// },
+					// pic_name: {
+					// 	required: true
+					// },
+					// jabatan: {
+					// 	required: true
+					// },
+					// npwp_company: {
+					// 	required: true,
+					// 	minlength: 15
+					// },
+					// nib_company: {
+					// 	required: true,
+					// 	minlength: 13
+					// },
+					// address_company: {
+					// 	required: true
+					// },
+					// provinsi: {
+					// 	required: true
+					// },
+					// kabupaten: {
+					// 	required: true
+					// },
 					kecamatan: {
 						required: true
 					},
 					desa: {
 						required: true
-					},
-					kodepos: {
-						required: true
-					},
-					username: {
-						required: true,
-						minlength: 3
-					},
-					password: {
-						required: true,
-						minlength: 6
-					},
-					password_confirmation: {
-						required: true,
-						minlength: 6
-					},
+					// },
+					// kodepos: {
+					// 	required: true
+					// },
+					// username: {
+					// 	required: true,
+					// 	minlength: 3
+					// },
+					// password: {
+					// 	required: true,
+					// 	minlength: 6
+					// },
+					// password_confirmation: {
+					// 	required: true,
+					// 	minlength: 6
+					// },
 
-					dataok: {
-						required: true
+					// dataok: {
+					// 	required: true
 
-					},
-					terms: {
-						required: true
-
+					// },
+					// terms: {
+					// 	required: true
 					}
 				},
 				messages:{
-					name:
-					{
-						required:"Nama harus diisi"
-					},
-					email:
-					{
-						required:"Email harus diisi",
-						email: "Format Email tidak benar"
-					},
-					mobile_phone:
-					{
-						required:"No handphone harus diisi",
-						minlength: "minimal {0} digit"
-					},
-					ktp:
-					{
-						required:"No KTP harus diisi",
-						minlength: "minimal {0} digit"
-					},
-					company_name:
-					{
-						required:"Nama perusahaan harus diisi"
+					// name:
+					// {
+					// 	required:"Nama harus diisi"
+					// },
+					// email:
+					// {
+					// 	required:"Email harus diisi",
+					// 	email: "Format Email tidak benar"
+					// },
+					// mobile_phone:
+					// {
+					// 	required:"No handphone harus diisi",
+					// 	minlength: "minimal {0} digit"
+					// },
+					// ktp:
+					// {
+					// 	required:"No KTP harus diisi",
+					// 	minlength: "minimal {0} digit"
+					// },
+					// company_name:
+					// {
+					// 	required:"Nama perusahaan harus diisi"
 
-					},
-					pic_name:
-					{
-						required:"Nama penanggung jawab harus diisi"
-					},
-					jabatan:
-					{
-						required:"Jabatan harus diisi"
-					},
-					npwp_company: {
-						required: "NPWP perusahaan harus diisi",
-						minlength: "minimal {0} digit"
-					},
-					nib_company: {
-						required: "NIB perusahaan harus diisi",
-						minlength: "minimal {0} digit"
-					},
-					address_company: {
-						required: "Alamat perusahaan harus diisi"
-					},
-					provinsi: {
-						required: "Pilih provinsi"
-					},
-					kabupaten: {
-						required: "Pilih kabupaten"
-					},
+					// },
+					// pic_name:
+					// {
+					// 	required:"Nama penanggung jawab harus diisi"
+					// },
+					// jabatan:
+					// {
+					// 	required:"Jabatan harus diisi"
+					// },
+					// npwp_company: {
+					// 	required: "NPWP perusahaan harus diisi",
+					// 	minlength: "minimal {0} digit"
+					// },
+					// nib_company: {
+					// 	required: "NIB perusahaan harus diisi",
+					// 	minlength: "minimal {0} digit"
+					// },
+					// address_company: {
+					// 	required: "Alamat perusahaan harus diisi"
+					// },
+					// provinsi: {
+					// 	required: "Pilih provinsi"
+					// },
+					// kabupaten: {
+					// 	required: "Pilih kabupaten"
+					// },
 					kecamatan: {
 						required: "Pilih kecamatan"
 					},
 					desa: {
 						required: "Pilih Desa / Kelurahan"
-					},
-					kodepos: {
-						required: "Kode Pos harus diisi"
-					},
-					username: {
-						required: "Username harus diisi",
-						minlength: "minimal {0} karakter"
-					},
-					password: {
-						required: "Password harus diisi",
-						minlength: "minimal {0} karakter"
-					},
-					password_confirmation: {
-						required: "Password belum dikonfirmmasi",
-						minlength: "minimal {0} karakter"
-					},
+					// },
+					// kodepos: {
+					// 	required: "Kode Pos harus diisi"
+					// },
+					// username: {
+					// 	required: "Username harus diisi",
+					// 	minlength: "minimal {0} karakter"
+					// },
+					// password: {
+					// 	required: "Password harus diisi",
+					// 	minlength: "minimal {0} karakter"
+					// },
+					// password_confirmation: {
+					// 	required: "Password belum dikonfirmmasi",
+					// 	minlength: "minimal {0} karakter"
+					// },
 
-					dataok: {
-						required: "!"
-					},
-					terms: {
-						required: "!"
-
+					// dataok: {
+					// 	required: "!"
+					// },
+					// terms: {
+					// 	required: "!"
 					}
 				}
 			});

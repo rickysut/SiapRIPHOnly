@@ -100,23 +100,29 @@ class ProfileController extends Controller
 		$data = $request->all();
 
 		$regdata = [
-			'name'          => $data['name'],
-			'mobile_phone'  => $data['mobile_phone'],
-			'fix_phone'     => $data['fix_phone'],
-			'company_name'  => $data['company_name'],
-			'pic_name'      => $data['pic_name'],
-			'jabatan'       => $data['jabatan'],
-			'npwp_company'  => $data['npwp_company'],
-			'nib_company'   => $data['nib_company'],
-			'address_company' => $data['address_company'],
-			'provinsi'      => $data['provinsi'],
-			'kabupaten'     => $data['kabupaten'],
-			'kecamatan'     => $data['kecamatan'],
-			'desa'          => $data['desa'],
-			'kodepos'       => $data['kodepos'],
-			'ktp'           => $data['ktp'],
-			'email_company' => $data['email_company']
+			// 'name'          => $data['name'],
+			// 'mobile_phone'  => $data['mobile_phone'],
+			// 'fix_phone'     => $data['fix_phone'],
+			// 'company_name'  => $data['company_name'],
+			// 'pic_name'      => $data['pic_name'],
+			// 'jabatan'       => $data['jabatan'],
+			// 'npwp_company'  => $data['npwp_company'],
+			// 'nib_company'   => $data['nib_company'],
+			// 'address_company' => $data['address_company'],
+			// 'provinsi'      => $data['provinsi'],
+			// 'kabupaten'     => $data['kabupaten'],
+			// 'kecamatan'     => $data['kecamatan'],
+			// 'desa'          => $data['desa'],
+			// 'kodepos'       => $data['kodepos'],
+			// 'ktp'           => $data['ktp'],
+			// 'email_company' => $data['email_company']
 		];
+		$request->validate([
+			'avatar' => 'mimes:jpeg,jpg,png|mimetypes:image/jpeg,image/png|max:2048',
+			'logo' => 'mimes:jpeg,jpg,png|mimetypes:image/jpeg,image/png|max:2048',
+			'imagektp' => 'mimes:jpeg,jpg,png|mimetypes:image/jpeg,image/png|max:2048',
+			'assignment' => 'mimes:pdf|mimetypes:application/pdf|max:2048',
+		]);
 		$avatar_path = '';
 		$realnpwp = $data['npwp_company'];
 		$npwp = str_replace('.', '', $realnpwp);
