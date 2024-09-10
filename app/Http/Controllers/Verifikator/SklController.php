@@ -63,8 +63,8 @@ class SklController extends Controller
 		$luas_verif = $pengajuan->luas_verif;
 		$wajib_produksi = $commitment->volume_riph * 0.05;
 		$volume_verif = $pengajuan->volume_verif;
-		$total_luas = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
+		$total_luas = $commitment->datarealisasi->sum('luas_lahan');
+		$total_volume = $commitment->datarealisasi->sum('volume');
 
 		$data = [
 			'Perusahaan' => $commitment->datauser->company_name,

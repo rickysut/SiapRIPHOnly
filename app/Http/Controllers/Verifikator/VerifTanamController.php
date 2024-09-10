@@ -70,8 +70,8 @@ class VerifTanamController extends Controller
 		$pkss = Pks::withCount('lokasi')->where('no_ijin', $verifikasi->no_ijin)
 			->get();
 
-		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
+		$total_luastanam = $commitment->datarealisasi->sum('luas_lahan');
+		$total_volume = $commitment->datarealisasi->sum('volume');
 
 		$countPoktan = $pkss->count();
 		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
