@@ -325,10 +325,10 @@ class DashboardDataController extends Controller
 			return $commitment->lokasi->pluck('id');
 		})->count();
 		$realisasi_tanam = $commitments->flatMap(function ($commitment) {
-			return $commitment->datarealisasi->pluck('luas_lahan');
+			return $commitment->lokasi->pluck('luas_tanam');
 		})->sum();
 		$realisasi_produksi = $commitments->flatMap(function ($commitment) {
-			return $commitment->datarealisasi->pluck('volume');
+			return $commitment->lokasi->pluck('volume');
 		})->sum();
 
 
