@@ -14,7 +14,7 @@
 		@csrf
 			<div class="text-center">
 				<i class="fa fa-sync-alt fa-3x text-primary"></i>
-				<h2>Penyelarasan Data SiapRIPH S</h2>
+				<h2>Penyelarasan Data SiapRIPH</h2>
 				<div class="row justify-content-center">
 					<div class="col-md-8 order-md-2 mb-4">
 						<div class="row">
@@ -325,15 +325,16 @@
 
 			if(isNomorExists) {
 				// Jika nomor sudah terdaftar, tampilkan pesan kepada pengguna
-				var confirmMessage = confirm("PERHATIAN! Nomor tersebut sudah terdaftar. Jika Anda melanjutkan, data yang telah tersimpan akan terhapus dan digantikan dengan data yang baru. Prosedur ini menjadi Tanggung Jawab Anda sepenuhnya. Apakah Anda ingin melanjutkan?");
+				var confirmMessage = confirm("Nomor tersebut sudah terdaftar. Jika Anda melanjutkan, data yang telah tersimpan akan terhapus dan digantikan dengan data yang baru. Apakah Anda ingin melanjutkan?");
 				if(!confirmMessage) {
+					// Jika pengguna membatalkan, hentikan proses
 					return false;
 				}
 			}
 
 			const arraysToCheck = [
-				// { data: <?php echo json_encode($ajutanam); ?>, message: "Verifikasi Tanam" },
-				// { data: <?php echo json_encode($ajuproduksi); ?>, message: "Verifikasi Produksi" },
+				{ data: <?php echo json_encode($ajutanam); ?>, message: "Verifikasi Tanam" },
+				{ data: <?php echo json_encode($ajuproduksi); ?>, message: "Verifikasi Produksi" },
 				{ data: <?php echo json_encode($ajuskl); ?>, message: "Pengajuan SKL" },
 				{ data: <?php echo json_encode($completed); ?>, message: "Lunas" }
 			];
