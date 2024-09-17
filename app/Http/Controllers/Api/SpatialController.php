@@ -110,7 +110,7 @@ class SpatialController extends Controller
 					'prev_page_url' => $spatials->previousPageUrl(),
 				]
 			]);
-		}catch (\Exception $e) {
+		} catch (\Exception $e) {
 			return response()->json([
 				'success' => false,
 				'error' => $e->getMessage(),
@@ -129,6 +129,36 @@ class SpatialController extends Controller
 			]);
 		}
 	}
+
+	public function releaseAllUnlockedSpatial(Request $request)
+	{
+		DB::beginTransaction();
+
+		try {
+			// Retrieve all records with status 1
+			$spatials = MasterSpatial::where('status', 1)->get();
+
+			// Check if there are no records with status 1
+			if ($spatials->isEmpty()) {
+				DB::rollBack();
+				return response()->json(['success' => false, 'message' => 'Semua lokasi berstatus Idle.']);
+			}
+
+			// Update status for each record
+			foreach ($spatials as $spatial) {
+				$spatial->status = 0;
+				$spatial->save();
+			}
+
+			DB::commit();
+
+			return response()->json(['success' => true, 'message' => 'Semua lokasi telah idle.']);
+		} catch (\Exception $e) {
+			DB::rollBack();
+			return response()->json(['success' => false, 'message' => 'Failed to update spatial data.', 'error' => $e->getMessage()], 500);
+		}
+	}
+
 
 
 	/**
