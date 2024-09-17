@@ -15,6 +15,11 @@ Route::group(['as' => 'api.', 'namespace' => 'Api', 'middleware' => ['auth:sanct
 	//getCompletedSKL
 	Route::get('getSKL/{no_ijin}', 'SKLController@getSKL');
 
+	//getspatial
+	Route::get('getLokasiTanam', 'SpatialController@getLokasiTanam');
+	Route::post('batchUpdateStatusLokasi', 'SpatialController@batchUpdateStatusLokasi');
+	Route::post('updateStatusLokasi/{kodeSpatial}', 'SpatialController@updateStatusLokasi');
+
 	//dashboard
 	Route::get('getApiDashboardDatabyYear/{periodetahun}', 'DashboardDataController@monitoringDataByYear');
 
