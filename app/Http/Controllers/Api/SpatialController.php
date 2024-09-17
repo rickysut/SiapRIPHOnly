@@ -17,8 +17,8 @@ class SpatialController extends Controller
 		// About information
 		$about = [
 			'Daftar Kode Spatial Wajib Tanam Simethris 4beta',
-			'Parameter: ?s=status&p=provinsi_id&b=kabupaten_id&c=kecamatan_id&l=kelurahan_id&k=kode_poktan',
-			'status dimaksud adalah status lahan.',
+			'Parameter: ?page=int&s=status&p=provinsi_id&b=kabupaten_id&c=kecamatan_id&l=kelurahan_id&k=kode_poktan',
+			'status pada data_spatial dimaksud adalah status kemitraan (0 = unlock/release; 1 = locked/claimed).',
 			'wilayah dimaksud adalah Wilayah di mana lahan tersebut berada.'
 		];
 
