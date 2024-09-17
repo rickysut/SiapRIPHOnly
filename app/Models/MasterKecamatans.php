@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MasterKecamatan extends Model
 {
-    use HasFactory;
-	public $table = 'data_kecamatans';
+	use HasFactory, SoftDeletes;
+
+	public $table = 'kecamatans';
 
 	protected $dates = [
 		'created_at',
@@ -19,11 +21,10 @@ class MasterKecamatan extends Model
 	public $fillable = [
 		'kabupaten_id',
 		'kecamatan_id',
-		'kode_dagri',
 		'nama_kecamatan',
+		'kd_bast',
 		'lat',
 		'lng',
-		'polygon',
 	];
 
 	public function kabupaten()

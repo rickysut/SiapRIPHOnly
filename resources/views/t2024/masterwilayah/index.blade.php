@@ -472,8 +472,31 @@
 			lengthChange: false,
 			paging: false,
 			ordering: true,
+			language: {
+				"processing": "Sedang memproses...",
+				"lengthMenu": "Tampilkan _MENU_ entri",
+				"zeroRecords": "Tidak ditemukan data yang sesuai",
+				"info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+				"infoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
+				"infoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+				"search": "Cari:",
+				"paginate": {
+					"first": "Pertama",
+					"last": "Terakhir",
+					"next": "Berikutnya",
+					"previous": "Sebelumnya"
+				},
+				"emptyTable": "Tidak ada data di dalam tabel",
+				"loadingRecords": "Sedang memuat...",
+				"thousands": ".",
+				"decimal": ",",
+				"aria": {
+					"sortAscending": ": aktifkan untuk mengurutkan kolom naik",
+					"sortDescending": ": aktifkan untuk mengurutkan kolom turun"
+				}
+			},
 			dom:
-				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
 				"<'row'<'col-sm-12'tr>>" +
 				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 			ajax: {
@@ -675,7 +698,7 @@
 						Swal.fire({
 							icon: 'error',
 							title: 'Gagal!',
-							text: 'Terjadi kesalahan saat memperbarui data.'
+							text: 'Terjadi kesalahan saat memperbarui data.' + error
 						});
 					}
 				});
@@ -700,7 +723,7 @@
 					Swal.fire({
 						icon: 'error',
 						title: 'Gagal!',
-						text: 'Terjadi kesalahan saat memperbarui data.'
+						text: 'Terjadi kesalahan saat memperbarui data.' + xhr
 					});
 				}
 			});

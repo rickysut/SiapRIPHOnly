@@ -18,6 +18,7 @@
         "laraveldaily/laravel-charts": "^0.1.29",
         "nuovo/spreadsheet-reader": "^0.5.11",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "spatie/browsershot": "^4.3",
         "twbs/bootstrap-icons": "^1.10",
         "yajra/laravel-datatables-oracle": "^9.19"
     },

@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MasterKabupaten extends Model
 {
-    use HasFactory;
-	public $table = 'data_kabupatens';
+	use HasFactory, SoftDeletes;
+
+	public $table = 'kabupatens';
 
 	protected $dates = [
 		'created_at',
@@ -19,11 +21,10 @@ class MasterKabupaten extends Model
 	public $fillable = [
 		'provinsi_id',
 		'kabupaten_id',
-		'kode_dagri',
 		'nama_kab',
+		'kd_bast',
 		'lat',
 		'lng',
-		'polygon',
 	];
 
 	public function provinsi()
@@ -35,4 +36,9 @@ class MasterKabupaten extends Model
 	{
 		return $this->hasMany(MasterKecamatan::class, 'kabupaten_id', 'kabupaten_id');
 	}
+
+	// public function pksmitra()
+	// {
+	// 	return $this->hasMany(PksMitra::class, 'kd_kab', 'kabupaten_id');
+	// }
 }
