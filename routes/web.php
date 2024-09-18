@@ -16,17 +16,20 @@ Route::get('/v2/register', function () {
 
 Route::get('/home', function () {
 	if (session('status')) {
-		if (Auth::user()->roles[0]->title == 'Spatial Administrator' || Auth::user()->roles[0]->title == 'Spatial Staff') {
-			return redirect()->route('2024.spatial.home')->with('status', session('status'));
-		}else{
+		// if (Auth::user()->roles[0]->title == 'Spatial Administrator' || Auth::user()->roles[0]->title == 'Spatial Staff') {
+		// 	return redirect()->route('2024.spatial.home')->with('status', session('status'));
+		// }else{
 			return redirect()->route('admin.home')->with('status', session('status'));
-		}
+		// }
 	}
-	if (Auth::user()->roles[0]->title == 'Spatial Administrator' || Auth::user()->roles[0]->title == 'Spatial Staff') {
-		return redirect()->route('2024.spatial.home')->with('status', session('status'));
-	}else{
-		return redirect()->route('2024.admin.home')->with('status', session('status'));
-	}
+
+	return redirect()->route('admin.home');
+
+	// if (Auth::user()->roles[0]->title == 'Spatial Administrator' || Auth::user()->roles[0]->title == 'Spatial Staff') {
+	// 	return redirect()->route('2024.spatial.home')->with('status', session('status'));
+	// }else{
+	// 	return redirect()->route('2024.admin.home')->with('status', session('status'));
+	// }
 });
 
 
