@@ -28,8 +28,6 @@ class SpatialController extends Controller
 		$page_heading = 'Peta Lahan Wajib Tanam Produksi Bawang Putih';
 		$heading_class = 'bi bi-globe-asia-australia';
 
-		$ijins = PullRiph::select('no_ijin')->get();
-
 		$kabupatens = MasterSpatial::distinct()->pluck('kabupaten_id');
 
 		//output array kabupaten
@@ -40,7 +38,7 @@ class SpatialController extends Controller
 
 		$mapkey = ForeignApi::find(1);
 
-		return view('t2024.spatial.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'mapkey', 'ijins', 'indexKabupaten'));
+		return view('t2024.spatial.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'mapkey', 'indexKabupaten'));
 	}
 
 	public function spatialList()
@@ -50,7 +48,7 @@ class SpatialController extends Controller
 		$page_heading = 'Daftar Lahan Wajib Tanam Produksi Bawang Putih';
 		$heading_class = 'bi bi-globe-asia-australia';
 
-		$ijins = PullRiph::select('no_ijin')->get();
+		// $ijins = PullRiph::select('no_ijin')->get();
 
 		$kabupatens = MasterSpatial::distinct()->pluck('kabupaten_id');
 
@@ -63,7 +61,7 @@ class SpatialController extends Controller
 
 		$mapkey = ForeignApi::find(1);
 
-		return view('t2024.spatial.spatialList', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'mapkey', 'ijins', 'indexKabupaten'));
+		return view('t2024.spatial.spatialList', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'mapkey', 'indexKabupaten'));
 	}
 
 	public function printPayload(Request $request)

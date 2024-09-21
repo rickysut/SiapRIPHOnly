@@ -57,10 +57,10 @@
 			</ul>
 		</div>
 		<ul id="js-nav-menu" class="nav-menu">
-			{{-- landing / beranda --}}
+
 			@can('landing_access')
-				<li class="c-sidebar-nav-item {{ request()->is('admin') ? 'active' : '' }}">
-					<a href="{{ route('admin.home') }}" class="c-sidebar-nav-link"
+				<li class="c-sidebar-nav-item {{ request()->is('2024/admin') ? 'active' : '' }}">
+					<a href="{{ route('2024.admin.home') }}" class="c-sidebar-nav-link"
 						data-filter-tags="home beranda landing informasi berita pesan">
 						<i class="c-sidebar-nav-icon fal fa-home-alt">
 						</i>
@@ -68,7 +68,6 @@
 					</a>
 				</li>
 			@endcan
-
 			{{-- dashhboard --}}
 			@can('dashboard_access')
 				@if (Auth::user()->roles[0]->title == 'User')
@@ -140,222 +139,431 @@
 					</li>
 				@endif
 			@endcan
-
-			{{-- user_task_access --}}
-			@can('user_task_access')
-				<li class="nav-title">Pelaporan Realisasi</li>
-				@can('pull_access')
-					<li class="c-sidebar-nav-item {{ request()->is('admin/task/pull') ? 'active' : '' }}">
-						<a href="{{ route('admin.task.pull') }}"
-							data-filter-tags="sinkronisasi sync tarik data siap riph">
-							<i class="fa-fw fal fa-sync-alt c-sidebar-nav-icon">
-							</i>
-							{{ trans('cruds.pullSync.title_lang') }}
-						</a>
-					</li>
-				@endcan
-				@can('commitment_access')
-					@if (Auth::user()->roles[0]->title == 'User')
-						<li class="c-sidebar-nav-item {{ request()->is('admin/task/commitment') ||
-						request()->is('admin/task/pks*') ? 'active' : '' }}">
-							<a href="{{ route('admin.task.commitment') }}"
-								data-filter-tags="daftar komitmen riph index">
-								<i class="fa-fw fal fa-ballot c-sidebar-nav-icon"></i>
-								{{ trans('cruds.commitment.title_lang') }}
-							</a>
-						</li>
-					@endif
-				@endcan
-				{{-- pengajuan verifikasi --}}
-				@can('pengajuan_access')
-					{{-- <li class="c-sidebar-nav-item {{request()->is('admin/task/pengajuan*') ? 'active' : '' }}">
-						@if (Auth::user()->roles[0]->title == 'User')
-						<a href="{{ route('admin.task.pengajuan.index') }}" title="Pengajuan verifikasi"
-							data-filter-tags="daftar pengajuan verifikasi data online onfarm">
-							<i class="fa-fw fal fa-upload c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">
-								Daftar Pengajuan Verifikasi
-							</span>
-						</a>
-						@else
-
-						@endif
-					</li> --}}
-				@endcan
-				{{-- Skl terbit --}}
-
-				@can('permohonan_access')
-					<li class="c-sidebar-nav-item {{ request()->is('skl/arsip') ? 'active' : '' }}">
-						<a href="{{route('admin.task.skl.arsip')}}"
-							data-filter-tags="daftar skl terbit">
-							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
-							<span class="nav-link-text text-wrap">
-								Daftar SKL Terbits
-							</span>
-							@php
-								$newSkl = new \App\Models\SklReads();
-								$newSklCount = $newSkl->getNewSklCount();
-							@endphp
-							@if ($newSklCount > 0)
-								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newSklCount }}</span>
-							@endif
-						</a>
-					</li>
-				@endcan
-				@can('draft')
-					<li class="{{ request()->is('admin/task/masterpenangkar')
-						|| request()->is('admin/task/kelompoktani')
-						|| request()->is('admin/task/masterpoktan')
-						|| request()->is('admin/task/kelompoktani/*') ? 'active open' : '' }}">
-						<a href="#" title="Kelompok tani"
-							data-filter-tags="data master kelompoktani poktan penangkar pks">
-							<i class="fa-fw fal fa-users c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Master Penangkar dan Saprodi</span>
+			<li class="nav-title" data-i18n="nav.2023_data">SIMETHRIS 2023</li>
+			<li>
+				<a href="#" title="Aplikasi Simethris 2023" data-filter-tags="2023">
+					<i class="fal fa-calendar"></i>
+					<span class="nav-link-text" data-i18n="nav.2023_data">UNTUK 2023</span>
+				</a>
+				<ul>
+					<li>
+						<a href="javascript:void(0);" title="Dashboard 2023" data-filter-tags="dashboard 2023">
+							<span class="nav-link-text" data-i18n="nav.dashboard">DASHBOARD 2023</span>
 						</a>
 						<ul>
-							@can('poktan_access')
-								@if (Auth::user()->roles[0]->title == 'user_v2')
-									{{-- for later use only --}}
-								@else
-								@endif
-								<li class="c-sidebar-nav-item {{ request()->is('admin/task/penangkar')
-									|| request()->is('admin/task/penangkar/*') ? 'active' : '' }}">
-									<a href="{{route('admin.task.penangkar')}}" title="Daftar Penangkar Benih Bawang Putih Berlabel"
-										data-filter-tags="daftar master penangkar benih">
-										<i class="fa-fw fal fa-users c-sidebar-nav-icon"></i>
-										Master Penangkar
+							{{-- landing / beranda --}}
+							@can('landing_access')
+								<li class="c-sidebar-nav-item {{ request()->is('admin') ? 'active' : '' }}">
+									<a href="{{ route('admin.home') }}" class="c-sidebar-nav-link"
+										data-filter-tags="home beranda landing informasi berita pesan 2023">
+										<i class="c-sidebar-nav-icon fal fa-home-alt">
+										</i>
+										<span class="nav-link-text">{{ trans('cruds.landing.title_lang') }}</span>
 									</a>
 								</li>
-								<li class="c-sidebar-nav-item {{ request()->is('admin/task/saprodi') ? 'active' : '' }}">
-									<a href="{{route('admin.task.saprodi.index')}}" title="Daftar Bantuan Saprodi">
-										<i class="fa-fw fal fa-gifts c-sidebar-nav-icon"></i>
-										Daftar Saprodi
+							@endcan
+
+							{{-- dashhboard --}}
+							@can('dashboard_access')
+								@if (Auth::user()->roles[0]->title == 'User')
+									<li class="{{ request()->is('admin/dashboard*') ? 'active open' : '' }} ">
+										<a href="#" title="Dashboard" data-filter-tags="dashboard pemantauan kinerja 2023">
+											<i class="fal fa-analytics"></i>
+											<span class="nav-link-text">{{ trans('cruds.dashboard.title_lang') }}</span>
+										</a>
+										<ul>
+											<li class="c-sidebar-nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+												<a href="{{ route('admin.dashboard') }}" title="Dashboard Data Monitor 2023"
+													data-filter-tags="dashboard data monitor kinerja 2023">
+													<i class="fa-fw fal fa-database c-sidebar-nav-icon"></i>
+													<span class="nav-link-text">{{ trans('cruds.dashboardUser.title_lang') }}</span>
+												</a>
+											</li>
+											<li class="c-sidebar-nav-item {{ request()->is('admin/dashboard/map') ? 'active' : '' }}">
+												<a href="{{ route('admin.dashboard.map') }}" title="Peta Wajib Tanam 2023"
+													data-filter-tags="dashboard peta pemetaan wajib tanam 2023">
+													<i class="fa-fw fal fa-map c-sidebar-nav-icon"></i>
+													<span class="nav-link-text">Peta Wajib Tanam</span>
+												</a>
+											</li>
+										</ul>
+									</li>
+								@elseif (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat')
+									<li class="{{ request()->is('admin/dashboard*') ? 'active open' : '' }} ">
+										<a href="#" title="Dashboard" data-filter-tags="dashboard pemantauan kinerja 2023">
+											<i class="fal fa-analytics"></i>
+											<span class="nav-link-text">{{ trans('cruds.dashboard.title_lang') }}</span>
+										</a>
+										<ul>
+											<li class="c-sidebar-nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+												<a href="{{ route('admin.dashboard') }}" class="c-sidebar-nav-link"
+													data-filter-tags="{{ strtolower(trans('cruds.dashboardAdmin.title_lang')) }}">
+													<i class="fa-fw fal fa-stamp c-sidebar-nav-icon"></i>{{ trans('cruds.dashboardAdmin.title_lang') }}
+												</a>
+											</li>
+											<li class="c-sidebar-nav-item {{ request()->is('admin/dashboard/map') ? 'active' : '' }}">
+												<a href="{{ route('admin.dashboard.map') }}" title="Dashboard Pemetaan 2023"
+													data-filter-tags="dashboard pemetaan 2023">
+													<i class="fa-fw fal fa-map c-sidebar-nav-icon"></i><span class="nav-link-text">Pemetaan</span>
+												</a>
+											</li>
+										</ul>
+									</li>
+								@elseif (Auth::user()->roles[0]->title == 'Verifikator')
+									<li class="{{ request()->is('admin/dashboard*') ? 'active open' : '' }} ">
+										<a href="#" title="Dashboard" data-filter-tags="dashboard pemantauan kinerja 2023">
+											<i class="fal fa-analytics"></i>
+											<span class="nav-link-text">{{ trans('cruds.dashboard.title_lang') }}</span>
+										</a>
+										<ul>
+											<li class="c-sidebar-nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+												<a href="{{ route('admin.dashboard') }}" class="c-sidebar-nav-link"
+													data-filter-tags="{{ strtolower(trans('cruds.dashboardVerifikator.title_lang')) }}">
+													<i
+														class="fa-fw fal fa-stamp c-sidebar-nav-icon"></i>Monitoring {{ trans('cruds.dashboardVerifikator.title_lang') }}
+												</a>
+											</li>
+											<li class="c-sidebar-nav-item {{ request()->is('admin/dashboard/map') ? 'active' : '' }}">
+												<a href="{{ route('admin.dashboard.map') }}" title="Dashboard Pemetaan 2023"
+													data-filter-tags="dashboard pemetaan 2023">
+													<i class="fa-fw fal fa-map c-sidebar-nav-icon"></i><span class="nav-link-text">Pemetaan</span>
+												</a>
+											</li>
+										</ul>
+									</li>
+								@endif
+							@endcan
+						</ul>
+					</li>
+					@can('verificator_task_access')
+					<li>
+						<a href="javascript:void(0);" title="Pengajuan Verifikasi 2023" data-filter-tags="pengajuan verifikasi 2023">
+							<span class="nav-link-text" data-i18n="nav.administration">PENGAJUAN VERIFIKASI 2023</span>
+						</a>
+						<ul>
+							@can('online_access')
+								<li class="c-sidebar-nav-item {{ request()->is('verification/tanam')
+									|| request()->is('verification/tanam*') ? 'active' : '' }}">
+									<a href="{{ route('verification.tanam') }}"
+										data-filter-tags="verifikasi tanam">
+										<i class="fal fa-seedling c-sidebar-nav-icon"></i>
+										<span class="nav-link-text">
+											Verifikasi Tanam
+										</span>
+										@php
+											$pengajuan = new \App\Models\AjuVerifTanam();
+											$unverified = $pengajuan->NewRequest();
+											$proceed = $pengajuan->proceedVerif();
+										@endphp
+										<span class="">
+											{{-- untuk 2024 --}}
+											@if ($unverified > 0 || $proceed > 0)
+												<span class="dl-ref {{ $unverified > 0 ? 'bg-danger-500' : 'bg-warning-500' }} hidden-nav-function-minify hidden-nav-function-top">
+													{{ $unverified }}/{{ $proceed }}
+												</span>
+											@endif
+											{{-- @if ($unverified > 0)
+												<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+											@endif
+											@if ($proceed > 0)
+												<span class="dl-ref bg-warning-500 hidden-nav-function-minify hidden-nav-function-top">{{ $proceed }}</span>
+											@endif --}}
+										</span>
+									</a>
+								</li>
+							@endcan
+							@can('onfarm_access')
+								<li class="c-sidebar-nav-item {{ request()->is('verification/produksi')
+									|| request()->is('verification/produksi*') ? 'active' : '' }}">
+									<a href="{{ route('verification.produksi') }}"
+										data-filter-tags="verifikasi produksi">
+										<i class="fal fa-dolly c-sidebar-nav-icon"></i>
+										<span class="nav-link-text">Verifikasi Produksi</span>
+										@php
+											$pengajuan = new \App\Models\AjuVerifProduksi();
+											$unverified = $pengajuan->NewRequest();
+											$proceed = $pengajuan->proceedVerif();
+										@endphp
+										{{-- untuk 2024 --}}
+										@if ($unverified > 0 || $proceed > 0)
+											<span class="dl-ref {{ $unverified > 0 ? 'bg-danger-500' : 'bg-warning-500' }} hidden-nav-function-minify hidden-nav-function-top">
+												{{ $unverified }}/{{ $proceed }}
+											</span>
+										@endif
+										{{-- @if ($unverified > 0)
+											<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+										@endif
+										@if ($proceed > 0)
+											<span class="dl-ref bg-warning-500 hidden-nav-function-minify hidden-nav-function-top">{{ $proceed }}</span>
+										@endif --}}
+									</a>
+								</li>
+							@endcan
+							@can('administrator_access')
+								<li class="c-sidebar-nav-item {{ request()->is('verification/skl')
+									|| request()->is('verification/skl*') ? 'active' : '' }}">
+									<a href="{{ route('verification.skl') }}"
+										data-filter-tags="verifikasi produksi">
+										<i class="fal fa-award c-sidebar-nav-icon"></i>
+										<span class="nav-link-text">Pengajuan SKL</span>
+										@php
+											$pengajuan = new \App\Models\AjuVerifSkl();
+											$unverified = $pengajuan->NewRequest();
+											$proceed = $pengajuan->proceedVerif();
+										@endphp
+										@if ($unverified > 0 || $proceed > 0)
+										<span class="dl-ref {{ $unverified > 0 ? 'bg-danger-500' : 'bg-warning-500' }} hidden-nav-function-minify hidden-nav-function-top">
+											{{ $unverified }}/{{ $proceed }}
+										</span>
+										@endif
+										{{-- @if ($unverified > 0)
+											<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+										@endif
+										@if ($proceed > 0)
+											<span class="dl-ref bg-warning-500 hidden-nav-function-minify hidden-nav-function-top">{{ $proceed }}</span>
+										@endif --}}
+									</a>
+								</li>
+								{{-- <li class="c-sidebar-nav-item {{ request()->is('skl/recomended/list') ? 'active' : '' }}">
+									<a href="{{ route('skl.recomended.list') }}"
+										data-filter-tags="daftar rekomendasi skl terbit">
+										<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
+										<span class="nav-link-text text-wrap">Rekomendasi & SKL</span>
+									@php
+										$pengajuan = new \App\Models\Skl();
+										$newApproved = $pengajuan->newApprovedCount();
+									@endphp
+
+									@if ($newApproved > 0)
+										<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newApproved }}</span>
+									@endif
+									</a>
+								</li> --}}
+								<li class="c-sidebar-nav-item {{ request()->is('skl/arsip') ? 'active' : '' }}">
+									<a href="{{ route('skl.arsip') }}"
+										data-filter-tags="daftar skl terbit">
+										<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
+										<span class="nav-link-text text-wrap">Daftar SKL Terbit</span>
+										{{-- @php
+											$newSkl = new \App\Models\SklReads();
+											$newSklCount = $newSkl->getNewSklCount();
+										@endphp
+										@if ($newSklCount > 0)
+											<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newSklCount }}</span>
+										@endif --}}
 									</a>
 								</li>
 							@endcan
 						</ul>
 					</li>
-				@endcan
-			@endcan
+					@endcan
+					@can('administrator_access')
+						<li>
+							<a href="javascript:void(0);" title="Menu child" data-filter-tags="utilities menu child">
+								<span class="nav-link-text" data-i18n="nav.utilities_menu_child">ADMINISTRATOR</span>
+							</a>
+							<ul>
+								@can('master_riph_access')
+									<li class="c-sidebar-nav-item {{ request()->is('admin/riphAdmin') || request()->is('admin/riphAdmin/*') ? 'active' : '' }}">
+										<a href="{{ route('admin.riphAdmin.index') }}"
+											data-filter-tags="data benchmark riph tahunan">
+											<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>{{ trans('cruds.masterriph.title_lang') }}
+										</a>
+									</li>
+									<li class="c-sidebar-nav-item {{ request()->is('admin/riphAdmin') || request()->is('admin/riphAdmin/*') ? 'active' : '' }}">
+										<a href="{{ route('admin.locationexport') }}"
+											data-filter-tags="data benchmark riph tahunan">
+											<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>
+											Eksport Data Lokasi
+										</a>
+									</li>
+								@endcan
+								@can('draft')
+									<li class="{{ request()->is('admin/task/masterpenangkar')
+										|| request()->is('admin/task/kelompoktani')
+										|| request()->is('admin/task/masterpoktan')
+										|| request()->is('admin/task/kelompoktani/*') ? 'active open' : '' }}">
+										<a href="#" title="Kelompok tani"
+											data-filter-tags="data master kelompoktani poktan penangkar pks">
+											<i class="fa-fw fal fa-users c-sidebar-nav-icon"></i>
+											<span class="nav-link-text">Master Penangkar dan Saprodi</span>
+										</a>
+										<ul>
+											@can('poktan_access')
+												@if (Auth::user()->roles[0]->title == 'user_v2')
+													{{-- for later use only --}}
+												@else
+												@endif
+												<li class="c-sidebar-nav-item {{ request()->is('admin/task/penangkar')
+													|| request()->is('admin/task/penangkar/*') ? 'active' : '' }}">
+													<a href="{{route('admin.task.penangkar')}}" title="Daftar Penangkar Benih Bawang Putih Berlabel"
+														data-filter-tags="daftar master penangkar benih">
+														<i class="fa-fw fal fa-users c-sidebar-nav-icon"></i>
+														Master Penangkar
+													</a>
+												</li>
+												<li class="c-sidebar-nav-item {{ request()->is('admin/task/saprodi') ? 'active' : '' }}">
+													<a href="{{route('admin.task.saprodi.index')}}" title="Daftar Bantuan Saprodi">
+														<i class="fa-fw fal fa-gifts c-sidebar-nav-icon"></i>
+														Daftar Saprodi
+													</a>
+												</li>
+											@endcan
+										</ul>
+									</li>
+								@endcan
+							</ul>
+						</li>
 
-			{{-- verificator task --}}
-			@can('verificator_task_access')
-				<li class="nav-title" data-i18n="nav.administation">PENGAJUAN VERIFIKASI</li>
-				@can('online_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/tanam')
-						|| request()->is('verification/tanam*') ? 'active' : '' }}">
-						<a href="{{ route('verification.tanam') }}"
-							data-filter-tags="verifikasi tanam">
-							<i class="fal fa-seedling c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">
-								Verifikasi Tanam
-							</span>
-							@php
-								$pengajuan = new \App\Models\AjuVerifTanam();
-								$unverified = $pengajuan->NewRequest();
-								$proceed = $pengajuan->proceedVerif();
-							@endphp
-							<span class="">
-								{{-- untuk 2024 --}}
-								@if ($unverified > 0 || $proceed > 0)
-									<span class="dl-ref {{ $unverified > 0 ? 'bg-danger-500' : 'bg-warning-500' }} hidden-nav-function-minify hidden-nav-function-top">
-										{{ $unverified }}/{{ $proceed }}
-									</span>
-								@endif
-								{{-- @if ($unverified > 0)
-									<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
-								@endif
-								@if ($proceed > 0)
-									<span class="dl-ref bg-warning-500 hidden-nav-function-minify hidden-nav-function-top">{{ $proceed }}</span>
-								@endif --}}
-							</span>
+					@endcan
+
+					@can('user_task_access')
+						<li>
+							<a href="javascript:void(0);" title="Pelaporan Realisasi 2023" data-filter-tags="pelaporan realisasi 2023">
+								<span class="nav-link-text" data-i18n="nav.realisasi_report">PELAPORAN REALISASI</span>
+							</a>
+							<ul>
+								@can('pull_access')
+									<li class="c-sidebar-nav-item {{ request()->is('admin/task/pull') ? 'active' : '' }}">
+										<a href="{{ route('admin.task.pull') }}"
+											data-filter-tags="sinkronisasi sync tarik data siap riph">
+											<i class="fa-fw fal fa-sync-alt c-sidebar-nav-icon">
+											</i>
+											{{ trans('cruds.pullSync.title_lang') }}
+										</a>
+									</li>
+								@endcan
+								@can('commitment_access')
+									@if (Auth::user()->roles[0]->title == 'User')
+										<li class="c-sidebar-nav-item {{ request()->is('admin/task/commitment') ||
+										request()->is('admin/task/pks*') ? 'active' : '' }}">
+											<a href="{{ route('admin.task.commitment') }}"
+												data-filter-tags="daftar komitmen riph index">
+												<i class="fa-fw fal fa-ballot c-sidebar-nav-icon"></i>
+												{{ trans('cruds.commitment.title_lang') }}
+											</a>
+										</li>
+									@endif
+								@endcan
+								@can('permohonan_access')
+									<li class="c-sidebar-nav-item {{ request()->is('skl/arsip') ? 'active' : '' }}">
+										<a href="{{route('admin.task.skl.arsip')}}"
+											data-filter-tags="daftar skl terbit">
+											<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
+											<span class="nav-link-text text-wrap">
+												Daftar SKL Terbits
+											</span>
+											@php
+												$newSkl = new \App\Models\SklReads();
+												$newSklCount = $newSkl->getNewSklCount();
+											@endphp
+											@if ($newSklCount > 0)
+												<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newSklCount }}</span>
+											@endif
+										</a>
+									</li>
+								@endcan
+							</ul>
+						</li>
+					@endcan
+					<li>
+						<a href="javascript:void(0);" title="Dukungan Aplikasi" data-filter-tags="dukungan support 2023">
+							<span class="nav-link-text" data-i18n="nav.support">DUKUNGAN</span>
 						</a>
+						<ul>
+							@can('administrator_access')
+								<li class="c-sidebar-nav-item {{ request()->is('support/how_to/administrator') ? 'active' : '' }}">
+									<a href="{{route('support.howto.administrator')}}" class="c-sidebar-nav-link"
+										data-filter-tags="dukungan support panduan">
+										<i class="c-sidebar-nav-icon fal fa-books">
+										</i>
+										<span class="nav-link-text">Panduan Adminisrator</span>
+									</a>
+								</li>
+							@endcan
+							@can('verificator_task_access')
+								<li class="c-sidebar-nav-item {{ request()->is('support/how_to/verifikator') ? 'active' : '' }} ">
+									<a href="{{route('support.howto.verifikator')}}" title="Panduan Penggunaan Aplikasi bagi Verifikator"
+										data-filter-tags="dukungan support panduan">
+										<i class="c-sidebar-nav-icon fal fa-books"></i>
+										<span class="nav-link-text">Panduan Verifikator</span>
+									</a>
+								</li>
+							@endcan
+
+							@can('user_task_access')
+								<li class="c-sidebar-nav-item {{ request()->is('support/how_to/importir') ? 'active' : '' }} ">
+									<a href="{{route('support.howto.importir')}}" title="Panduan Penggunaan Aplikasi bagi Pelaku Usaha"
+									data-filter-tags="dukungan support panduan">
+										<i class="c-sidebar-nav-icon fal fa-books"></i>
+										<span class="nav-link-text">Panduan Pelaku Usaha</span>
+									</a>
+								</li>
+							@endcan
+							@if (Auth::user()->roles[0]->title == 'Pejabat')
+								<li class="c-sidebar-nav-item {{ request()->is('support/how_to/pejabat') ? 'active open' : '' }} ">
+									<a href="{{route('support.howto.pejabat')}}" title="Panduan Penggunaan Aplikasi bagi Pejabat"
+									data-filter-tags="dukungan support panduan">
+										<i class="c-sidebar-nav-icon fal fa-books"></i>
+										<span class="nav-link-text">Panduan Pejabat</span>
+									</a>
+								</li>
+							@endif
+						</ul>
 					</li>
-				@endcan
-				@can('onfarm_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/produksi')
-						|| request()->is('verification/produksi*') ? 'active' : '' }}">
-						<a href="{{ route('verification.produksi') }}"
-							data-filter-tags="verifikasi produksi">
-							<i class="fal fa-dolly c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Verifikasi Produksi</span>
-							@php
-								$pengajuan = new \App\Models\AjuVerifProduksi();
-								$unverified = $pengajuan->NewRequest();
-								$proceed = $pengajuan->proceedVerif();
-							@endphp
-							{{-- untuk 2024 --}}
-							@if ($unverified > 0 || $proceed > 0)
-								<span class="dl-ref {{ $unverified > 0 ? 'bg-danger-500' : 'bg-warning-500' }} hidden-nav-function-minify hidden-nav-function-top">
-									{{ $unverified }}/{{ $proceed }}
+					<li>
+						<a href="javascript:void(0);" title="Menu child" data-filter-tags="utilities menu child">
+							<span class="nav-link-text" data-i18n="nav.utilities_menu_child">SAMPLE MENU</span>
+						</a>
+						<ul>
+							<li>
+								<a href="javascript:void(0);" title="Sublevel Item" data-filter-tags="utilities menu child sublevel item">
+									<span class="nav-link-text" data-i18n="nav.utilities_menu_child_sublevel_item">Sublevel Item</span>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" title="Another Item" data-filter-tags="utilities menu child another item">
+									<span class="nav-link-text" data-i18n="nav.utilities_menu_child_another_item">Another Item</span>
+								</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+
+			{{-- user_task_access --}}
+			@can('user_task_access')
+				<li class="nav-title">Pelaporan Realisasi</li>
+				@can('commitment_access')
+					@if (Auth::user()->roles[0]->title == 'User')
+						<li class="c-sidebar-nav-item {{ request()->is('2024/user/commitment*') || request()->is('2024/user/pull')  ? 'active' : '' }}">
+							<a href="{{ route('2024.user.commitment.index') }}"
+								data-filter-tags="daftar komitmen riph index">
+								<i class="fa-fw fal fa-ballot c-sidebar-nav-icon"></i>
+								{{ trans('cruds.commitment.title_lang') }}
+							</a>
+						</li>
+						<li class="c-sidebar-nav-item {{ request()->is('skl/arsip') ? 'active' : '' }}">
+							<a href="{{route('2024.user.skl.mySkls')}}"
+								data-filter-tags="daftar skl terbit">
+								<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
+								<span class="nav-link-text text-wrap">
+									Daftar SKL Terbits
 								</span>
-							@endif
-							{{-- @if ($unverified > 0)
-								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
-							@endif
-							@if ($proceed > 0)
-								<span class="dl-ref bg-warning-500 hidden-nav-function-minify hidden-nav-function-top">{{ $proceed }}</span>
-							@endif --}}
-						</a>
-					</li>
+								@php
+									$newSkl = new \App\Models\SklReads();
+									$newSklCount = $newSkl->getNewSklCount();
+								@endphp
+								@if ($newSklCount > 0)
+									<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newSklCount }}</span>
+								@endif
+							</a>
+						</li>
+					@endif
 				@endcan
-				@can('administrator_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/skl')
-						|| request()->is('verification/skl*') ? 'active' : '' }}">
-						<a href="{{ route('verification.skl') }}"
-							data-filter-tags="verifikasi produksi">
-							<i class="fal fa-award c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Pengajuan SKL</span>
-							@php
-								$pengajuan = new \App\Models\AjuVerifSkl();
-								$unverified = $pengajuan->NewRequest();
-								$proceed = $pengajuan->proceedVerif();
-							@endphp
-							@if ($unverified > 0 || $proceed > 0)
-							<span class="dl-ref {{ $unverified > 0 ? 'bg-danger-500' : 'bg-warning-500' }} hidden-nav-function-minify hidden-nav-function-top">
-								{{ $unverified }}/{{ $proceed }}
-							</span>
-							@endif
-							{{-- @if ($unverified > 0)
-								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
-							@endif
-							@if ($proceed > 0)
-								<span class="dl-ref bg-warning-500 hidden-nav-function-minify hidden-nav-function-top">{{ $proceed }}</span>
-							@endif --}}
-						</a>
-					</li>
-					{{-- <li class="c-sidebar-nav-item {{ request()->is('skl/recomended/list') ? 'active' : '' }}">
-						<a href="{{ route('skl.recomended.list') }}"
-							data-filter-tags="daftar rekomendasi skl terbit">
-							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
-							<span class="nav-link-text text-wrap">Rekomendasi & SKL</span>
-						@php
-							$pengajuan = new \App\Models\Skl();
-							$newApproved = $pengajuan->newApprovedCount();
-						@endphp
 
-						@if ($newApproved > 0)
-							<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newApproved }}</span>
-						@endif
-						</a>
-					</li> --}}
-					<li class="c-sidebar-nav-item {{ request()->is('skl/arsip') ? 'active' : '' }}">
-						<a href="{{ route('skl.arsip') }}"
-							data-filter-tags="daftar skl terbit">
-							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
-							<span class="nav-link-text text-wrap">Daftar SKL Terbit</span>
-							{{-- @php
-								$newSkl = new \App\Models\SklReads();
-								$newSklCount = $newSkl->getNewSklCount();
-							@endphp
-							@if ($newSklCount > 0)
-								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newSklCount }}</span>
-							@endif --}}
-						</a>
-					</li>
-				@endcan
 			@endcan
-			{{-- direktur task --}}
+
 			@if (Auth::user()->roles[0]->title == 'Pejabat')
 				<li class="nav-title" data-i18n="nav.administation">Menu</li>
 				<li class="c-sidebar-nav-item {{ request()->is('verification/skl/recomendation*') ? 'active' : '' }}">
@@ -454,6 +662,55 @@
 			@endcan
 			{{-- end feed --}}
 
+
+
+			@can('spatial_data_access')
+				<li class="nav-title text-uppercase" data-i18n="nav.administation">MASTER DATA</li>
+				<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/master-wilayah') ? 'active' : '' }}">
+					<a href="{{route('2024.spatial.wilayah')}}" title="Coming soon!"
+					data-filter-tags="data wilayah provinsi kabupaten kecamatan desa kelurahan">
+						<i class="fal fa-globe-asia"></i>
+						<span class="nav-link-text">Wilayah</span>
+					</a>
+				</li>
+				<li class="c-sidebar-nav-item {{ request()->is('2024/cpcl/poktan*') ? 'active' : '' }}">
+					<a href="{{route('2024.cpcl.poktan.index')}}" title="Coming soon!"
+					data-filter-tags="data kelompok tani">
+						<i class="fal fa-users"></i>
+						<span class="nav-link-text">Kelompok Tani</span>
+					</a>
+				</li>
+				<li class="c-sidebar-nav-item {{ request()->is('2024/cpcl/anggota*') ? 'active' : '' }}">
+					<a href="{{route('2024.cpcl.anggota.index')}}" title="Coming soon!"
+					data-filter-tags="data cpcl anggota">
+						<i class="fal fa-user"></i>
+						<span class="nav-link-text">Anggota Poktan</span>
+					</a>
+				</li>
+				<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/list') || request()->is('2024/spatial/spatialList') || request()->is('2024/spatial/createsingle') ? 'active' : '' }}">
+					<a href="{{route('2024.spatial.index')}}" title="Coming soon!"
+					data-filter-tags="data spatial spasial">
+						<i class="fal fa-map"></i>
+						<span class="nav-link-text">Lokasi/Spatial</span>
+					</a>
+				</li>
+				{{-- <li class="c-sidebar-nav-item">
+					<a href="javascript:void(0);" title="Coming soon!"
+					data-filter-tags="data spatial spasial">
+						<i class="fal fa-map-marker-plus"></i>
+						<span class="nav-link-text">Peta Lokasi Baru</span>
+					</a>
+				</li> --}}
+				<li class="nav-title" data-i18n="nav.administation">SIMULATOR</li>
+				<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/simulator') ? 'active' : '' }}">
+					<a href="{{route('2024.spatial.simulatorJarak')}}" title="Coming soon!"
+					data-filter-tags="simulator spatial spasial">
+						<i class="fal fa-map"></i>
+						<span class="nav-link-text">Simulator</span>
+					</a>
+				</li>
+			@endcan
+
 			{{-- administrator access --}}
 			@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat')
 			@can('administrator_access')
@@ -514,21 +771,6 @@
 				@endcan
 
 				{{-- Master data RIPH --}}
-				@can('master_riph_access')
-					<li class="c-sidebar-nav-item {{ request()->is('admin/riphAdmin') || request()->is('admin/riphAdmin/*') ? 'active' : '' }}">
-						<a href="{{ route('admin.riphAdmin.index') }}"
-							data-filter-tags="data benchmark riph tahunan">
-							<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>{{ trans('cruds.masterriph.title_lang') }}
-						</a>
-					</li>
-					<li class="c-sidebar-nav-item {{ request()->is('admin/riphAdmin') || request()->is('admin/riphAdmin/*') ? 'active' : '' }}">
-						<a href="{{ route('admin.locationexport') }}"
-							data-filter-tags="data benchmark riph tahunan">
-							<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>
-							Eksport Data Lokasi
-						</a>
-					</li>
-				@endcan
 
 				{{-- Master template --}}
 				{{-- @can('template_access') --}}
@@ -623,43 +865,8 @@
 
 			{{-- support --}}
 			<li class="nav-title" data-i18n="nav.administation">DUKUNGAN</li>
-			@can('administrator_access')
-			<li class="c-sidebar-nav-item {{ request()->is('support/how_to/administrator') ? 'active' : '' }}">
-				<a href="{{route('support.howto.administrator')}}" class="c-sidebar-nav-link"
-					data-filter-tags="dukungan support panduan">
-					<i class="c-sidebar-nav-icon fal fa-books">
-					</i>
-					<span class="nav-link-text">Panduan Adminisrator</span>
-				</a>
-			</li>
-			@endcan
-			@can('verificator_task_access')
-			<li class="c-sidebar-nav-item {{ request()->is('support/how_to/verifikator') ? 'active' : '' }} ">
-				<a href="{{route('support.howto.verifikator')}}" title="Panduan Penggunaan Aplikasi bagi Verifikator"
-					data-filter-tags="dukungan support panduan">
-					<i class="c-sidebar-nav-icon fal fa-books"></i>
-					<span class="nav-link-text">Panduan Verifikator</span>
-				</a>
-			</li>
-			@endcan
-			@can('user_task_access')
-			<li class="c-sidebar-nav-item {{ request()->is('support/how_to/importir') ? 'active' : '' }} ">
-				<a href="{{route('support.howto.importir')}}" title="Panduan Penggunaan Aplikasi bagi Pelaku Usaha"
-				data-filter-tags="dukungan support panduan">
-					<i class="c-sidebar-nav-icon fal fa-books"></i>
-					<span class="nav-link-text">Panduan Pelaku Usaha</span>
-				</a>
-			</li>
-			@endcan
-			@if (Auth::user()->roles[0]->title == 'Pejabat')
-			<li class="c-sidebar-nav-item {{ request()->is('support/how_to/pejabat') ? 'active open' : '' }} ">
-				<a href="{{route('support.howto.pejabat')}}" title="Panduan Penggunaan Aplikasi bagi Pejabat"
-				data-filter-tags="dukungan support panduan">
-					<i class="c-sidebar-nav-icon fal fa-books"></i>
-					<span class="nav-link-text">Panduan Pejabat</span>
-				</a>
-			</li>
-			@endif
+
+
 			<li class="disabled">
 				<a href="javascript:void(0);" title="Coming soon!"
 				data-filter-tags="dukungan support tiket" disabled>
@@ -667,10 +874,6 @@
 					<span class="nav-link-text">Tiket Bantuan</span>
 				</a>
 			</li>
-
-			@can('spatial_data_access')
-			<li class="nav-title" data-i18n="nav.administation">SPATIAL SYSTEM</li>
-			@endcan
 
 			{{-- personalisasi --}}
 			<li class="nav-title" data-i18n="nav.administation">PERSONALISASI</li>

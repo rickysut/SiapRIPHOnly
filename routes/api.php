@@ -13,7 +13,7 @@ Route::post('getToken', 'Api\\AuthController@getToken');
 Route::group(['as' => 'api.', 'namespace' => 'Api', 'middleware' => ['auth:sanctum']], function () {
 
 	//getCompletedSKL
-	Route::get('getSKL/{no_ijin}', 'SKLController@getSKL');
+	Route::get('getSKL', 'SKLController@getSKL');
 
 	//getspatial
 	Route::get('getLokasiTanam', 'SpatialController@getLokasiTanam');
