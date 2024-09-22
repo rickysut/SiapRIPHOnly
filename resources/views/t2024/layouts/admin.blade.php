@@ -72,7 +72,7 @@
 		<div class="page-wrapper">
 			<div class="page-inner">
 				<!-- begin sidebar -->
-				@include('t2024.partials.menu')
+				@include('partials.menu')
 				<!-- end sidebar -->
 				<div class="page-content-wrapper">
 					<!-- begin page header -->

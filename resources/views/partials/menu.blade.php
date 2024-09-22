@@ -513,6 +513,44 @@
 					</li>
 				@endcan
 
+				<li class="{{ request()->is('') ? 'active open' : '' }} ">
+					<a href="#" title="Master Data Spatial dan Wilayah"
+						data-filter-tags="spatial latitude longitude polygon wilayah provinsi kabupaten kecamatan desa">
+						<i class="fal fal fa-globe-asia"></i>
+						<span class="nav-link-text">Spatial dan Wilayah</span>
+					</a>
+					<ul>
+						<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/master-wilayah') ? 'active' : '' }}">
+							<a href="{{route('2024.spatial.wilayah')}}" title="Coming soon!"
+							data-filter-tags="data wilayah provinsi kabupaten kecamatan desa kelurahan">
+								<i class="fal fa-globe-asia"></i>
+								<span class="nav-link-text">Wilayah</span>
+							</a>
+						</li>
+						<li class="c-sidebar-nav-item {{ request()->is('2024/cpcl/poktan*') ? 'active' : '' }}">
+							<a href="{{route('2024.cpcl.poktan.index')}}" title="Coming soon!"
+							data-filter-tags="data kelompok tani">
+								<i class="fal fa-users"></i>
+								<span class="nav-link-text">Kelompok Tani</span>
+							</a>
+						</li>
+						<li class="c-sidebar-nav-item {{ request()->is('2024/cpcl/anggota*') ? 'active' : '' }}">
+							<a href="{{route('2024.cpcl.anggota.index')}}" title="Coming soon!"
+							data-filter-tags="data cpcl anggota">
+								<i class="fal fa-user"></i>
+								<span class="nav-link-text">Anggota Poktan</span>
+							</a>
+						</li>
+						<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/list') || request()->is('2024/spatial/spatialList') || request()->is('2024/spatial/createsingle') ? 'active' : '' }}">
+							<a href="{{route('2024.spatial.index')}}" title="Coming soon!"
+							data-filter-tags="data spatial spasial">
+								<i class="fal fa-map"></i>
+								<span class="nav-link-text">Lokasi/Spatial</span>
+							</a>
+						</li>
+					</ul>
+				</li>
+
 				{{-- Master data RIPH --}}
 				@can('master_riph_access')
 					<li class="c-sidebar-nav-item {{ request()->is('admin/riphAdmin') || request()->is('admin/riphAdmin/*') ? 'active' : '' }}">
