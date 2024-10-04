@@ -96,8 +96,8 @@ class LoginController extends Controller
 				$response = null;
 			}
 			if ($response) {
-				$res = json_decode(json_encode((array)simplexml_load_string($response)),true);
-				// $res = simplexml_load_string($response);
+				// $res = json_decode(json_encode((array)simplexml_load_string($response)),true);
+				$res = simplexml_load_string($response);
 				// dd((string)$res->riph->company_profile->fax);
 				if ((string)$res->keterangan == 'SUCCESS') {
 
