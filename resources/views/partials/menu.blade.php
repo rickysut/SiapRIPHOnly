@@ -455,208 +455,209 @@
 			{{-- end feed --}}
 
 			{{-- administrator access --}}
-			@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat')
-			@can('administrator_access')
-				<li class="nav-title" data-i18n="nav.administation">ADMINISTRATOR</li>
-				{{-- user Management --}}
-				@can('user_management_access')
-					<li class="{{ request()->is('admin/permissions*')
-						|| request()->is('admin/roles*') || request()->is('admin/users*')
-						|| request()->is('admin/audit-logs*') ? 'active open' : '' }} ">
-						<a href="#" title="User Management"
-							data-filter-tags="setting permission user">
-							<i class="fal fal fa-users"></i>
-							<span class="nav-link-text">{{ trans('cruds.userManagement.title_lang') }}</span>
+			@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Spatial Administrator')
+			<li class="nav-title" data-i18n="nav.administation">ADMINISTRATOR</li>
+				@can('administrator_access')
+					{{-- user Management --}}
+					@can('user_management_access')
+						<li class="{{ request()->is('admin/permissions*')
+							|| request()->is('admin/roles*') || request()->is('admin/users*')
+							|| request()->is('admin/audit-logs*') ? 'active open' : '' }} ">
+							<a href="#" title="User Management"
+								data-filter-tags="setting permission user">
+								<i class="fal fal fa-users"></i>
+								<span class="nav-link-text">{{ trans('cruds.userManagement.title_lang') }}</span>
+							</a>
+							<ul>
+								@can('permission_access')
+									<li class="c-sidebar-nav-item {{ request()->is('admin/permissions')
+										|| request()->is('admin/permissions/*') ? 'active' : '' }}">
+										<a href="{{ route('admin.permissions.index') }}" title="Permission"
+											data-filter-tags="setting daftar permission user">
+											<i class="fa-fw fal fa-unlock-alt c-sidebar-nav-icon"></i>
+											<span class="nav-link-text">{{ trans('cruds.permission.title_lang') }}</span>
+										</a>
+									</li>
+								@endcan
+								@can('role_access')
+									<li class="c-sidebar-nav-item {{ request()->is('admin/roles')
+										|| request()->is('admin/roles/*') ? 'active' : '' }}">
+										<a href="{{ route('admin.roles.index') }}" title="Roles"
+											data-filter-tags="setting role user">
+											<i class="fa-fw fal fa-briefcase c-sidebar-nav-icon"></i>
+											<span class="nav-link-text">{{ trans('cruds.role.title_lang') }}</span>
+										</a>
+									</li>
+								@endcan
+								@can('user_access')
+									<li class="c-sidebar-nav-item {{ request()->is('admin/users')
+										|| request()->is('admin/users/*') ? 'active' : '' }}">
+										<a href="{{ route('admin.users.index') }}" title="User"
+											data-filter-tags="setting user pengguna">
+											<i class="fa-fw fal fa-user c-sidebar-nav-icon"></i>
+											<span class="nav-link-text">{{ trans('cruds.user.title_lang') }}</span>
+										</a>
+									</li>
+								@endcan
+								@can('audit_log_access')
+									<li class="c-sidebar-nav-item {{ request()->is('admin/audit-logs')
+										|| request()->is('admin/audit-logs/*') ? 'active' : '' }}">
+										<a href="{{ route('admin.audit-logs.index') }}" title="Audit Log"
+											data-filter-tags="setting log_access audit">
+											<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
+											<span class="nav-link-text">{{ trans('cruds.auditLog.title_lang') }}</span>
+										</a>
+									</li>
+								@endcan
+							</ul>
+						</li>
+					@endcan
+				@endcan
+				@can('spatial_data_access')
+					<li class="{{ request()->is('') ? 'active open' : '' }} ">
+						<a href="#" title="Master Data Spatial dan Wilayah"
+							data-filter-tags="spatial latitude longitude polygon wilayah provinsi kabupaten kecamatan desa">
+							<i class="fal fal fa-globe-asia"></i>
+							<span class="nav-link-text">Spatial dan Wilayah</span>
 						</a>
 						<ul>
-							@can('permission_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/permissions')
-									|| request()->is('admin/permissions/*') ? 'active' : '' }}">
-									<a href="{{ route('admin.permissions.index') }}" title="Permission"
-										data-filter-tags="setting daftar permission user">
-										<i class="fa-fw fal fa-unlock-alt c-sidebar-nav-icon"></i>
-										<span class="nav-link-text">{{ trans('cruds.permission.title_lang') }}</span>
-									</a>
-								</li>
-							@endcan
-							@can('role_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/roles')
-									|| request()->is('admin/roles/*') ? 'active' : '' }}">
-									<a href="{{ route('admin.roles.index') }}" title="Roles"
-										data-filter-tags="setting role user">
-										<i class="fa-fw fal fa-briefcase c-sidebar-nav-icon"></i>
-										<span class="nav-link-text">{{ trans('cruds.role.title_lang') }}</span>
-									</a>
-								</li>
-							@endcan
-							@can('user_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/users')
-									|| request()->is('admin/users/*') ? 'active' : '' }}">
-									<a href="{{ route('admin.users.index') }}" title="User"
-										data-filter-tags="setting user pengguna">
-										<i class="fa-fw fal fa-user c-sidebar-nav-icon"></i>
-										<span class="nav-link-text">{{ trans('cruds.user.title_lang') }}</span>
-									</a>
-								</li>
-							@endcan
-							@can('audit_log_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/audit-logs')
-									|| request()->is('admin/audit-logs/*') ? 'active' : '' }}">
-									<a href="{{ route('admin.audit-logs.index') }}" title="Audit Log"
-										data-filter-tags="setting log_access audit">
-										<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
-										<span class="nav-link-text">{{ trans('cruds.auditLog.title_lang') }}</span>
-									</a>
-								</li>
-							@endcan
+							<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/master-wilayah') ? 'active' : '' }}">
+								<a href="{{route('2024.spatial.wilayah')}}" title="Coming soon!"
+								data-filter-tags="data wilayah provinsi kabupaten kecamatan desa kelurahan">
+									<i class="fal fa-globe-asia"></i>
+									<span class="nav-link-text">Wilayah</span>
+								</a>
+							</li>
+							<li class="c-sidebar-nav-item {{ request()->is('2024/cpcl/poktan*') ? 'active' : '' }}">
+								<a href="{{route('2024.cpcl.poktan.index')}}" title="Coming soon!"
+								data-filter-tags="data kelompok tani">
+									<i class="fal fa-users"></i>
+									<span class="nav-link-text">Kelompok Tani</span>
+								</a>
+							</li>
+							<li class="c-sidebar-nav-item {{ request()->is('2024/cpcl/anggota*') ? 'active' : '' }}">
+								<a href="{{route('2024.cpcl.anggota.index')}}" title="Coming soon!"
+								data-filter-tags="data cpcl anggota">
+									<i class="fal fa-user"></i>
+									<span class="nav-link-text">Anggota Poktan</span>
+								</a>
+							</li>
+							<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/list') || request()->is('2024/spatial/spatialList') || request()->is('2024/spatial/createsingle') ? 'active' : '' }}">
+								<a href="{{route('2024.spatial.index')}}" title="Coming soon!"
+								data-filter-tags="data spatial spasial">
+									<i class="fal fa-map"></i>
+									<span class="nav-link-text">Lokasi/Spatial</span>
+								</a>
+							</li>
 						</ul>
 					</li>
 				@endcan
-
-				<li class="{{ request()->is('') ? 'active open' : '' }} ">
-					<a href="#" title="Master Data Spatial dan Wilayah"
-						data-filter-tags="spatial latitude longitude polygon wilayah provinsi kabupaten kecamatan desa">
-						<i class="fal fal fa-globe-asia"></i>
-						<span class="nav-link-text">Spatial dan Wilayah</span>
-					</a>
-					<ul>
-						<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/master-wilayah') ? 'active' : '' }}">
-							<a href="{{route('2024.spatial.wilayah')}}" title="Coming soon!"
-							data-filter-tags="data wilayah provinsi kabupaten kecamatan desa kelurahan">
-								<i class="fal fa-globe-asia"></i>
-								<span class="nav-link-text">Wilayah</span>
+					{{-- Master data RIPH --}}
+					@can('master_riph_access')
+						<li class="c-sidebar-nav-item {{ request()->is('admin/riphAdmin') || request()->is('admin/riphAdmin/*') ? 'active' : '' }}">
+							<a href="{{ route('admin.riphAdmin.index') }}"
+								data-filter-tags="data benchmark riph tahunan">
+								<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>{{ trans('cruds.masterriph.title_lang') }}
 							</a>
 						</li>
-						<li class="c-sidebar-nav-item {{ request()->is('2024/cpcl/poktan*') ? 'active' : '' }}">
-							<a href="{{route('2024.cpcl.poktan.index')}}" title="Coming soon!"
-							data-filter-tags="data kelompok tani">
-								<i class="fal fa-users"></i>
-								<span class="nav-link-text">Kelompok Tani</span>
+						<li class="c-sidebar-nav-item {{ request()->is('admin/riphAdmin') || request()->is('admin/riphAdmin/*') ? 'active' : '' }}">
+							<a href="{{ route('admin.locationexport') }}"
+								data-filter-tags="data benchmark riph tahunan">
+								<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>
+								Eksport Data Lokasi
 							</a>
 						</li>
-						<li class="c-sidebar-nav-item {{ request()->is('2024/cpcl/anggota*') ? 'active' : '' }}">
-							<a href="{{route('2024.cpcl.anggota.index')}}" title="Coming soon!"
-							data-filter-tags="data cpcl anggota">
-								<i class="fal fa-user"></i>
-								<span class="nav-link-text">Anggota Poktan</span>
+					@endcan
+
+					{{-- Master template --}}
+					@can('template_access')
+						<li class="c-sidebar-nav-item {{ request()->is('admin/template') || request()->is('admin/template/*') ? 'active' : '' }}">
+							<a href="{{ route('admin.template.index') }}"
+								data-filter-tags="{{ strtolower(trans('cruds.mastertemplate.title_lang')) }}">
+								<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>{{ trans('cruds.mastertemplate.title_lang') }}
 							</a>
 						</li>
-						<li class="c-sidebar-nav-item {{ request()->is('2024/spatial/list') || request()->is('2024/spatial/spatialList') || request()->is('2024/spatial/createsingle') ? 'active' : '' }}">
-							<a href="{{route('2024.spatial.index')}}" title="Coming soon!"
-							data-filter-tags="data spatial spasial">
-								<i class="fal fa-map"></i>
-								<span class="nav-link-text">Lokasi/Spatial</span>
+					@endcan
+
+					{{-- data report --}}
+					@can('data_report_access')
+						<li hidden
+							class="{{ request()->is('admin/datareport') || request()->is('admin/datareport/*') ? 'active open' : '' }}">
+							<a href="#" title="Data Report"
+								data-filter-tags="lapoan wajib tanam produksi report realisasi">
+								<i class="fal fa-print c-sidebar-nav-icon"></i>
+								<span class="nav-link-text">{{ trans('cruds.datareport.title_lang') }}</span>
+							</a>
+							<ul>
+								@can('commitment_list_access')
+									<li class="c-sidebar-nav-item {{ request()->is('admin/datareport/comlist') ? 'active' : '' }}">
+										<a href="{{ route('admin.audit-logs.index') }}" title="Commitment List"
+											data-filter-tags="laporan realisasi komitmen">
+											<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
+											<span class="nav-link-text">{{ trans('cruds.commitmentlist.title_lang') }}</span>
+										</a>
+									</li>
+								@endcan
+								@can('verification_report_access')
+									<li
+										class="c-sidebar-nav-item {{ request()->is('admin/datareport/verification') ? 'active' : '' }}">
+										<a href="#" title="Audit Log"
+											data-filter-tags="laporan realisasi verifikasi">
+											<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
+											<span class="nav-link-text">{{ trans('cruds.verificationreport.title_lang') }}</span>
+										</a>
+										<ul>
+											@can('verif_onfarm_access')
+												<li>
+													<a href=""title="Onfarm"
+														data-filter-tags="laporan realisasi verifikasi onfarm">
+														<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
+														<span class="nav-link-text">{{ trans('cruds.verifonfarm.title_lang') }}</span>
+													</a>
+												</li>
+											@endcan
+											@can('verif_online_access')
+												<li>
+													<a href=""title="Online"
+														data-filter-tags="laporan realisasi verifikasi online">
+														<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
+														<span class="nav-link-text">{{ trans('cruds.verifonline.title_lang') }}</span>
+													</a>
+												</li>
+											@endcan
+
+										</ul>
+									</li>
+								@endcan
+							</ul>
+						</li>
+					@endcan
+
+
+					@can('varietas_access')
+						<li hidden class="{{ request()->is('admin/daftarpejabat*') ? 'active open' : '' }} ">
+							<a href="{{route('admin.pejabats')}}" title="Daftar Pejabat Penandatangan SKL"
+								data-filter-tags="setting permission user">
+								<i class="fal fa-user-tie"></i>
+								<span class="nav-link-text">Daftar Pejabat</span>
 							</a>
 						</li>
-					</ul>
-				</li>
+						<li class="{{ request()->is('admin/varietas*') ? 'active open' : '' }} ">
+							<a href="{{route('admin.varietas')}}" title="Daftar Varietas Hortikultura"
+								data-filter-tags="setting permission user">
+								<i class="fal fa-seedling"></i>
+								<span class="nav-link-text">Daftar Varietas</span>
+							</a>
+						</li>
+						<li class="{{ request()->is('admin/gmapapi*') ? 'active open' : '' }} ">
+							<a href="{{route('admin.gmapapi.edit')}}" title="Goole Map API"
+								data-filter-tags="google map api key">
+								<i class="fab fa-google"></i>
+								<span class="nav-link-text">Google Map API</span>
+							</a>
+						</li>
+					@endcan
 
-				{{-- Master data RIPH --}}
-				@can('master_riph_access')
-					<li class="c-sidebar-nav-item {{ request()->is('admin/riphAdmin') || request()->is('admin/riphAdmin/*') ? 'active' : '' }}">
-						<a href="{{ route('admin.riphAdmin.index') }}"
-							data-filter-tags="data benchmark riph tahunan">
-							<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>{{ trans('cruds.masterriph.title_lang') }}
-						</a>
-					</li>
-					<li class="c-sidebar-nav-item {{ request()->is('admin/riphAdmin') || request()->is('admin/riphAdmin/*') ? 'active' : '' }}">
-						<a href="{{ route('admin.locationexport') }}"
-							data-filter-tags="data benchmark riph tahunan">
-							<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>
-							Eksport Data Lokasi
-						</a>
-					</li>
-				@endcan
-
-				{{-- Master template --}}
-				{{-- @can('template_access') --}}
-					<li class="c-sidebar-nav-item {{ request()->is('admin/template') || request()->is('admin/template/*') ? 'active' : '' }}">
-						<a href="{{ route('admin.template.index') }}"
-							data-filter-tags="{{ strtolower(trans('cruds.mastertemplate.title_lang')) }}">
-							<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>{{ trans('cruds.mastertemplate.title_lang') }}
-						</a>
-					</li>
-				{{-- @endcan --}}
-
-				{{-- data report --}}
-				@can('data_report_access')
-					<li hidden
-						class="{{ request()->is('admin/datareport') || request()->is('admin/datareport/*') ? 'active open' : '' }}">
-						<a href="#" title="Data Report"
-							data-filter-tags="lapoan wajib tanam produksi report realisasi">
-							<i class="fal fa-print c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">{{ trans('cruds.datareport.title_lang') }}</span>
-						</a>
-						<ul>
-							@can('commitment_list_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/datareport/comlist') ? 'active' : '' }}">
-									<a href="{{ route('admin.audit-logs.index') }}" title="Commitment List"
-										data-filter-tags="laporan realisasi komitmen">
-										<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
-										<span class="nav-link-text">{{ trans('cruds.commitmentlist.title_lang') }}</span>
-									</a>
-								</li>
-							@endcan
-							@can('verification_report_access')
-								<li
-									class="c-sidebar-nav-item {{ request()->is('admin/datareport/verification') ? 'active' : '' }}">
-									<a href="#" title="Audit Log"
-										data-filter-tags="laporan realisasi verifikasi">
-										<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
-										<span class="nav-link-text">{{ trans('cruds.verificationreport.title_lang') }}</span>
-									</a>
-									<ul>
-										@can('verif_onfarm_access')
-											<li>
-												<a href=""title="Onfarm"
-													data-filter-tags="laporan realisasi verifikasi onfarm">
-													<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
-													<span class="nav-link-text">{{ trans('cruds.verifonfarm.title_lang') }}</span>
-												</a>
-											</li>
-										@endcan
-										@can('verif_online_access')
-											<li>
-												<a href=""title="Online"
-													data-filter-tags="laporan realisasi verifikasi online">
-													<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
-													<span class="nav-link-text">{{ trans('cruds.verifonline.title_lang') }}</span>
-												</a>
-											</li>
-										@endcan
-
-									</ul>
-								</li>
-							@endcan
-						</ul>
-					</li>
-				@endcan
-
-
-				@can('varietas_access')
-					<li hidden class="{{ request()->is('admin/daftarpejabat*') ? 'active open' : '' }} ">
-						<a href="{{route('admin.pejabats')}}" title="Daftar Pejabat Penandatangan SKL"
-							data-filter-tags="setting permission user">
-							<i class="fal fa-user-tie"></i>
-							<span class="nav-link-text">Daftar Pejabat</span>
-						</a>
-					</li>
-					<li class="{{ request()->is('admin/varietas*') ? 'active open' : '' }} ">
-						<a href="{{route('admin.varietas')}}" title="Daftar Varietas Hortikultura"
-							data-filter-tags="setting permission user">
-							<i class="fal fa-seedling"></i>
-							<span class="nav-link-text">Daftar Varietas</span>
-						</a>
-					</li>
-					<li class="{{ request()->is('admin/gmapapi*') ? 'active open' : '' }} ">
-						<a href="{{route('admin.gmapapi.edit')}}" title="Goole Map API"
-							data-filter-tags="google map api key">
-							<i class="fab fa-google"></i>
-							<span class="nav-link-text">Google Map API</span>
-						</a>
-					</li>
-				@endcan
-			@endcan
 			@endif
 
 			{{-- support --}}
