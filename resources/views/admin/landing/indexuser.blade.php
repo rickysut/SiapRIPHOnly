@@ -61,7 +61,7 @@
 							<div class="flex-1">
 								<span class="h3">Informasi!!</span>
 								<br>
-									Pemeliharaan telah selesai. Anda dapat melanjutkan kembali.
+									Pemeliharaan akan segera dilakukan. Simpan pekerjaan Anda sebelum pemeliharaan dimulai sesuai jadwal yang telah disampaikan.
 								<br><br>
 								Terima Kasih.
 								<br><br>

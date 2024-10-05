@@ -44,6 +44,7 @@
 		<link rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/fa-regular.css') }}">
 		<link rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/fa-solid.css') }}">
 		<link rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/fa-brands.css') }}">
+		<link rel="stylesheet" media="screen, print" href="{{ asset('css/smartadmin/notifications/sweetalert2/sweetalert2.bundle.css') }}">
 
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -100,6 +101,7 @@
 							</div>
 						@endif
 						<!-- end alert error -->
+						<div>HALLO</div>
 						@yield('content')
 					</main>
 					<div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
@@ -150,6 +152,7 @@
 		<script src="{{ asset('js/smartadmin/statistics/echart/echarts.min.js') }}"></script>
 		<script src="{{ asset('js/smartadmin/statistics/easypiechart/easypiechart.bundle.js') }}"></script>
 		<script src="{{ asset('js/smartadmin/statistics/sparkline/sparkline.bundle.js') }}"></script>
+		<script src="{{ asset('js/smartadmin/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
 
 
@@ -161,12 +164,9 @@
 		<script src="{{ asset('js/pdfmake/pdfmake.min.js') }}"></script>
 		<script src="{{ asset('js/pdfmake/vfs_fonts.js') }}"></script>
 		<script src="{{ asset('js/jszip/jszip.min.js') }}"></script>
-
 		<!-- search bar -->
 		<script type="text/javascript">
-
-
-			console.log("Init Language");
+			// console.log("Init Language");
 			if (!$.i18n) {
 				initApp.loadScript("/js/i18n/i18n.js",
 					function activateLang () {
@@ -179,7 +179,7 @@
 							$('[data-i18n]').i18n();
 							$('[data-lang]').removeClass('active');
 							$('[data-lang="{{ app()->getLocale() }}"]').addClass('active');
-							console.log("Init language to: " + "{{ app()->getLocale() }}");
+							// console.log("Init language to: " + "{{ app()->getLocale() }}");
 						});
 
 					}
@@ -191,85 +191,110 @@
 					$('[data-i18n]').i18n();
 					$('[data-lang]').removeClass('active');
 					$('[data-lang="{{ app()->getLocale() }}"]').addClass('active');
-					console.log("setting language to: " + "{{ app()->getLocale() }}");
+					// console.log("setting language to: " + "{{ app()->getLocale() }}");
 				});
 
 			}
 
+			$(document).ready(function() {
+				$('.searchable-field').select2({
+					minimumInputLength: 3,
+					ajax: {
+					url: '{{ route("admin.globalSearch") }}',
+					dataType: 'json',
+					type: 'GET',
+					delay: 200,
+					data: function(term) {
+						return {
+						search: term
+						};
+					},
+					results: function(data) {
+						return {
+						data
+						};
+					}
+					},
+					escapeMarkup: function(markup) {
+					return markup;
+					},
+					templateResult: formatItem,
+					templateSelection: formatItemSelection,
+					placeholder: "{{ trans('global.search') }} ...",
+					language: {
+					inputTooShort: function(args) {
+						var remainingChars = args.minimum - args.input.length;
+						var translation = "{{ trans('global.search_input_too_short') }}";
 
-		$(document).ready(function() {
-		$('.searchable-field').select2({
-			minimumInputLength: 3,
-			ajax: {
-			url: '{{ route("admin.globalSearch") }}',
-			dataType: 'json',
-			type: 'GET',
-			delay: 200,
-			data: function(term) {
-				return {
-				search: term
-				};
-			},
-			results: function(data) {
-				return {
-				data
-				};
-			}
-			},
-			escapeMarkup: function(markup) {
-			return markup;
-			},
-			templateResult: formatItem,
-			templateSelection: formatItemSelection,
-			placeholder: "{{ trans('global.search') }} ...",
-			language: {
-			inputTooShort: function(args) {
-				var remainingChars = args.minimum - args.input.length;
-				var translation = "{{ trans('global.search_input_too_short') }}";
+						return translation.replace(':count', remainingChars);
+					},
+					errorLoading: function() {
+						return "{{ trans('global.results_could_not_be_loaded') }}";
+					},
+					searching: function() {
+						return "{{ trans('global.searching') }}";
+					},
+					noResults: function() {
+						return "{{ trans('global.no_results') }}";
+					},
+					}
 
-				return translation.replace(':count', remainingChars);
-			},
-			errorLoading: function() {
-				return "{{ trans('global.results_could_not_be_loaded') }}";
-			},
-			searching: function() {
-				return "{{ trans('global.searching') }}";
-			},
-			noResults: function() {
-				return "{{ trans('global.no_results') }}";
-			},
-			}
+				});
 
-		});
+				function formatItem(item) {
+					if (item.loading) {
+					return "{{ trans('global.searching') }}...";
+					}
+					var markup = "<div class='searchable-link' href='" + item.url + "'>";
+					markup += "<div class='searchable-title'>" + item.model + "</div>";
+					$.each(item.fields, function(key, field) {
+					markup += "<div class='searchable-fields'>" + item.fields_formated[field] + " : " + item[field] + "</div>";
+					});
+					markup += "</div>";
 
-		function formatItem(item) {
-			if (item.loading) {
-			return "{{ trans('global.searching') }}...";
-			}
-			var markup = "<div class='searchable-link' href='" + item.url + "'>";
-			markup += "<div class='searchable-title'>" + item.model + "</div>";
-			$.each(item.fields, function(key, field) {
-			markup += "<div class='searchable-fields'>" + item.fields_formated[field] + " : " + item[field] + "</div>";
+					return markup;
+				}
+
+				function formatItemSelection(item) {
+					if (!item.model) {
+					return "{{ trans('global.search') }}...";
+					}
+					return item.model;
+				}
+				$(document).delegate('.searchable-link', 'click', function() {
+					var url = $(this).attr('href');
+					window.location = url;
+				});
+
+				// informasi maintenance
+
 			});
-			markup += "</div>";
-
-			return markup;
-		}
-
-		function formatItemSelection(item) {
-			if (!item.model) {
-			return "{{ trans('global.search') }}...";
-			}
-			return item.model;
-		}
-		$(document).delegate('.searchable-link', 'click', function() {
-			var url = $(this).attr('href');
-			window.location = url;
-		});
-
-
-		});
 		</script>
+
+		<script>
+			$(document).ready(function() {
+				function showMaintenanceAlert() {
+					const message = `Akan dilakukan Pemeliharaan Sistem pada hari Sabtu, 5 Oktober 2024 dimulai pukul 21.00 WIB. Selama proses pemeliharaan berlangsung, pelaporan kemungkinan tidak akan dapat diproses lebih lanjut. Pemberitahuan akan disampaikan setelah proses pemeliharaan selesai.`
+					Swal.fire(
+                    {
+                        title: "<strong>PEMELIHARAAN SISTEM</strong>",
+                        type: "warning",
+						icon: 'warning',
+                        html: "Akan dilakukan Pemeliharaan Sistem pada hari <br>" +
+						'<b style="color:#fd3995;">Sabtu, 5 Oktober 2024 dimulai pukul 21.00 WIB</b>.<br>'+
+						"<p>Selama proses pemeliharaan berlangsung, pelaporan kemungkinan tidak akan dapat diproses lebih lanjut. Pemberitahuan akan disampaikan setelah proses pemeliharaan selesai</p>"+
+						"<span><b>Administrator<b></span>",
+                        focusConfirm: false,
+                        confirmButtonText: 'OK',
+						allowOutsideClick: false,
+                    });
+				}
+
+				showMaintenanceAlert();
+				console.log('alert');
+			});
+		</script>
+
 		@yield('scripts')
 	</body>
 </html>
