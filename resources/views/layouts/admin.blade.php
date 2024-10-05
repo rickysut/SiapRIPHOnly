@@ -101,7 +101,6 @@
 							</div>
 						@endif
 						<!-- end alert error -->
-						<div>HALLO</div>
 						@yield('content')
 					</main>
 					<div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
@@ -291,7 +290,6 @@
 				}
 
 				showMaintenanceAlert();
-				console.log('alert');
 			});
 		</script>
 
