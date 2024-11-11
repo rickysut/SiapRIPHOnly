@@ -11,18 +11,15 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
-      - name: Stash local changes (if any)
+      - name: Remove untracked files and directories
         run: |
           cd ${{ vars.GIT_WORKDIR_MASTER }}
-          git stash || echo "Nothing to stash"
+          git clean -fd   # Removes only untracked files and directories
       - name: Pull latest changes
         run: |
           cd ${{ vars.GIT_WORKDIR_MASTER }}
           git pull
-      - name: Apply stashed changes (if any)
-        run: |
-          cd ${{ vars.GIT_WORKDIR_MASTER }}
-          git stash pop || echo "No stashed changes to apply"
+      
       - name: Run artisan optimize:clear
         run: |
           cd ${{ vars.GIT_WORKDIR_MASTER }}
