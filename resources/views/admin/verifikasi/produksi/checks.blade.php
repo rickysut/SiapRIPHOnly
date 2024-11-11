@@ -139,10 +139,15 @@ td {
 													{{number_format($total_luastanam, 2,'.',',')}} ha
 												</td>
 												<td>
-													@if($total_luastanam < $commitment->luas_wajib_tanam)
+													@php
+														$totalLuasTanam = number_format($total_luastanam, 2);
+														$wajibTanam = number_format($commitment->luas_wajib_tanam, 2);
+													@endphp
+
+													@if($totalLuasTanam < $wajibTanam)
 														<span class="text-warning"><i class="fas fa-exclamation-circle mr-1"></i>TIDAK TERPENUHI</span>
 													@else
-													<span class="text-success"><i class="fas fa-check mr-1"></i>TERPENUHI</span>
+														<span class="text-success"><i class="fas fa-check mr-1"></i>TERPENUHI</span>
 													@endif
 												</td>
 											</tr>
