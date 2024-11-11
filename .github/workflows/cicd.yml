@@ -11,10 +11,21 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
-      - name: Run Script
+      - name: Stash local changes (if any)
         run: |
-          cd ${{vars.GIT_WORKDIR_MASTER}}
+          cd ${{ vars.GIT_WORKDIR_MASTER }}
+          git stash || echo "Nothing to stash"
+      - name: Pull latest changes
+        run: |
+          cd ${{ vars.GIT_WORKDIR_MASTER }}
           git pull
+      - name: Apply stashed changes (if any)
+        run: |
+          cd ${{ vars.GIT_WORKDIR_MASTER }}
+          git stash pop || echo "No stashed changes to apply"
+      - name: Run artisan optimize:clear
+        run: |
+          cd ${{ vars.GIT_WORKDIR_MASTER }}
           php artisan optimize:clear
           cd ..
 
