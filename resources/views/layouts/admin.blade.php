@@ -289,7 +289,7 @@
                     });
 				}
 
-				// showMaintenanceAlert();
+				showMaintenanceAlert();
 			});
 		</script>
 
