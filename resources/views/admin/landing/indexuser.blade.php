@@ -47,7 +47,7 @@
 		</div>
 
 		{{-- @if (Auth::user()->roles[0]->title == 'User') --}}
-			<div class="row mb-5">
+			{{-- <div class="row mb-5">
 				<div class="col-12">
 					<div class="alert alert-warning fade show" role="alert">
 						<div class="d-flex align-items-top">
@@ -70,7 +70,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> --}}
 		{{-- @endif --}}
 
 		@if (Auth::user()->roles[0]->title == 'Pejabat')
