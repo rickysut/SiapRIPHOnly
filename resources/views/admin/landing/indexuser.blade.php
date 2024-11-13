@@ -46,7 +46,7 @@
 			</div>
 		</div>
 
-		{{-- @if (Auth::user()->roles[0]->title == 'User') --}}
+		@if (Auth::user()->roles[0]->title == 'User')
 			{{-- <div class="row mb-5">
 				<div class="col-12">
 					<div class="alert alert-warning fade show" role="alert">
@@ -71,7 +71,7 @@
 					</div>
 				</div>
 			</div> --}}
-		{{-- @endif --}}
+		@endif
 
 		@if (Auth::user()->roles[0]->title == 'Pejabat')
 			@if (!$profile || (!$profile->jabatan || !$profile->nip))
